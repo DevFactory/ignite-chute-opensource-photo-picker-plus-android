@@ -74,6 +74,7 @@ public class AssetActivity extends FragmentActivity implements
 	private FragmentRoot fragmentRoot;
 	private FragmentSingle fragmentSingle;
 	private AccountModel account;
+	private AccountType accountType;
 	private List<Integer> selectedAccountsPositions;
 	private List<Integer> selectedImagesPositions;
 	private List<Integer> selectedVideosPositions;
@@ -81,7 +82,6 @@ public class AssetActivity extends FragmentActivity implements
 	private ListenerImageSelection listenerImagesSelection;
 	private ListenerVideoSelection listenerVideosSelection;
 	private String folderId;
-	private AccountType accountType;
 
 	public void setAssetsSelectListener(
 			ListenerAccountAssetsSelection adapterListener) {
@@ -270,10 +270,6 @@ public class AssetActivity extends FragmentActivity implements
 		selectedImagesPositions = savedInstanceState != null ? savedInstanceState
 				.getIntegerArrayList(Constants.KEY_SELECTED_IMAGES_ITEMS)
 				: null;
-
-		if (selectedImagesPositions != null) {
-			ALog.d("retrieve positions : " + selectedImagesPositions.toString());
-		}
 
 		selectedVideosPositions = savedInstanceState != null ? savedInstanceState
 				.getIntegerArrayList(Constants.KEY_SELECTED_VIDEOS_ITEMS)

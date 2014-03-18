@@ -128,7 +128,7 @@ public class ServicesActivity extends FragmentActivity implements
 		fragmentManager = getSupportFragmentManager();
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main_layout);
-			
+
 		dualPanes = getResources().getBoolean(R.bool.has_two_panes);
 
 		signOut = (TextView) findViewById(R.id.gcTextViewSignOut);
@@ -250,7 +250,8 @@ public class ServicesActivity extends FragmentActivity implements
 
 	}
 
-	public void accountClicked(AccountModel account) {
+	public void accountClicked(AccountModel account, AccountType accountType) {
+		PhotoPickerPreferenceUtil.get().setAccountType(accountType);
 		photoFilterType = PhotoFilterType.SOCIAL_MEDIA.ordinal();
 		accountItemPositions = null;
 		imageItemPositions = null;
@@ -304,7 +305,7 @@ public class ServicesActivity extends FragmentActivity implements
 		if (PreferenceUtil.get().hasAccount(type.getLoginMethod())) {
 			AccountModel account = PreferenceUtil.get().getAccount(
 					type.getLoginMethod());
-			accountClicked(account);
+			accountClicked(account, accountType);
 		} else {
 			AuthenticationFactory.getInstance().startAuthenticationActivity(
 					ServicesActivity.this,
@@ -582,7 +583,7 @@ public class ServicesActivity extends FragmentActivity implements
 			for (AccountModel accountModel : responseData.getData()) {
 				if (accountModel.getType().equals(accountType.getLoginMethod())) {
 					PreferenceUtil.get().saveAccount(accountModel);
-					accountClicked(accountModel);
+					accountClicked(accountModel, accountType);
 				}
 			}
 
@@ -603,7 +604,8 @@ public class ServicesActivity extends FragmentActivity implements
 			if (dualPanes) {
 				replaceContentWithEmptyFragment();
 			}
-			NotificationUtil.makeToast(getApplicationContext(), R.string.toast_signed_out);
+			NotificationUtil.makeToast(getApplicationContext(),
+					R.string.toast_signed_out);
 			TokenAuthenticationProvider.getInstance().clearAuth();
 			PhotoPickerPreferenceUtil.get().clearAll();
 

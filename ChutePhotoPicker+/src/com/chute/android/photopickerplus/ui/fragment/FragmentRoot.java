@@ -62,6 +62,7 @@ import com.chute.android.photopickerplus.util.AppUtil;
 import com.chute.android.photopickerplus.util.AssetUtil;
 import com.chute.android.photopickerplus.util.Constants;
 import com.chute.android.photopickerplus.util.NotificationUtil;
+import com.chute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
 import com.chute.android.photopickerplus.util.UIUtil;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
 import com.chute.sdk.v2.model.AccountAlbumModel;
@@ -85,9 +86,9 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 	private ProgressBar progressBar;
 	private RelativeLayout relativeLayoutRoot;
 
-	private boolean isMultipicker;
 	private boolean supportVideos;
 	private boolean supportImages;
+	private boolean isMultipicker;
 	private List<Integer> selectedAccountsPositions;
 	private List<Integer> selectedImagePositions;
 	private List<Integer> selectedVideoPositions;
@@ -136,9 +137,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 		isMultipicker = PhotoPicker.getInstance().isMultiPicker();
 		supportVideos = PhotoPicker.getInstance().supportVideos();
 		supportImages = PhotoPicker.getInstance().supportImages();
-		if (account != null) {
-			accountType = AccountType.valueOf(account.getType().toUpperCase());
-		}
+		accountType = PhotoPickerPreferenceUtil.get().getAccountType();
 		accountMap = PhotoPicker.getInstance().getAccountDisplayType();
 		displayType = AppUtil.getDisplayType(accountMap, PhotoPicker
 				.getInstance().getDefaultAccountDisplayType(), accountType);
@@ -198,18 +197,17 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 			adapterMerge.addAdapter(adapterVideos);
 			adapterMerge.addAdapter(adapterImages);
 			gridView.setAdapter(adapterMerge);
-			if (supportImages == true) {
+			if (supportImages) {
 				getActivity().getSupportLoaderManager().initLoader(1, null,
 						new ImagesLoaderCallback(selectedImagePositions));
 			}
-			if (supportVideos == true) {
+			if (supportVideos) {
 				getActivity().getSupportLoaderManager().initLoader(2, null,
 						new VideosLoaderCallback(selectedVideoPositions));
 			}
 		} else if (filterType == PhotoFilterType.SOCIAL_MEDIA
 				&& getActivity() != null) {
-			if (supportVideos == false
-					&& accountType.equals(AccountType.YOUTUBE)) {
+			if (!supportVideos && accountType.equals(AccountType.YOUTUBE)) {
 				progressBar.setVisibility(View.GONE);
 			} else {
 				GCAccounts.accountRoot(getActivity().getApplicationContext(),
@@ -403,7 +401,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 
 	@Override
 	public void onFileClicked(int position) {
-		if (isMultipicker == true) {
+		if (isMultipicker) {
 			adapterAccounts.toggleTick(position);
 		} else {
 			ArrayList<AccountMediaModel> accountMediaModelList = new ArrayList<AccountMediaModel>();

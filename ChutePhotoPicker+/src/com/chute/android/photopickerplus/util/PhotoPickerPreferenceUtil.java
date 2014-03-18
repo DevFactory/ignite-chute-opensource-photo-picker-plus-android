@@ -103,7 +103,8 @@ public class PhotoPickerPreferenceUtil {
 		String accountName = getPreferences().getString(KEY_ACCOUNT_TYPE, null);
 		AccountType type = null;
 		for (AccountType accountType : AccountType.values()) {
-			if (accountName.equalsIgnoreCase(accountType.name())) {
+			if (accountName != null
+					&& accountName.equalsIgnoreCase(accountType.name())) {
 				type = accountType;
 			}
 		}

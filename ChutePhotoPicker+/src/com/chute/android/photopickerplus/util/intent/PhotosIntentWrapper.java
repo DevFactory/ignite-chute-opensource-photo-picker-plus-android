@@ -33,6 +33,7 @@ import com.chute.android.photopickerplus.ui.activity.AssetActivity;
 import com.chute.android.photopickerplus.models.enums.PhotoFilterType;
 import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.AssetModel;
+import com.chute.sdk.v2.model.enums.AccountType;
 
 /**
  * {@link PhotosIntentWrapper} is a wrapper class that wraps the following
@@ -47,56 +48,67 @@ import com.chute.sdk.v2.model.AssetModel;
  */
 public class PhotosIntentWrapper extends IntentWrapper {
 
-  public static final int ACTIVITY_FOR_RESULT_STREAM_KEY = 113;
+	public static final int ACTIVITY_FOR_RESULT_STREAM_KEY = 113;
 
-  // social photos
-  private static final String KEY_ACCOUNT = "account";
-  private static final String KEY_ALBUM_ID = "albumId";
-  public static final String KEY_PHOTO_COLLECTION = "photoCollection";
+	// social photos
+	private static final String KEY_ACCOUNT = "account";
+	private static final String KEY_ALBUM_ID = "albumId";
+	public static final String KEY_PHOTO_COLLECTION = "photoCollection";
+	private static final String KEY_FILTER_TYPE = "filter_type";
+	private static final String KEY_ACCOUNT_TYPE = "account_type";
 
-  private static final String EXTRA_KEY_FILTER_TYPE = "filter_type";
+	public PhotosIntentWrapper(Context context) {
+		super(context, AssetActivity.class);
+	}
 
-  public PhotosIntentWrapper(Context context) {
-    super(context, AssetActivity.class);
-  }
+	public PhotosIntentWrapper(Intent intent) {
+		super(intent);
+	}
 
-  public PhotosIntentWrapper(Intent intent) {
-    super(intent);
-  }
+	public AccountModel getAccount() {
+		return getIntent().getExtras().getParcelable(KEY_ACCOUNT);
+	}
 
-  public AccountModel getAccount() {
-    return getIntent().getExtras().getParcelable(KEY_ACCOUNT);
-  }
+	public void setAccount(AccountModel account) {
+		getIntent().putExtra(KEY_ACCOUNT, account);
+	}
 
-  public void setAccount(AccountModel account) {
-    getIntent().putExtra(KEY_ACCOUNT, account);
-  }
+	public String getAlbumId() {
+		return getIntent().getExtras().getString(KEY_ALBUM_ID);
+	}
 
-  public String getAlbumId() {
-    return getIntent().getExtras().getString(KEY_ALBUM_ID);
-  }
+	public void setAlbumId(String albumId) {
+		getIntent().putExtra(KEY_ALBUM_ID, albumId);
+	}
 
-  public void setAlbumId(String albumId) {
-    getIntent().putExtra(KEY_ALBUM_ID, albumId);
-  }
+	@SuppressWarnings("unchecked")
+	public ArrayList<AssetModel> getMediaCollection() {
+		return (ArrayList<AssetModel>) getIntent().getExtras().getParcelable(
+				KEY_PHOTO_COLLECTION);
+	}
 
-  public ArrayList<AssetModel> getMediaCollection() {
-    return (ArrayList<AssetModel>) getIntent().getExtras().getParcelable(KEY_PHOTO_COLLECTION);
-  }
+	public void setMediaCollection(ArrayList<AssetModel> mediaCollection) {
+		getIntent()
+				.putExtra(KEY_PHOTO_COLLECTION, (Parcelable) mediaCollection);
+	}
 
-  public void setMediaCollection(ArrayList<AssetModel> mediaCollection) {
-    getIntent().putExtra(KEY_PHOTO_COLLECTION, (Parcelable) mediaCollection);
-  }
+	public PhotoFilterType getFilterType() {
+		return (PhotoFilterType) getIntent().getExtras().get(KEY_FILTER_TYPE);
+	}
 
-  public PhotoFilterType getFilterType() {
-    return (PhotoFilterType) getIntent().getExtras().get(EXTRA_KEY_FILTER_TYPE);
-  }
+	public void setFilterType(PhotoFilterType type) {
+		getIntent().putExtra(KEY_FILTER_TYPE, type);
+	}
 
-  public void setFilterType(PhotoFilterType type) {
-    getIntent().putExtra(EXTRA_KEY_FILTER_TYPE, type);
-  }
+	public AccountType getAccountType() {
+		return (AccountType) getIntent().getExtras().get(KEY_ACCOUNT_TYPE);
+	}
 
-  public void startActivityForResult(Activity context, int code) {
-    context.startActivityForResult(getIntent(), code);
-  }
+	public void setAccountType(AccountType type) {
+		getIntent().putExtra(KEY_ACCOUNT_TYPE, type);
+	}
+
+	public void startActivityForResult(Activity context, int code) {
+		context.startActivityForResult(getIntent(), code);
+	}
 }

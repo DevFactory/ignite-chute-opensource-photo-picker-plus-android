@@ -74,7 +74,6 @@ public class FragmentSingle extends Fragment implements
 	private RelativeLayout relativeLayoutRoot;
 
 	private AccountModel account;
-	private AccountType accountType;
 	private DisplayType displayType;
 	private String folderId;
 	private boolean isMultipicker;
@@ -112,13 +111,11 @@ public class FragmentSingle extends Fragment implements
 			Bundle savedInstanceState) {
 
 		isMultipicker = PhotoPicker.getInstance().isMultiPicker();
-		if (account != null) {
-			accountType = AccountType.valueOf(account.getType().toUpperCase());
-		}
 		Map<AccountType, DisplayType> accountMap = PhotoPicker.getInstance()
 				.getAccountDisplayType();
 		displayType = AppUtil.getDisplayType(accountMap, PhotoPicker
-				.getInstance().getDefaultAccountDisplayType(), accountType);
+				.getInstance().getDefaultAccountDisplayType(),
+				PhotoPickerPreferenceUtil.get().getAccountType());
 
 		View view = inflater.inflate(R.layout.gc_fragment_assets_grid,
 				container, false);
@@ -221,7 +218,7 @@ public class FragmentSingle extends Fragment implements
 
 	@Override
 	public void onFileClicked(int position) {
-		if (isMultipicker == true) {
+		if (isMultipicker) {
 			accountAssetAdapter.toggleTick(position);
 		} else {
 			ArrayList<AccountMediaModel> accountMediaModelList = new ArrayList<AccountMediaModel>();
