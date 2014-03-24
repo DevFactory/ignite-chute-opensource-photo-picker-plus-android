@@ -375,7 +375,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 				if (!adapterAccounts.getPhotoCollection().isEmpty()) {
 					ImageDataResponseLoader.postImageData(getActivity()
 							.getApplicationContext(), adapterAccounts
-							.getPhotoCollection(), accountListener);
+							.getPhotoCollection(), accountListener, accountType);
 				}
 			} else if ((filterType == PhotoFilterType.ALL_MEDIA)
 					|| (filterType == PhotoFilterType.CAMERA_ROLL)) {
@@ -409,7 +409,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 					.getItem(position));
 			ImageDataResponseLoader.postImageData(getActivity()
 					.getApplicationContext(), accountMediaModelList,
-					accountListener);
+					accountListener, accountType);
 		}
 
 	}

@@ -42,6 +42,7 @@ import com.chute.sdk.v2.api.authentication.AuthenticationFactory;
 import com.chute.sdk.v2.api.authentication.TokenAuthenticationProvider;
 import com.chute.sdk.v2.model.AccountMediaModel;
 import com.chute.sdk.v2.model.AssetModel;
+import com.chute.sdk.v2.model.enums.AccountType;
 import com.chute.sdk.v2.model.response.ResponseModel;
 import com.dg.libs.rest.HttpRequest;
 import com.dg.libs.rest.callbacks.HttpCallback;
@@ -60,7 +61,7 @@ public class ImageDataResponseLoader {
 
 	public static void postImageData(Context context,
 			ArrayList<AccountMediaModel> selectedImages,
-			ListenerFilesAccount accountListener) {
+			ListenerFilesAccount accountListener, AccountType accountType) {
 
 		String token = TokenAuthenticationProvider.getInstance().getToken();
 		AuthConstants authConstants = AuthenticationFactory.getInstance()
@@ -90,7 +91,8 @@ public class ImageDataResponseLoader {
 		imageDataModel.setMedia(mediaModelList);
 
 		getImageData(context, imageDataModel,
-				new ImageDataCallback(context, accountListener)).executeAsync();
+				new ImageDataCallback(context, accountListener, accountType))
+				.executeAsync();
 
 	}
 
@@ -105,10 +107,13 @@ public class ImageDataResponseLoader {
 
 		private Context context;
 		private ListenerFilesAccount listener;
+		private AccountType accountType;
 
-		private ImageDataCallback(Context context, ListenerFilesAccount listener) {
+		private ImageDataCallback(Context context,
+				ListenerFilesAccount listener, AccountType accountType) {
 			this.context = context;
 			this.listener = listener;
+			this.accountType = accountType;
 		}
 
 		@Override
@@ -124,7 +129,8 @@ public class ImageDataResponseLoader {
 			if (responseData.getData() != null) {
 				List<AssetModel> assetList = responseData.getData()
 						.getAssetList();
-				listener.onDeliverAccountFiles((ArrayList<AssetModel>) assetList);
+				listener.onDeliverAccountFiles(
+						(ArrayList<AssetModel>) assetList, accountType);
 			}
 
 		}

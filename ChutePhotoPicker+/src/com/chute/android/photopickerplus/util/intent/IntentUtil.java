@@ -30,6 +30,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.chute.android.photopickerplus.ui.activity.ServicesActivity;
 import com.chute.sdk.v2.model.AssetModel;
+import com.chute.sdk.v2.model.enums.AccountType;
 
 /**
  * Helper class that contains methods for delivering the result to the main
@@ -38,21 +39,26 @@ import com.chute.sdk.v2.model.AssetModel;
  */
 public class IntentUtil {
 
-  public static void deliverDataToInitialActivity(final FragmentActivity context,
-      final AssetModel model) {
-    List<AssetModel> mediaCollection = new ArrayList<AssetModel>();
-    mediaCollection.add(model);
-    deliverDataToInitialActivity(context, mediaCollection);
-  }
+	public static void deliverDataToInitialActivity(
+			final FragmentActivity context, final AssetModel model,
+			AccountType accountTupe) {
+		List<AssetModel> mediaCollection = new ArrayList<AssetModel>();
+		mediaCollection.add(model);
+		deliverDataToInitialActivity(context, mediaCollection, accountTupe);
+	}
 
-  public static void deliverDataToInitialActivity(final FragmentActivity context,
-      final List<AssetModel> collection) {
-    final PhotoPickerPlusIntentWrapper wrapper = new PhotoPickerPlusIntentWrapper(new Intent(
-        context,
-        ServicesActivity.class));
-    wrapper.setMediaCollection(collection);
-    wrapper.getIntent().addFlags(
-        Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-    wrapper.startActivity(context);
-  }
+	public static void deliverDataToInitialActivity(
+			final FragmentActivity context, final List<AssetModel> collection,
+			AccountType accountType) {
+		final PhotoPickerPlusIntentWrapper wrapper = new PhotoPickerPlusIntentWrapper(
+				new Intent(context, ServicesActivity.class));
+		wrapper.setMediaCollection(collection);
+		if (accountType != null) {
+			wrapper.setAccountType(accountType);
+		}
+		wrapper.getIntent().addFlags(
+				Intent.FLAG_ACTIVITY_CLEAR_TOP
+						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		wrapper.startActivity(context);
+	}
 }

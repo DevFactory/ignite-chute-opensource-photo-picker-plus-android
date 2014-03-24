@@ -172,7 +172,7 @@ public class ServicesActivity extends FragmentActivity implements
 			model.setVideoUrl(lastVideoItemFromCameraVideos.toString());
 			model.setType(MediaType.VIDEO.name().toLowerCase());
 			IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-					model);
+					model, null);
 		}
 	}
 
@@ -209,7 +209,7 @@ public class ServicesActivity extends FragmentActivity implements
 			model.setUrl(uri.toString());
 			model.setType(MediaType.IMAGE.name().toLowerCase());
 			IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-					model);
+					model, null);
 		}
 
 	}
@@ -414,29 +414,29 @@ public class ServicesActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void onDeliverAccountFiles(ArrayList<AssetModel> assetList) {
+	public void onDeliverAccountFiles(ArrayList<AssetModel> assetList, AccountType accountType) {
 		IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-				assetList);
+				assetList, accountType);
 
 	}
 
 	@Override
 	public void onDeliverCursorAssets(List<DeliverMediaModel> deliverList) {
 		IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-				AssetUtil.getPhotoCollection(deliverList));
+				AssetUtil.getPhotoCollection(deliverList), null);
 
 	}
 
 	@Override
-	public void onAccountFilesSelect(AssetModel assetModel) {
+	public void onAccountFilesSelect(AssetModel assetModel, AccountType accountType) {
 		IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-				assetModel);
+				assetModel, accountType);
 	}
 
 	@Override
 	public void onCursorAssetsSelect(AssetModel assetModel) {
 		IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-				assetModel);
+				assetModel, null);
 	}
 
 	@Override

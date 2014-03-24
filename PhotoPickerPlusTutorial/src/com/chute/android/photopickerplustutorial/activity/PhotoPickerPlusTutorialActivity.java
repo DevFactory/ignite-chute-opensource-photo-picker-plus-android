@@ -43,6 +43,7 @@ import com.chute.android.photopickerplus.util.intent.PhotoPickerPlusIntentWrappe
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.android.photopickerplustutorial.adapter.GridAdapter;
 import com.chute.sdk.v2.model.AssetModel;
+import com.chute.sdk.v2.model.enums.AccountType;
 
 public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 
@@ -51,6 +52,7 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 	private GridView grid;
 	private GridAdapter adapter;
 	private ArrayList<AssetModel> accountMediaList;
+	private AccountType accountType;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,9 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 		final PhotoPickerPlusIntentWrapper wrapper = new PhotoPickerPlusIntentWrapper(
 				data);
 		accountMediaList = wrapper.getMediaCollection();
+		if (accountType != null) {
+		accountType = wrapper.getAccountType();
+		}
 		adapter.changeData(accountMediaList);
 		ALog.d(wrapper.getMediaCollection().toString());
 

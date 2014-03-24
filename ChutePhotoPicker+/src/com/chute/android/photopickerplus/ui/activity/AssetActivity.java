@@ -122,8 +122,8 @@ public class AssetActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void onAccountFilesSelect(AssetModel assetModel) {
-		IntentUtil.deliverDataToInitialActivity(AssetActivity.this, assetModel);
+	public void onAccountFilesSelect(AssetModel assetModel, AccountType accountType) {
+		IntentUtil.deliverDataToInitialActivity(AssetActivity.this, assetModel, accountType);
 		setResult(RESULT_OK);
 		finish();
 
@@ -131,7 +131,7 @@ public class AssetActivity extends FragmentActivity implements
 
 	@Override
 	public void onCursorAssetsSelect(AssetModel assetModel) {
-		IntentUtil.deliverDataToInitialActivity(AssetActivity.this, assetModel);
+		IntentUtil.deliverDataToInitialActivity(AssetActivity.this, assetModel, null);
 		setResult(RESULT_OK);
 		finish();
 
@@ -140,16 +140,16 @@ public class AssetActivity extends FragmentActivity implements
 	@Override
 	public void onDeliverCursorAssets(List<DeliverMediaModel> deliverList) {
 		IntentUtil.deliverDataToInitialActivity(AssetActivity.this,
-				AssetUtil.getPhotoCollection(deliverList));
+				AssetUtil.getPhotoCollection(deliverList), null);
 		setResult(RESULT_OK);
 		finish();
 
 	}
 
 	@Override
-	public void onDeliverAccountFiles(ArrayList<AssetModel> assetModelList) {
+	public void onDeliverAccountFiles(ArrayList<AssetModel> assetModelList, AccountType accountType) {
 		IntentUtil.deliverDataToInitialActivity(AssetActivity.this,
-				assetModelList);
+				assetModelList, accountType);
 		setResult(RESULT_OK);
 		finish();
 
