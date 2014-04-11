@@ -48,5 +48,6 @@
     <string name="expired_session_logging_in">Your session has expired. Logging in again...</string>
     <string name="sign_out">Sign out</string>
     <string name="toast_signed_out">Signed out</string>
+    <string name="toast_memory_full">Camera cannot start, memory is full.</string>
 
 </resources>

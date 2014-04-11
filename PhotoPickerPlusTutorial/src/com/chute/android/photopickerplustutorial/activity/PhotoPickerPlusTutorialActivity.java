@@ -102,7 +102,7 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 				data);
 		accountMediaList = wrapper.getMediaCollection();
 		if (accountType != null) {
-		accountType = wrapper.getAccountType();
+			accountType = wrapper.getAccountType();
 		}
 		adapter.changeData(accountMediaList);
 		ALog.d(wrapper.getMediaCollection().toString());

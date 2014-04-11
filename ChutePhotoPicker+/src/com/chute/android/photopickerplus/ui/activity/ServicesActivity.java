@@ -193,7 +193,13 @@ public class ServicesActivity extends FragmentActivity implements
 					android.provider.MediaStore.EXTRA_OUTPUT,
 					android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		}
-		startActivityForResult(intent, Constants.CAMERA_PIC_REQUEST);
+		try {
+			startActivityForResult(intent, Constants.CAMERA_PIC_REQUEST);
+		} catch (Exception e) {
+			ALog.w("Could not start the camera. Memory is full.");
+			NotificationUtil.makeToast(getApplicationContext(),
+					R.string.toast_memory_full);
+		}
 	}
 
 	@Override
@@ -414,7 +420,8 @@ public class ServicesActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void onDeliverAccountFiles(ArrayList<AssetModel> assetList, AccountType accountType) {
+	public void onDeliverAccountFiles(ArrayList<AssetModel> assetList,
+			AccountType accountType) {
 		IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
 				assetList, accountType);
 
@@ -428,7 +435,8 @@ public class ServicesActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void onAccountFilesSelect(AssetModel assetModel, AccountType accountType) {
+	public void onAccountFilesSelect(AssetModel assetModel,
+			AccountType accountType) {
 		IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
 				assetModel, accountType);
 	}
