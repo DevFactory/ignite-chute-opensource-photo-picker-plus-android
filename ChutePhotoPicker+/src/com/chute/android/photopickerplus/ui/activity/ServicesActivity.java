@@ -152,7 +152,7 @@ public class ServicesActivity extends FragmentActivity implements
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 		}
 		intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-		startActivityForResult(intent, Constants.CAMERA_VIDEO_REQUEST);
+		startTheCamera(intent, Constants.CAMERA_VIDEO_REQUEST);
 
 	}
 
@@ -193,13 +193,7 @@ public class ServicesActivity extends FragmentActivity implements
 					android.provider.MediaStore.EXTRA_OUTPUT,
 					android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		}
-		try {
-			startActivityForResult(intent, Constants.CAMERA_PIC_REQUEST);
-		} catch (Exception e) {
-			ALog.w("Could not start the camera. Memory is full.");
-			NotificationUtil.makeToast(getApplicationContext(),
-					R.string.toast_memory_full);
-		}
+		startTheCamera(intent, Constants.CAMERA_PIC_REQUEST);
 	}
 
 	@Override
@@ -619,6 +613,16 @@ public class ServicesActivity extends FragmentActivity implements
 
 		}
 
+	}
+
+	private void startTheCamera(Intent intent, int requestCode) {
+		try {
+			startActivityForResult(intent, requestCode);
+		} catch (Exception e) {
+			ALog.w("Could not start the camera. Memory is full.");
+			NotificationUtil.makeToast(getApplicationContext(),
+					R.string.toast_memory_full);
+		}
 	}
 
 }
