@@ -6,12 +6,12 @@ import java.util.Map;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.CursorAdapter;
 import android.widget.ImageView;
 
 import com.chute.android.photopickerplus.R;
