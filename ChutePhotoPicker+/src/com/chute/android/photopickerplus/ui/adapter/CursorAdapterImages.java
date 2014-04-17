@@ -26,6 +26,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -37,6 +39,7 @@ import android.widget.ImageView;
 
 import com.chute.android.photopickerplus.R;
 import com.chute.android.photopickerplus.config.PhotoPicker;
+import com.chute.android.photopickerplus.dao.MediaDAO;
 import com.chute.android.photopickerplus.models.DeliverMediaModel;
 import com.chute.android.photopickerplus.models.enums.MediaType;
 import com.chute.android.photopickerplus.ui.activity.AssetActivity;
@@ -49,10 +52,13 @@ public class CursorAdapterImages extends BaseCursorAdapter implements
 		ListenerImageSelection {
 
 	private ListenerFilesCursor listener;
+	private Context context;
+	private int position;
 
 	public CursorAdapterImages(Context context, Cursor c,
 			ListenerFilesCursor listener) {
 		super(context, c);
+		this.context = context;
 		this.listener = listener;
 		if (context.getResources().getBoolean(R.bool.has_two_panes)) {
 			((ServicesActivity) context).setImagesSelectListener(this);
@@ -76,7 +82,7 @@ public class CursorAdapterImages extends BaseCursorAdapter implements
 		if (cursor == null) {
 			return 0;
 		} else {
-			return cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+			return cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA);
 		}
 	}
 
@@ -101,33 +107,40 @@ public class CursorAdapterImages extends BaseCursorAdapter implements
 	}
 
 	private final class ImageClickListener implements OnClickListener {
-		private String path;
+		private String thumbnail;
 		private int selectedPosition;
 
-		private ImageClickListener(String path, int selectedPosition) {
-			this.path = path;
+		private ImageClickListener(String thumbnail, int selectedPosition) {
+			this.thumbnail = thumbnail;
 			this.selectedPosition = selectedPosition;
 		}
 
 		@Override
 		public void onClick(View v) {
+			position = selectedPosition;
 			if (PhotoPicker.getInstance().isMultiPicker()) {
-				toggleTick(selectedPosition);
+				toggleTick(position);
 			} else {
+				String imagePath = MediaDAO.getImagePathFromCursor(context,
+						getCursor(), position);
 				listener.onCursorAssetsSelect(AssetUtil
-						.getMediaModel(createMediaResultModel(path)));
+						.getMediaModel(createMediaResultModel(thumbnail, imagePath)));
 			}
-
 		}
 
 	}
 
 	public List<DeliverMediaModel> getSelectedFilePaths() {
 		final List<DeliverMediaModel> deliverList = new ArrayList<DeliverMediaModel>();
-		final Iterator<String> iterator = tick.values().iterator();
+		Iterator<Entry<Integer, String>> iterator = tick.entrySet().iterator();
 		while (iterator.hasNext()) {
-			String url = iterator.next();
-			deliverList.add(createMediaResultModel(url));
+			Map.Entry<Integer, String> pairs = iterator.next();
+			String thumbnail = pairs.getValue();
+			int position = pairs.getKey();
+
+			String path = MediaDAO.getImagePathFromCursor(context,
+					getCursor(), position);
+			deliverList.add(createMediaResultModel(thumbnail, Uri.fromFile(new File(path)).toString()));
 		}
 		return deliverList;
 	}
@@ -141,10 +154,10 @@ public class CursorAdapterImages extends BaseCursorAdapter implements
 		notifyDataSetChanged();
 	}
 
-	private DeliverMediaModel createMediaResultModel(String path) {
+	private DeliverMediaModel createMediaResultModel(String thumbnail, String path) {
 		DeliverMediaModel model = new DeliverMediaModel();
 		model.setImageUrl(path);
-		model.setThumbnail(path);
+		model.setThumbnail(thumbnail);
 		model.setMediaType(MediaType.IMAGE);
 		return model;
 	}

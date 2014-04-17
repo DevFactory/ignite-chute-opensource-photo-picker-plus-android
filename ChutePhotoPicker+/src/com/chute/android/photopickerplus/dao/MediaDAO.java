@@ -24,7 +24,6 @@ package com.chute.android.photopickerplus.dao;
 
 import java.io.File;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -60,6 +59,27 @@ public class MediaDAO {
 		final String query = MediaStore.Images.Media.DATA + " LIKE \"%DCIM%\"";
 		return context.getContentResolver().query(images, projection, query,
 				null, MediaStore.Images.Media.DATE_ADDED + " DESC");
+	}
+
+	/**
+	 * Request a specific record in {@link MediaStore.Images.Thumbnails}
+	 * database.
+	 * 
+	 * @param context
+	 *            The application context.
+	 * @return Cursor object enabling read-write access to camera photos on the
+	 *         device.
+	 */
+	public static Cursor getCameraThumbnails(final Context context) {
+		final String[] projection = new String[] {
+				MediaStore.Images.Thumbnails._ID,
+				MediaStore.Images.Thumbnails.IMAGE_ID,
+				MediaStore.Images.Thumbnails.DATA };
+		final Uri images = MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI;
+		final String query = MediaStore.Images.Thumbnails.DATA
+				+ " LIKE \"%DCIM%\"";
+		return context.getContentResolver().query(images, projection, query,
+				null, MediaStore.Images.Thumbnails._ID + " DESC");
 	}
 
 	/**
@@ -117,6 +137,25 @@ public class MediaDAO {
 	}
 
 	/**
+	 * Request a specific record in {@link MediaStore.Images.Thumbnails}
+	 * database.
+	 * 
+	 * @param context
+	 *            The application context.
+	 * @return Cursor object enabling read-write access to all photos on the
+	 *         device.
+	 */
+	public static Cursor getAllMediaThumbnails(final Context context) {
+		final String[] projection = new String[] {
+				MediaStore.Images.Thumbnails._ID,
+				MediaStore.Images.Thumbnails.IMAGE_ID,
+				MediaStore.Images.Thumbnails.DATA };
+		final Uri images = MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI;
+		return context.getContentResolver().query(images, projection, null,
+				null, MediaStore.Images.Thumbnails._ID + " DESC");
+	}
+
+	/**
 	 * Request a specific record in {@link MediaStore.Video.Thumbnails}
 	 * database.
 	 * 
@@ -169,6 +208,23 @@ public class MediaDAO {
 	}
 
 	/**
+	 * Returns the last photo thumbnail URI from all photos on the device.
+	 * 
+	 * @param context
+	 *            The application context.
+	 * @return The URI for the requested query.
+	 */
+	public static Uri getLastPhotoThumbnailFromAllPhotos(final Context context) {
+		Cursor allMediaPhotos = getAllMediaThumbnails(context);
+		Uri uri = getFirstImageThumbnailUri(allMediaPhotos);
+		safelyCloseCursor(allMediaPhotos);
+		if (uri == null) {
+			return Uri.parse("");
+		}
+		return uri;
+	}
+
+	/**
 	 * Returns the last photo URI from the camera photos on the device.
 	 * 
 	 * @param context
@@ -176,9 +232,27 @@ public class MediaDAO {
 	 * @return The URI for the requested query.
 	 */
 	public static Uri getLastPhotoFromCameraPhotos(final Context context) {
-		Cursor allMediaPhotos = getCameraPhotos(context);
-		Uri uri = getFirstImageItemUri(allMediaPhotos);
-		safelyCloseCursor(allMediaPhotos);
+		Cursor cameraPhotos = getCameraPhotos(context);
+		Uri uri = getFirstImageItemUri(cameraPhotos);
+		safelyCloseCursor(cameraPhotos);
+		if (uri == null) {
+			return Uri.parse("");
+		}
+		return uri;
+	}
+
+	/**
+	 * Returns the last photo thumbnail URI from the camera photos on the
+	 * device.
+	 * 
+	 * @param context
+	 *            The application context.
+	 * @return The URI for the requested query.
+	 */
+	public static Uri getLastThumbnailFromCameraPhotos(final Context context) {
+		Cursor cameraPhotos = getCameraThumbnails(context);
+		Uri uri = getFirstImageThumbnailUri(cameraPhotos);
+		safelyCloseCursor(cameraPhotos);
 		if (uri == null) {
 			return Uri.parse("");
 		}
@@ -291,6 +365,39 @@ public class MediaDAO {
 	}
 
 	/**
+	 * Request a specific record in {@link MediaStore.Images.Thumbnails}
+	 * database.
+	 * 
+	 * @param context
+	 *            The application context.
+	 * @param dataCursor
+	 *            Cursor object enabling read-write access to videos on the
+	 *            device.
+	 * @param position
+	 *            Cursor position.
+	 * @return Path of the image associated with the corresponding thumbnail.
+	 */
+	public static String getImagePathFromCursor(final Context context,
+			final Cursor dataCursor, int position) {
+		String imagePath = null;
+		String[] imageColumns = { MediaStore.Images.Media.DATA,
+				MediaStore.Images.Media._ID };
+		if (dataCursor.moveToPosition(position)) {
+			int id = dataCursor.getInt(dataCursor
+					.getColumnIndex(MediaStore.Images.Thumbnails.IMAGE_ID));
+			Cursor imageCursor = context.getContentResolver().query(
+					MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageColumns,
+					MediaStore.Images.Media._ID + "=" + id, null, null);
+			if (imageCursor.moveToFirst()) {
+				imagePath = imageCursor.getString(imageCursor
+						.getColumnIndex(MediaStore.Images.Media.DATA));
+			}
+			safelyCloseCursor(imageCursor);
+		}
+		return imagePath;
+	}
+
+	/**
 	 * Returns the URI of the first item from all photos on the device.
 	 * 
 	 * @param Cursor
@@ -302,6 +409,22 @@ public class MediaDAO {
 		if (cursor != null && cursor.moveToFirst()) {
 			return Uri.fromFile(new File(cursor.getString(cursor
 					.getColumnIndex(MediaStore.Images.Media.DATA))));
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the URI of the first item from all thumbnails on the device.
+	 * 
+	 * @param Cursor
+	 *            Cursor object enabling read-write access to all photos on the
+	 *            device.
+	 * @return The URI for the requested query.
+	 */
+	private static Uri getFirstImageThumbnailUri(Cursor cursor) {
+		if (cursor != null && cursor.moveToFirst()) {
+			return Uri.fromFile(new File(cursor.getString(cursor
+					.getColumnIndex(MediaStore.Images.Thumbnails.DATA))));
 		}
 		return null;
 	}
