@@ -46,7 +46,7 @@ public interface ListenerFilesAccount {
 	 *            The {@link AssetModel} delivered to the main activity i.e. the
 	 *            activity that started the PhotoPicker.
 	 */
-	public void onAccountFilesSelect(AssetModel assetModel, AccountType accountType);
+	public void onAccountFilesSelect(AssetModel assetModel, AccountModel accountModel);
 
 	/**
 	 * Delivers a list of {@link AssetModel}s to the main activity when media items
@@ -56,7 +56,7 @@ public interface ListenerFilesAccount {
 	 *            {@link AssetModel} list delivered to the main activity i.e.
 	 *            the activity that started the PhotoPicker.
 	 */
-	public void onDeliverAccountFiles(ArrayList<AssetModel> assetModelList, AccountType accountType);
+	public void onDeliverAccountFiles(ArrayList<AssetModel> assetModelList, AccountModel accountModel);
 
 	/**
 	 * Triggered when a remote service folder or album is selected.

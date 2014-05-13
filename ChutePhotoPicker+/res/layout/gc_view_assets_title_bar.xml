@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gcLinearLayoutAssetsViewTitle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/gcTextViewBack"
+        style="@style/textViewActionBarItem"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:drawableLeft="@drawable/back"
+        android:drawablePadding="5dp"
+        android:text="@string/button_navigation_services" />
+
+    <TextView
+        android:id="@+id/gcTextViewLabelAccount"
+        style="@style/fragmentTitle"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="@string/choose_service" />
+
+    <TextView
+        android:id="@+id/gcTextViewUse"
+        style="@style/textViewActionBarItem"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingRight="10dp"
+        android:text="@string/button_use_media" />
+
+</LinearLayout>

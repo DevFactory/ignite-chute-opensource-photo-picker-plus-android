@@ -40,7 +40,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -53,20 +53,23 @@ import com.chute.android.photopickerplus.dao.MediaDAO;
 import com.chute.android.photopickerplus.models.DeliverMediaModel;
 import com.chute.android.photopickerplus.models.enums.MediaType;
 import com.chute.android.photopickerplus.models.enums.PhotoFilterType;
-import com.chute.android.photopickerplus.ui.fragment.FragmentEmpty;
 import com.chute.android.photopickerplus.ui.fragment.FragmentRoot;
 import com.chute.android.photopickerplus.ui.fragment.FragmentServices.ServiceClickedListener;
 import com.chute.android.photopickerplus.ui.fragment.FragmentSingle;
 import com.chute.android.photopickerplus.ui.listener.ListenerAccountAssetsSelection;
 import com.chute.android.photopickerplus.ui.listener.ListenerFilesAccount;
 import com.chute.android.photopickerplus.ui.listener.ListenerFilesCursor;
+import com.chute.android.photopickerplus.ui.listener.ListenerFragmentRoot;
+import com.chute.android.photopickerplus.ui.listener.ListenerFragmentSingle;
 import com.chute.android.photopickerplus.ui.listener.ListenerImageSelection;
 import com.chute.android.photopickerplus.ui.listener.ListenerVideoSelection;
 import com.chute.android.photopickerplus.util.AppUtil;
 import com.chute.android.photopickerplus.util.AssetUtil;
 import com.chute.android.photopickerplus.util.Constants;
+import com.chute.android.photopickerplus.util.FragmentUtil;
 import com.chute.android.photopickerplus.util.NotificationUtil;
 import com.chute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
+import com.chute.android.photopickerplus.util.UIUtil;
 import com.chute.android.photopickerplus.util.intent.IntentUtil;
 import com.chute.android.photopickerplus.util.intent.PhotosIntentWrapper;
 import com.chute.sdk.v2.api.accounts.CurrentUserAccountsRequest;
@@ -90,10 +93,10 @@ import com.dg.libs.rest.domain.ResponseStatus;
  * GridView.
  */
 public class ServicesActivity extends FragmentActivity implements
-		ListenerFilesAccount, ListenerFilesCursor, ServiceClickedListener {
+		ListenerFilesAccount, ListenerFilesCursor, ServiceClickedListener,
+		ListenerFragmentRoot, ListenerFragmentSingle {
 
 	private static FragmentManager fragmentManager;
-	private FragmentTransaction fragmentTransaction;
 	private AccountType accountType;
 	private boolean dualPanes;
 	private List<Integer> accountItemPositions;
@@ -106,7 +109,8 @@ public class ServicesActivity extends FragmentActivity implements
 	private ListenerVideoSelection listenerVideosSelection;
 	private FragmentSingle fragmentSingle;
 	private FragmentRoot fragmentRoot;
-	private TextView signOut;
+	private TextView textViewSignOut;
+	private TextView textViewClose;
 	private int photoFilterType;
 
 	public void setAssetsSelectListener(
@@ -126,22 +130,34 @@ public class ServicesActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		fragmentManager = getSupportFragmentManager();
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		requestWindowFeature(Window.FEATURE_ACTION_BAR);
 		setContentView(R.layout.main_layout);
 
-		dualPanes = getResources().getBoolean(R.bool.has_two_panes);
+		View actionBarView = UIUtil.initActionBar(this,
+				R.layout.gc_view_services_title_bar);
+		textViewClose = (TextView) actionBarView
+				.findViewById(R.id.gcTextViewClose);
+		textViewSignOut = (TextView) actionBarView
+				.findViewById(R.id.gcTextViewLogout);
+		textViewSignOut.setOnClickListener(new SignOutListener());
+		textViewClose.setOnClickListener(new CloseListener());
 
-		signOut = (TextView) findViewById(R.id.gcTextViewSignOut);
-		signOut.setOnClickListener(new SignOutListener());
+		dualPanes = getResources().getBoolean(R.bool.has_two_panes);
 
 		retrieveValuesFromBundle(savedInstanceState);
 
 		if (dualPanes
 				&& savedInstanceState == null
 				&& getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT) {
-			replaceContentWithEmptyFragment();
+			FragmentUtil.replaceContentWithEmptyFragment(ServicesActivity.this);
 		}
 
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		return true;
 	}
 
 	@Override
@@ -227,7 +243,9 @@ public class ServicesActivity extends FragmentActivity implements
 			wrapper.startActivityForResult(ServicesActivity.this,
 					PhotosIntentWrapper.ACTIVITY_FOR_RESULT_STREAM_KEY);
 		} else {
-			replaceContentWithRootFragment(null, PhotoFilterType.ALL_MEDIA);
+			FragmentUtil.replaceContentWithRootFragment(ServicesActivity.this,
+					null, PhotoFilterType.ALL_MEDIA, accountItemPositions,
+					imageItemPositions, videoItemPositions);
 		}
 
 	}
@@ -245,7 +263,9 @@ public class ServicesActivity extends FragmentActivity implements
 			wrapper.startActivityForResult(ServicesActivity.this,
 					PhotosIntentWrapper.ACTIVITY_FOR_RESULT_STREAM_KEY);
 		} else {
-			replaceContentWithRootFragment(null, PhotoFilterType.CAMERA_ROLL);
+			FragmentUtil.replaceContentWithRootFragment(ServicesActivity.this,
+					null, PhotoFilterType.CAMERA_ROLL, accountItemPositions,
+					imageItemPositions, videoItemPositions);
 		}
 
 	}
@@ -265,37 +285,12 @@ public class ServicesActivity extends FragmentActivity implements
 			wrapper.startActivityForResult(ServicesActivity.this,
 					PhotosIntentWrapper.ACTIVITY_FOR_RESULT_STREAM_KEY);
 		} else {
-			replaceContentWithRootFragment(account,
-					PhotoFilterType.SOCIAL_MEDIA);
+			FragmentUtil.replaceContentWithRootFragment(ServicesActivity.this,
+					account, PhotoFilterType.SOCIAL_MEDIA,
+					accountItemPositions, imageItemPositions,
+					videoItemPositions);
 		}
 
-	}
-
-	public void replaceContentWithSingleFragment(AccountModel account,
-			String folderId, List<Integer> selectedItemPositions) {
-		fragmentTransaction = fragmentManager.beginTransaction();
-		fragmentTransaction.replace(R.id.gcFragments, FragmentSingle
-				.newInstance(account, folderId, selectedItemPositions),
-				Constants.TAG_FRAGMENT_FILES);
-		fragmentTransaction.addToBackStack(null);
-		fragmentTransaction.commit();
-
-	}
-
-	public void replaceContentWithRootFragment(AccountModel account,
-			PhotoFilterType filterType) {
-		fragmentTransaction = fragmentManager.beginTransaction();
-		fragmentTransaction.replace(R.id.gcFragments, FragmentRoot.newInstance(
-				account, filterType, accountItemPositions, imageItemPositions,
-				videoItemPositions), Constants.TAG_FRAGMENT_FOLDER);
-		fragmentTransaction.commit();
-	}
-
-	public void replaceContentWithEmptyFragment() {
-		fragmentTransaction = fragmentManager.beginTransaction();
-		fragmentTransaction.replace(R.id.gcFragments,
-				FragmentEmpty.newInstance(), Constants.TAG_FRAGMENT_EMPTY);
-		fragmentTransaction.commit();
 	}
 
 	@Override
@@ -415,9 +410,9 @@ public class ServicesActivity extends FragmentActivity implements
 
 	@Override
 	public void onDeliverAccountFiles(ArrayList<AssetModel> assetList,
-			AccountType accountType) {
+			AccountModel accountModel) {
 		IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-				assetList, accountType);
+				assetList, accountModel);
 
 	}
 
@@ -430,9 +425,9 @@ public class ServicesActivity extends FragmentActivity implements
 
 	@Override
 	public void onAccountFilesSelect(AssetModel assetModel,
-			AccountType accountType) {
+			AccountModel accountModel) {
 		IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-				assetModel, accountType);
+				assetModel, accountModel);
 	}
 
 	@Override
@@ -449,8 +444,8 @@ public class ServicesActivity extends FragmentActivity implements
 		photoFilterType = PhotoFilterType.SOCIAL_MEDIA.ordinal();
 		this.folderId = folderId;
 		this.account = account;
-		replaceContentWithSingleFragment(account, folderId,
-				accountItemPositions);
+		FragmentUtil.replaceContentWithSingleFragment(ServicesActivity.this,
+				account, folderId, accountItemPositions);
 	}
 
 	@Override
@@ -490,9 +485,9 @@ public class ServicesActivity extends FragmentActivity implements
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		fragmentSingle = (FragmentSingle) getSupportFragmentManager()
-				.findFragmentByTag(Constants.TAG_FRAGMENT_FILES);
+				.findFragmentByTag(FragmentUtil.TAG_FRAGMENT_FILES);
 		fragmentRoot = (FragmentRoot) getSupportFragmentManager()
-				.findFragmentByTag(Constants.TAG_FRAGMENT_FOLDER);
+				.findFragmentByTag(FragmentUtil.TAG_FRAGMENT_FOLDER);
 		if (fragmentSingle != null
 				&& photoFilterType == PhotoFilterType.SOCIAL_MEDIA.ordinal()) {
 			fragmentSingle.updateFragment(account, folderId,
@@ -533,9 +528,9 @@ public class ServicesActivity extends FragmentActivity implements
 	@Override
 	public void onDestroy() {
 		Fragment fragmentFolder = fragmentManager
-				.findFragmentByTag(Constants.TAG_FRAGMENT_FOLDER);
+				.findFragmentByTag(FragmentUtil.TAG_FRAGMENT_FOLDER);
 		Fragment fragmentFiles = fragmentManager
-				.findFragmentByTag(Constants.TAG_FRAGMENT_FILES);
+				.findFragmentByTag(FragmentUtil.TAG_FRAGMENT_FILES);
 		if (fragmentFolder != null && fragmentFolder.isResumed()) {
 			fragmentManager.beginTransaction().remove(fragmentFolder).commit();
 		}
@@ -558,9 +553,9 @@ public class ServicesActivity extends FragmentActivity implements
 	@Override
 	public void onBackPressed() {
 		fragmentRoot = (FragmentRoot) getSupportFragmentManager()
-				.findFragmentByTag(Constants.TAG_FRAGMENT_FOLDER);
+				.findFragmentByTag(FragmentUtil.TAG_FRAGMENT_FOLDER);
 		fragmentSingle = (FragmentSingle) getSupportFragmentManager()
-				.findFragmentByTag(Constants.TAG_FRAGMENT_FILES);
+				.findFragmentByTag(FragmentUtil.TAG_FRAGMENT_FILES);
 		if (fragmentRoot != null && fragmentRoot.isVisible()) {
 			this.finish();
 		} else {
@@ -604,12 +599,23 @@ public class ServicesActivity extends FragmentActivity implements
 		@Override
 		public void onClick(View v) {
 			if (dualPanes) {
-				replaceContentWithEmptyFragment();
+				FragmentUtil
+						.replaceContentWithEmptyFragment(ServicesActivity.this);
 			}
 			NotificationUtil.makeToast(getApplicationContext(),
 					R.string.toast_signed_out);
 			TokenAuthenticationProvider.getInstance().clearAuth();
 			PhotoPickerPreferenceUtil.get().clearAll();
+
+		}
+
+	}
+
+	private final class CloseListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			finish();
 
 		}
 
@@ -623,6 +629,21 @@ public class ServicesActivity extends FragmentActivity implements
 			NotificationUtil.makeToast(getApplicationContext(),
 					R.string.toast_memory_full);
 		}
+	}
+
+	@Override
+	public void onFragmentRootNavigationBack() {
+		FragmentUtil.replaceContentWithEmptyFragment(ServicesActivity.this);
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onFragmentSingleNavigationBack() {
+		FragmentUtil.replaceContentWithRootFragment(ServicesActivity.this,
+				account, PhotoFilterType.SOCIAL_MEDIA, accountItemPositions,
+				imageItemPositions, videoItemPositions);
+
 	}
 
 }

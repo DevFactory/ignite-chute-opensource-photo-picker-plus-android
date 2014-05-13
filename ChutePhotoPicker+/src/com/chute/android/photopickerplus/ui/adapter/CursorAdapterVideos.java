@@ -22,7 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplus.ui.adapter;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,12 +30,12 @@ import java.util.Map.Entry;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
+import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplus.R;
 import com.chute.android.photopickerplus.config.PhotoPicker;
 import com.chute.android.photopickerplus.dao.MediaDAO;
@@ -45,21 +44,25 @@ import com.chute.android.photopickerplus.models.enums.MediaType;
 import com.chute.android.photopickerplus.ui.activity.AssetActivity;
 import com.chute.android.photopickerplus.ui.activity.ServicesActivity;
 import com.chute.android.photopickerplus.ui.listener.ListenerFilesCursor;
+import com.chute.android.photopickerplus.ui.listener.ListenerItemCount;
 import com.chute.android.photopickerplus.ui.listener.ListenerVideoSelection;
 import com.chute.android.photopickerplus.util.AssetUtil;
 
 public class CursorAdapterVideos extends BaseCursorAdapter implements
 		ListenerVideoSelection {
 
-	private ListenerFilesCursor listener;
+	private ListenerFilesCursor filesCursorListener;
+	private ListenerItemCount itemCountListener;
 	private Context context;
 	private int position;
+	private int count = 0;
 
 	public CursorAdapterVideos(Context context, Cursor c,
-			ListenerFilesCursor listener) {
+			ListenerFilesCursor filesCursorListener, ListenerItemCount itemCountListener) {
 		super(context, c);
-		this.listener = listener;
 		this.context = context;
+		this.filesCursorListener = filesCursorListener;
+		this.itemCountListener = itemCountListener;
 		if (context.getResources().getBoolean(R.bool.has_two_panes)) {
 			((ServicesActivity) context).setVideosSelectListener(this);
 		} else {
@@ -123,7 +126,7 @@ public class CursorAdapterVideos extends BaseCursorAdapter implements
 			} else {
 				String thumb = MediaDAO.getVideoThumbnailFromCursor(context,
 						getCursor(), position);
-				listener.onCursorAssetsSelect(AssetUtil
+				filesCursorListener.onCursorAssetsSelect(AssetUtil
 						.getMediaModel(createMediaResultModel(thumb, path)));
 			}
 
@@ -149,16 +152,22 @@ public class CursorAdapterVideos extends BaseCursorAdapter implements
 	public void toggleTick(int positionSelected) {
 		if (tick.containsKey(positionSelected)) {
 			tick.remove(positionSelected);
+			count--;
 		} else {
 			tick.put(positionSelected, getItem(positionSelected));
+			count++;
 		}
+		itemCountListener.onSelectedVideosCount(count);
 		notifyDataSetChanged();
 	}
 
 	private DeliverMediaModel createMediaResultModel(String thumb,
 			String videoUrl) {
+		ALog.d("video thumb: " + thumb);
+		ALog.d("video url: " + videoUrl);
+		ALog.d("video image url: " + thumb);
 		DeliverMediaModel model = new DeliverMediaModel();
-		model.setVideoUrl(Uri.fromFile(new File(videoUrl)).toString());
+		model.setVideoUrl(videoUrl);
 		model.setMediaType(MediaType.VIDEO);
 		model.setImageUrl(thumb);
 		model.setThumbnail(thumb);

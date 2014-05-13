@@ -28,5 +28,21 @@ package com.chute.android.photopickerplus.models.enums;
  * 
  */
 public enum PhotoFilterType {
-	CAMERA_ROLL, ALL_MEDIA, SOCIAL_MEDIA
+	CAMERA_ROLL("Camera Roll"), ALL_MEDIA("All Media"), SOCIAL_MEDIA(
+			"Social Media");
+
+	private final String name;
+
+	private PhotoFilterType(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	};
+
+	public String getName() {
+		return name;
+	}
 }

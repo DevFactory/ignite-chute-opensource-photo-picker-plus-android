@@ -34,7 +34,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -46,9 +45,12 @@ import com.chute.android.photopickerplus.R;
 import com.chute.android.photopickerplus.callback.ImageDataResponseLoader;
 import com.chute.android.photopickerplus.config.PhotoPicker;
 import com.chute.android.photopickerplus.models.enums.DisplayType;
+import com.chute.android.photopickerplus.models.enums.PhotoFilterType;
 import com.chute.android.photopickerplus.ui.adapter.AssetAccountAdapter;
 import com.chute.android.photopickerplus.ui.adapter.AssetAccountAdapter.AdapterItemClickListener;
 import com.chute.android.photopickerplus.ui.listener.ListenerFilesAccount;
+import com.chute.android.photopickerplus.ui.listener.ListenerFragmentSingle;
+import com.chute.android.photopickerplus.ui.listener.ListenerItemCount;
 import com.chute.android.photopickerplus.util.AppUtil;
 import com.chute.android.photopickerplus.util.AssetUtil;
 import com.chute.android.photopickerplus.util.NotificationUtil;
@@ -65,11 +67,13 @@ import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.domain.ResponseStatus;
 
 public class FragmentSingle extends Fragment implements
-		AdapterItemClickListener {
+		AdapterItemClickListener, ListenerItemCount {
 
 	private GridView gridView;
 	private ListView listView;
-	private TextView textViewSelectMedia;
+	private TextView textViewServiceTitle;
+	private TextView textViewUseMedia;
+	private TextView textViewBack;
 	private ProgressBar progressBar;
 	private RelativeLayout relativeLayoutRoot;
 
@@ -82,6 +86,7 @@ public class FragmentSingle extends Fragment implements
 
 	private AssetAccountAdapter accountAssetAdapter;
 	private ListenerFilesAccount accountListener;
+	private ListenerFragmentSingle fragmentSingleListener;
 
 	public static FragmentSingle newInstance(AccountModel account,
 			String folderId, List<Integer> selectedItemPositions) {
@@ -98,6 +103,7 @@ public class FragmentSingle extends Fragment implements
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		accountListener = (ListenerFilesAccount) activity;
+		fragmentSingleListener = (ListenerFragmentSingle) activity;
 
 	}
 
@@ -105,6 +111,7 @@ public class FragmentSingle extends Fragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setRetainInstance(true);
+		this.setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -116,8 +123,7 @@ public class FragmentSingle extends Fragment implements
 		Map<AccountType, DisplayType> accountMap = PhotoPicker.getInstance()
 				.getAccountDisplayType();
 		displayType = AppUtil.getDisplayType(accountMap, PhotoPicker
-				.getInstance().getDefaultAccountDisplayType(),
-				accountType);
+				.getInstance().getDefaultAccountDisplayType(), accountType);
 
 		View view = inflater.inflate(R.layout.gc_fragment_assets_grid,
 				container, false);
@@ -131,16 +137,17 @@ public class FragmentSingle extends Fragment implements
 			relativeLayoutRoot.addView(gridView);
 		}
 
-		textViewSelectMedia = (TextView) view
-				.findViewById(R.id.gcTextViewSelectMedia);
+		View titleView = getActivity().getActionBar().getCustomView();
+		textViewServiceTitle = (TextView) titleView
+				.findViewById(R.id.gcTextViewLabelAccount);
+		textViewUseMedia = (TextView) titleView
+				.findViewById(R.id.gcTextViewUse);
+		textViewUseMedia.setOnClickListener(new OkClickListener());
+		textViewBack = (TextView) titleView.findViewById(R.id.gcTextViewBack);
+		textViewBack.setOnClickListener(new OnBackClickListener());
 		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
 		updateFragment(account, folderId, selectedItemsPositions);
-
-		Button ok = (Button) view.findViewById(R.id.gcButtonOk);
-		ok.setOnClickListener(new OkClickListener());
-		Button cancel = (Button) view.findViewById(R.id.gcButtonCancel);
-		cancel.setOnClickListener(new CancelClickListener());
 
 		return view;
 	}
@@ -184,7 +191,7 @@ public class FragmentSingle extends Fragment implements
 				accountAssetAdapter = new AssetAccountAdapter(getActivity(),
 						AssetUtil.filterFiles(responseData.getData(),
 								supportImages, supportVideos),
-						FragmentSingle.this, displayType);
+						FragmentSingle.this, displayType, FragmentSingle.this);
 				if (displayType == DisplayType.LIST) {
 					listView.setAdapter(accountAssetAdapter);
 				} else {
@@ -197,9 +204,8 @@ public class FragmentSingle extends Fragment implements
 					}
 				}
 
-				UIUtil.setFragmentLabel(getActivity().getApplicationContext(),
-						textViewSelectMedia, supportImages, supportVideos,
-						supportVideos);
+				UIUtil.setFragmentLabel(getActivity(), textViewServiceTitle,
+						accountType, PhotoFilterType.SOCIAL_MEDIA);
 				NotificationUtil.showPhotosAdapterToast(getActivity()
 						.getApplicationContext(), accountAssetAdapter
 						.getCount());
@@ -228,16 +234,7 @@ public class FragmentSingle extends Fragment implements
 					.getItem(position));
 			ImageDataResponseLoader.postImageData(getActivity()
 					.getApplicationContext(), accountMediaModelList,
-					accountListener, accountType);
-		}
-
-	}
-
-	private final class CancelClickListener implements OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			getActivity().finish();
+					accountListener, account);
 		}
 
 	}
@@ -249,9 +246,29 @@ public class FragmentSingle extends Fragment implements
 			if (!accountAssetAdapter.getPhotoCollection().isEmpty()) {
 				ImageDataResponseLoader.postImageData(getActivity()
 						.getApplicationContext(), accountAssetAdapter
-						.getPhotoCollection(), accountListener, accountType);
+						.getPhotoCollection(), accountListener, account);
 			}
 		}
+	}
+
+	@Override
+	public void onSelectedImagesCount(int count) {
+		UIUtil.setSelectedItemsCount(getActivity(), textViewUseMedia, count);
+	}
+
+	@Override
+	public void onSelectedVideosCount(int count) {
+
+	}
+
+	private final class OnBackClickListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			fragmentSingleListener.onFragmentSingleNavigationBack();
+
+		}
+
 	}
 
 }

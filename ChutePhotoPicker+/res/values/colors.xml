@@ -15,5 +15,8 @@
     <color name="dark_gray">#333333</color>
     <color name="gray_light">#C0C0C0</color>
     <color name="sky_blue">#40c1f4</color>
-    
+    <color name="blue">#3498db</color>
+    <color name="transparent_blue">#660066CC</color>
+    <color name="fragment_title_divider">#dce4ea</color>
+
 </resources>

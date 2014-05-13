@@ -42,20 +42,5 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         android:scrollbars="none"
         android:verticalSpacing="10dip" />
 
-    <Button
-        android:id="@+id/gcButtonPhotoPicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="5dp"
-        android:drawableLeft="@drawable/pp_button_icon"
-        android:drawablePadding="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:text="@string/start_photo_picker"
-        android:textColor="@color/grey"
-        android:textSize="15sp" />
 
 </RelativeLayout>

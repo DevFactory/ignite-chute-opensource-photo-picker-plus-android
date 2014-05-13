@@ -24,12 +24,18 @@ package com.chute.android.photopickerplus.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chute.android.photopickerplus.R;
+import com.chute.android.photopickerplus.models.enums.PhotoFilterType;
+import com.chute.sdk.v2.model.enums.AccountType;
 
 /**
  * Helper class containing methods needed for appropriately displaying views.
@@ -77,9 +83,8 @@ public class UIUtil {
 		GridView grid = new GridView(context);
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.MATCH_PARENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.BELOW, R.id.gcTextViewSelectMedia);
-		params.addRule(RelativeLayout.ABOVE, R.id.gcLinearLayoutButtons);
+				RelativeLayout.LayoutParams.MATCH_PARENT);
+		params.addRule(RelativeLayout.BELOW, R.id.gcImageViewDivider);
 		grid.setLayoutParams(params);
 		grid.setFadingEdgeLength(0);
 		grid.setFastScrollEnabled(true);
@@ -105,9 +110,8 @@ public class UIUtil {
 		ListView list = new ListView(context);
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.MATCH_PARENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.BELOW, R.id.gcTextViewSelectMedia);
-		params.addRule(RelativeLayout.ABOVE, R.id.gcLinearLayoutButtons);
+				RelativeLayout.LayoutParams.MATCH_PARENT);
+		params.addRule(RelativeLayout.BELOW, R.id.gcImageViewDivider);
 		list.setLayoutParams(params);
 		list.setFadingEdgeLength(0);
 		list.setFastScrollEnabled(true);
@@ -134,30 +138,34 @@ public class UIUtil {
 	 *            Indicates whether the application is single or multi picker.
 	 */
 	public static void setFragmentLabel(Context context, TextView textView,
-			boolean supportImages, boolean supportVideos, boolean isMultipicker) {
-		if (isMultipicker == true) {
-			if (supportImages == true && supportVideos == false) {
-				textView.setText(context.getResources().getString(
-						R.string.select_photos));
-			} else if (supportVideos == true && supportImages == false) {
-				textView.setText(context.getResources().getString(
-						R.string.select_videos));
-			} else {
-				textView.setText(context.getResources().getString(
-						R.string.select_media));
-			}
+			AccountType accountType, PhotoFilterType photoFilterType) {
+		if (photoFilterType != PhotoFilterType.SOCIAL_MEDIA) {
+			textView.setText(photoFilterType.getName());
 		} else {
-			if (supportImages == true && supportVideos == false) {
-				textView.setText(context.getResources().getString(
-						R.string.select_a_photo));
-			} else if (supportVideos == true && supportImages == false) {
-				textView.setText(context.getResources().getString(
-						R.string.select_a_video));
-			} else {
-				textView.setText(context.getResources().getString(
-						R.string.select_media));
-			}
+			textView.setText(AppUtil.capitalizeFirstLetter(accountType.name()
+					.toLowerCase()));
 		}
 	}
 
+	public static void setSelectedItemsCount(Context context, TextView textView,
+			int count) {
+		String useMedia = context.getResources().getString(
+				R.string.button_use_media);
+		if (count > 0) {
+			textView.setText(useMedia + " (" + count + ")");
+		} else {
+			textView.setText(useMedia);
+		}
+	}
+	
+	public static View initActionBar(FragmentActivity activity, int resId) {
+		activity.getActionBar().setIcon(
+				new ColorDrawable(activity.getResources().getColor(
+						android.R.color.transparent)));
+		activity.getActionBar().setDisplayShowTitleEnabled(false);
+		activity.getActionBar().setDisplayShowCustomEnabled(true);
+		activity.getActionBar().setCustomView(resId);
+		
+		return activity.getActionBar().getCustomView();
+	}
 }

@@ -18,7 +18,7 @@ public class VideoPlayerActivity extends FragmentActivity {
 		setContentView(R.layout.gc_activity_video_player);
 
 		String videoUrl = getIntent().getExtras().getString(
-				PhotoPickerPlusTutorialActivity.KEY_VIDEO_PATH);
+				PhotoGridActivity.KEY_VIDEO_PATH);
 		initVideo(videoUrl);
 
 	}

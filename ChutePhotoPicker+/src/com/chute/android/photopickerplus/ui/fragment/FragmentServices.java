@@ -31,18 +31,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import com.chute.android.photopickerplus.R;
 import com.chute.android.photopickerplus.config.PhotoPicker;
 import com.chute.android.photopickerplus.models.enums.LocalServiceType;
 import com.chute.android.photopickerplus.ui.adapter.ServicesAdapter;
-import com.chute.android.photopickerplus.util.UIUtil;
 import com.chute.sdk.v2.model.enums.AccountType;
 
 public class FragmentServices extends Fragment {
 
-	private TextView textViewTitle;
 	private GridView gridViewServices;
 	private ServicesAdapter adapter;
 	private ServiceClickedListener serviceClickedListener;
@@ -84,7 +81,6 @@ public class FragmentServices extends Fragment {
 		View view = null;
 		view = inflater
 				.inflate(R.layout.gc_fragment_services, container, false);
-		textViewTitle = (TextView) view.findViewById(R.id.gcTextViewTitle);
 		gridViewServices = (GridView) view
 				.findViewById(R.id.gcGridViewServices);
 		gridViewServices.setNumColumns(getResources().getInteger(
@@ -96,9 +92,6 @@ public class FragmentServices extends Fragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		PhotoPicker singleton = PhotoPicker.getInstance();
-		UIUtil.setServiceFragmentLabel(getActivity().getApplicationContext(),
-				textViewTitle, singleton.supportImages(),
-				singleton.supportVideos());
 		configureServices(singleton.getRemoteServices(),
 				singleton.getLocalServices());
 	}

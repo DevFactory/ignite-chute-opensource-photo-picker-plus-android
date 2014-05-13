@@ -26,8 +26,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import com.chute.android.photopickerplus.ui.activity.ServicesActivity;
+import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.AssetModel;
-import com.chute.sdk.v2.model.enums.AccountType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +45,9 @@ import java.util.List;
 public class PhotoPickerPlusIntentWrapper extends IntentWrapper {
 
 	public static final int ACTIVITY_FOR_RESULT_KEY = 115;
-	private static final String KEY_ACCOUNT_ID = "accountId";
-	private static final String KEY_ALBUM_ID = "albumId";
-	private static final String KEY_ACCOUNT_TYPE = "account_type";
-	private static final String KEY_PHOTO_COLLECTION = "photoCollection";
+	private static final String KEY_ALBUM_ID = "intent_key_album_id";
+	private static final String KEY_PHOTO_COLLECTION = "intent_key_photo_collection";
+	private static final String KEY_ACCOUNT_MODEL = "intent_key_account_model";
 
 	public PhotoPickerPlusIntentWrapper(Context context) {
 		super(context, ServicesActivity.class);
@@ -58,37 +57,12 @@ public class PhotoPickerPlusIntentWrapper extends IntentWrapper {
 		super(intent);
 	}
 
-	public String getAccountId() {
-		return getIntent().getExtras().getString(KEY_ACCOUNT_ID);
-	}
-
-	public void setAccountId(String accountId) {
-		getIntent().putExtra(KEY_ACCOUNT_ID, accountId);
-	}
-
 	public String getAlbumId() {
 		return getIntent().getExtras().getString(KEY_ALBUM_ID);
 	}
 
 	public void setAlbumId(String albumId) {
 		getIntent().putExtra(KEY_ALBUM_ID, albumId);
-	}
-
-	public void setAccountType(AccountType accountType) {
-		getIntent().putExtra(KEY_ACCOUNT_TYPE, accountType.name());
-	}
-
-	public AccountType getAccountType() {
-		String accountName = getIntent().getExtras()
-				.getString(KEY_ACCOUNT_TYPE);
-		AccountType type = null;
-		for (AccountType accountType : AccountType.values()) {
-			if (accountName != null
-					&& accountName.equalsIgnoreCase(accountType.name())) {
-				type = accountType;
-			}
-		}
-		return type;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -100,6 +74,14 @@ public class PhotoPickerPlusIntentWrapper extends IntentWrapper {
 	public void setMediaCollection(List<AssetModel> mediaCollection) {
 		getIntent().putExtra(KEY_PHOTO_COLLECTION,
 				(ArrayList<AssetModel>) mediaCollection);
+	}
+
+	public AccountModel getAccountModel() {
+		return getIntent().getExtras().getParcelable(KEY_ACCOUNT_MODEL);
+	}
+
+	public void setAccountModel(AccountModel accountModel) {
+		getIntent().putExtra(KEY_ACCOUNT_MODEL, accountModel);
 	}
 
 	public void startActivityForResult(Activity context) {

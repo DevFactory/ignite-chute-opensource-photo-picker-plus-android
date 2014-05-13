@@ -11,13 +11,22 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" >
     </ImageView>
+    
+    <View
+        android:id="@+id/gcViewSelect"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_blue"
+        android:visibility="gone"
+         >
+    </View>
 
     <ImageView
         android:id="@+id/gcImageViewTick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/tick_grid"
-        android:layout_gravity="top|right"
+        android:layout_gravity="center"
+        android:background="@drawable/tick_icon"
         >
     </ImageView>
     
@@ -25,8 +34,8 @@
         android:id="@+id/gcImageViewVideo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/video_icon"
-        android:layout_gravity="top|left"
+        android:background="@drawable/play_video"
+        android:layout_gravity="top|right"
         android:visibility="gone"
         >
     </ImageView>
@@ -36,6 +45,9 @@
         style="@style/textViewServiceName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center" />
+        android:textColor="@android:color/black"
+        android:layout_marginTop="20dp"
+        android:singleLine="true"
+        android:layout_gravity="center" />
 
 </com.chute.android.photopickerplus.ui.components.SquareFrameLayout>

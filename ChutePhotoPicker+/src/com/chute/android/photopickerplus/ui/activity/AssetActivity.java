@@ -34,19 +34,23 @@ import android.view.Window;
 
 import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplus.R;
+import com.chute.android.photopickerplus.models.DeliverMediaModel;
+import com.chute.android.photopickerplus.models.enums.PhotoFilterType;
 import com.chute.android.photopickerplus.ui.fragment.FragmentRoot;
 import com.chute.android.photopickerplus.ui.fragment.FragmentSingle;
+import com.chute.android.photopickerplus.ui.listener.ListenerAccountAssetsSelection;
 import com.chute.android.photopickerplus.ui.listener.ListenerFilesAccount;
 import com.chute.android.photopickerplus.ui.listener.ListenerFilesCursor;
-import com.chute.android.photopickerplus.ui.listener.ListenerAccountAssetsSelection;
+import com.chute.android.photopickerplus.ui.listener.ListenerFragmentRoot;
+import com.chute.android.photopickerplus.ui.listener.ListenerFragmentSingle;
 import com.chute.android.photopickerplus.ui.listener.ListenerImageSelection;
 import com.chute.android.photopickerplus.ui.listener.ListenerVideoSelection;
 import com.chute.android.photopickerplus.util.AssetUtil;
 import com.chute.android.photopickerplus.util.Constants;
+import com.chute.android.photopickerplus.util.FragmentUtil;
 import com.chute.android.photopickerplus.util.NotificationUtil;
-import com.chute.android.photopickerplus.models.DeliverMediaModel;
-import com.chute.android.photopickerplus.models.enums.PhotoFilterType;
 import com.chute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
+import com.chute.android.photopickerplus.util.UIUtil;
 import com.chute.android.photopickerplus.util.intent.IntentUtil;
 import com.chute.android.photopickerplus.util.intent.PhotosIntentWrapper;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
@@ -67,7 +71,8 @@ import com.dg.libs.rest.domain.ResponseStatus;
  * 
  */
 public class AssetActivity extends FragmentActivity implements
-		ListenerFilesCursor, ListenerFilesAccount {
+		ListenerFilesCursor, ListenerFilesAccount, ListenerFragmentRoot,
+		ListenerFragmentSingle {
 
 	private PhotoFilterType filterType;
 	private PhotosIntentWrapper wrapper;
@@ -100,9 +105,10 @@ public class AssetActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		requestWindowFeature(Window.FEATURE_ACTION_BAR);
 
 		setContentView(R.layout.gc_activity_assets);
+		UIUtil.initActionBar(this, R.layout.gc_view_assets_title_bar);
 
 		retrieveSavedValuesFromBundle(savedInstanceState);
 
@@ -116,14 +122,16 @@ public class AssetActivity extends FragmentActivity implements
 					selectedAccountsPositions, selectedImagesPositions,
 					selectedVideosPositions);
 			ft.add(R.id.gcFragments, fragmentRoot,
-					Constants.TAG_FRAGMENT_FOLDER).commit();
+					FragmentUtil.TAG_FRAGMENT_FOLDER).commit();
 		}
 
 	}
 
 	@Override
-	public void onAccountFilesSelect(AssetModel assetModel, AccountType accountType) {
-		IntentUtil.deliverDataToInitialActivity(AssetActivity.this, assetModel, accountType);
+	public void onAccountFilesSelect(AssetModel assetModel,
+			AccountModel accountModel) {
+		IntentUtil.deliverDataToInitialActivity(AssetActivity.this, assetModel,
+				accountModel);
 		setResult(RESULT_OK);
 		finish();
 
@@ -131,7 +139,8 @@ public class AssetActivity extends FragmentActivity implements
 
 	@Override
 	public void onCursorAssetsSelect(AssetModel assetModel) {
-		IntentUtil.deliverDataToInitialActivity(AssetActivity.this, assetModel, null);
+		IntentUtil.deliverDataToInitialActivity(AssetActivity.this, assetModel,
+				null);
 		setResult(RESULT_OK);
 		finish();
 
@@ -147,9 +156,10 @@ public class AssetActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void onDeliverAccountFiles(ArrayList<AssetModel> assetModelList, AccountType accountType) {
+	public void onDeliverAccountFiles(ArrayList<AssetModel> assetModelList,
+			AccountModel accountModel) {
 		IntentUtil.deliverDataToInitialActivity(AssetActivity.this,
-				assetModelList, accountType);
+				assetModelList, accountModel);
 		setResult(RESULT_OK);
 		finish();
 
@@ -162,7 +172,7 @@ public class AssetActivity extends FragmentActivity implements
 				.beginTransaction();
 		fragmentTransaction.replace(R.id.gcFragments, FragmentSingle
 				.newInstance(account, folderId, selectedAccountsPositions),
-				Constants.TAG_FRAGMENT_FILES);
+				FragmentUtil.TAG_FRAGMENT_FILES);
 		fragmentTransaction.addToBackStack(null);
 		fragmentTransaction.commit();
 
@@ -281,7 +291,7 @@ public class AssetActivity extends FragmentActivity implements
 
 	private void updateRootFragment() {
 		fragmentRoot = (FragmentRoot) getSupportFragmentManager()
-				.findFragmentByTag(Constants.TAG_FRAGMENT_FOLDER);
+				.findFragmentByTag(FragmentUtil.TAG_FRAGMENT_FOLDER);
 		if (fragmentRoot != null) {
 			fragmentRoot.updateFragment(account, filterType,
 					selectedAccountsPositions, selectedImagesPositions,
@@ -291,7 +301,7 @@ public class AssetActivity extends FragmentActivity implements
 
 	private void updateSingleFragment() {
 		fragmentSingle = (FragmentSingle) getSupportFragmentManager()
-				.findFragmentByTag(Constants.TAG_FRAGMENT_FILES);
+				.findFragmentByTag(FragmentUtil.TAG_FRAGMENT_FILES);
 		if (fragmentSingle != null) {
 			fragmentSingle.updateFragment(account, folderId,
 					selectedAccountsPositions);
@@ -300,6 +310,20 @@ public class AssetActivity extends FragmentActivity implements
 
 	public List<Integer> getPositions() {
 		return selectedImagesPositions;
+	}
+
+	@Override
+	public void onFragmentRootNavigationBack() {
+		finish();
+
+	}
+
+	@Override
+	public void onFragmentSingleNavigationBack() {
+		FragmentUtil.replaceContentWithRootFragment(AssetActivity.this,
+				account, filterType, selectedAccountsPositions,
+				selectedImagesPositions, selectedVideosPositions);
+
 	}
 
 }

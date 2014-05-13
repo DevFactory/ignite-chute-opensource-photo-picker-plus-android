@@ -4,5 +4,6 @@
     <color name="grey">#5f5f5f</color>
     <color name="background">#2d2d2d</color>
     <color name="black">#000000</color>
+    <color name="button_background">#419edd</color>
 
 </resources>

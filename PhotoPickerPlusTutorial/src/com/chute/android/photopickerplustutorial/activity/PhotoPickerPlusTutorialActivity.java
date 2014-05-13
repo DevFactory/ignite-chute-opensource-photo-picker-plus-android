@@ -26,59 +26,31 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.GridView;
 
 import com.araneaapps.android.libs.logger.ALog;
-import com.chute.android.photopickerplus.models.enums.MediaType;
 import com.chute.android.photopickerplus.util.intent.PhotoPickerPlusIntentWrapper;
 import com.chute.android.photopickerplustutorial.R;
-import com.chute.android.photopickerplustutorial.adapter.GridAdapter;
+import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.AssetModel;
-import com.chute.sdk.v2.model.enums.AccountType;
 
 public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 
-	public static final String KEY_SELECTED_ITEMS = "keySelectedItems";
-	public static final String KEY_VIDEO_PATH = "keyVideoPath";
-	private GridView grid;
-	private GridAdapter adapter;
+	public static final String KEY_MEDIA_LSIT = "keyMediaList";
 	private ArrayList<AssetModel> accountMediaList;
-	private AccountType accountType;
+	private AccountModel accountModel;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.gc_activity_photo_picker);
+		setContentView(R.layout.gc_activity_main);
 
-		Button startButton = (Button) findViewById(R.id.gcButtonPhotoPicker);
+		Button startButton = (Button) findViewById(R.id.gcButtonChoosePhotos);
 		startButton.setOnClickListener(new OnPhotoPickerClickListener());
-		grid = (GridView) findViewById(R.id.gcGrid);
-		if (savedInstanceState != null) {
-			accountMediaList = savedInstanceState
-					.getParcelableArrayList(KEY_SELECTED_ITEMS);
-			adapter = new GridAdapter(PhotoPickerPlusTutorialActivity.this,
-					accountMediaList);
-		} else {
-			adapter = new GridAdapter(PhotoPickerPlusTutorialActivity.this,
-					new ArrayList<AssetModel>());
-		}
-		grid.setAdapter(adapter);
-		grid.setOnItemClickListener(new MediaItemClickListener());
-
-		int orientation = getResources().getConfiguration().orientation;
-		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			grid.setNumColumns(getResources().getInteger(
-					R.integer.grid_columns_landscape));
-		}
 
 	}
 
@@ -101,40 +73,15 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 		final PhotoPickerPlusIntentWrapper wrapper = new PhotoPickerPlusIntentWrapper(
 				data);
 		accountMediaList = wrapper.getMediaCollection();
-		if (accountType != null) {
-			accountType = wrapper.getAccountType();
-		}
-		adapter.changeData(accountMediaList);
+		accountModel = wrapper.getAccountModel();
+
 		ALog.d(wrapper.getMediaCollection().toString());
+		Intent intent = new Intent(getApplicationContext(),
+				PhotoGridActivity.class);
+		intent.putExtra(KEY_MEDIA_LSIT,
+				(ArrayList<AssetModel>) accountMediaList);
+		startActivity(intent);
 
 	}
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putParcelableArrayList(KEY_SELECTED_ITEMS, accountMediaList);
-		super.onSaveInstanceState(outState);
-	}
-
-	private final class MediaItemClickListener implements OnItemClickListener {
-
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			AssetModel asset = adapter.getItem(position);
-			String type = asset.getType();
-			if (type.equals(MediaType.VIDEO.name().toLowerCase())) {
-				if (asset.getVideoUrl().contains("http")) {
-					Intent intent = new Intent(Intent.ACTION_VIEW);
-					intent.setData(Uri.parse(asset.getVideoUrl()));
-					startActivity(intent);
-				} else {
-					Intent intent = new Intent(getApplicationContext(),
-							VideoPlayerActivity.class);
-					intent.putExtra(KEY_VIDEO_PATH, asset.getVideoUrl());
-					startActivity(intent);
-				}
-			}
-		}
-
-	}
 }

@@ -70,8 +70,11 @@ public class AssetUtil {
 		final AssetModel asset = new AssetModel();
 		asset.setThumbnail(Uri.fromFile(new File(model.getThumbnail()))
 				.toString());
-		asset.setUrl(model.getImageUrl());
-		asset.setVideoUrl(model.getVideoUrl());
+		asset.setUrl(Uri.fromFile(new File(model.getImageUrl())).toString());
+		if (model.getVideoUrl() != null) {
+		asset.setVideoUrl(Uri.fromFile(new File(model.getVideoUrl()))
+				.toString());
+		}
 		asset.setType(model.getMediaType().name().toLowerCase());
 		return asset;
 	}

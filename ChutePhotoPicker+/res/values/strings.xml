@@ -37,6 +37,11 @@
     <string name="select_photo_source">Select Photo Source</string>
     <string name="title_default">Default</string>
     <string name="title_user">User</string>
+    <string name="button_use_media">Use</string>
+    <string name="button_navigation_services_close">Close</string>
+    <string name="button_navigation_services_logout">Logout</string>
+    <string name="button_navigation_services">Services</string>
+    <string name="choose_service">Choose Service</string>
 
     <!-- Toast -->
     <string name="toast_choose_photos">Please select photos</string>

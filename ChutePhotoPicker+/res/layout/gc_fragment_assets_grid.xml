@@ -6,44 +6,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <!-- Select Photos Title -->
-
-    <TextView
-        android:id="@+id/gcTextViewSelectMedia"
-        style="@style/textViewFragmentLabel"
+    <ImageView
+        android:id="@+id/gcImageViewDivider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
-
+        android:layout_height="1dp"
+        android:background="@color/fragment_title_divider" />
 
     <!-- Empty View -->
-    
-    <ProgressBar android:id="@+id/progressBar"
+
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
-
-
-    <LinearLayout
-        android:id="@+id/gcLinearLayoutButtons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/gcButtonOk"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/ok" />
-
-        <Button
-            android:id="@+id/gcButtonCancel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/cancel" />
-    </LinearLayout>
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

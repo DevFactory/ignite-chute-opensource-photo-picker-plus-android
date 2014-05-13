@@ -36,7 +36,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -58,6 +57,8 @@ import com.chute.android.photopickerplus.ui.adapter.CursorAdapterVideos;
 import com.chute.android.photopickerplus.ui.adapter.MergeAdapter;
 import com.chute.android.photopickerplus.ui.listener.ListenerFilesAccount;
 import com.chute.android.photopickerplus.ui.listener.ListenerFilesCursor;
+import com.chute.android.photopickerplus.ui.listener.ListenerFragmentRoot;
+import com.chute.android.photopickerplus.ui.listener.ListenerItemCount;
 import com.chute.android.photopickerplus.util.AppUtil;
 import com.chute.android.photopickerplus.util.AssetUtil;
 import com.chute.android.photopickerplus.util.Constants;
@@ -74,7 +75,8 @@ import com.chute.sdk.v2.model.response.ResponseModel;
 import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.domain.ResponseStatus;
 
-public class FragmentRoot extends Fragment implements AdapterItemClickListener {
+public class FragmentRoot extends Fragment implements AdapterItemClickListener,
+		ListenerItemCount {
 
 	private GridView gridView;
 	private ListView listView;
@@ -82,7 +84,9 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 	private CursorAdapterVideos adapterVideos;
 	private AssetAccountAdapter adapterAccounts;
 	private MergeAdapter adapterMerge;
-	private TextView textViewSelectMedia;
+	private TextView textViewServiceTitle;
+	private TextView textViewBack;
+	private TextView textViewUseMedia;
 	private ProgressBar progressBar;
 	private RelativeLayout relativeLayoutRoot;
 
@@ -99,6 +103,9 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 	private DisplayType displayType;
 	private ListenerFilesCursor cursorListener;
 	private ListenerFilesAccount accountListener;
+	private ListenerFragmentRoot fragmetRootListener;
+	private int imagesCount = 0;
+	private int videosCount = 0;
 
 	public static FragmentRoot newInstance(AccountModel account,
 			PhotoFilterType filterType,
@@ -121,6 +128,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 		super.onAttach(activity);
 		cursorListener = (ListenerFilesCursor) activity;
 		accountListener = (ListenerFilesAccount) activity;
+		fragmetRootListener = (ListenerFragmentRoot) activity;
 
 	}
 
@@ -128,6 +136,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -144,6 +153,18 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 
 		View view = inflater.inflate(R.layout.gc_fragment_assets_grid,
 				container, false);
+		initView(view);
+
+		if (savedInstanceState == null) {
+			updateFragment(account, filterType, selectedAccountsPositions,
+					selectedImagePositions, selectedVideoPositions);
+		}
+		UIUtil.setFragmentLabel(getActivity(), textViewServiceTitle,
+				accountType, filterType);
+		return view;
+	}
+
+	private void initView(View view) {
 		relativeLayoutRoot = (RelativeLayout) view
 				.findViewById(R.id.gcRelativeLayoutRoot);
 		if (displayType == DisplayType.LIST
@@ -155,26 +176,16 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 			relativeLayoutRoot.addView(gridView);
 		}
 
-		textViewSelectMedia = (TextView) view
-				.findViewById(R.id.gcTextViewSelectMedia);
+		View titleView = getActivity().getActionBar().getCustomView();
+		textViewServiceTitle = (TextView) titleView
+				.findViewById(R.id.gcTextViewLabelAccount);
+		textViewUseMedia = (TextView) titleView
+				.findViewById(R.id.gcTextViewUse);
+		textViewUseMedia.setOnClickListener(new OkClickListener());
+		textViewBack = (TextView) titleView.findViewById(R.id.gcTextViewBack);
+		textViewBack.setOnClickListener(new OnBackClickListener());
 		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-		Button ok = (Button) view.findViewById(R.id.gcButtonOk);
-		Button cancel = (Button) view.findViewById(R.id.gcButtonCancel);
-
-		ok.setOnClickListener(new OkClickListener());
-		cancel.setOnClickListener(new CancelClickListener());
-
-		if (savedInstanceState == null) {
-			updateFragment(account, filterType, selectedAccountsPositions,
-					selectedImagePositions, selectedVideoPositions);
-		}
-
-		UIUtil.setFragmentLabel(getActivity().getApplicationContext(),
-				textViewSelectMedia, supportImages, supportVideos,
-				isMultipicker);
-
-		return view;
 	}
 
 	public void updateFragment(AccountModel account,
@@ -191,9 +202,9 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 				|| (filterType == PhotoFilterType.CAMERA_ROLL)) {
 			adapterMerge = new MergeAdapter();
 			adapterImages = new CursorAdapterImages(getActivity(), null,
-					cursorListener);
+					cursorListener, this);
 			adapterVideos = new CursorAdapterVideos(getActivity(), null,
-					cursorListener);
+					cursorListener, this);
 			adapterMerge.addAdapter(adapterVideos);
 			adapterMerge.addAdapter(adapterImages);
 			gridView.setAdapter(adapterMerge);
@@ -246,7 +257,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 				adapterAccounts = new AssetAccountAdapter(getActivity(),
 						AssetUtil.filterFiles(responseData.getData(),
 								supportImages, supportVideos),
-						FragmentRoot.this, displayType);
+						FragmentRoot.this, displayType, FragmentRoot.this);
 				if (displayType == DisplayType.LIST) {
 					listView.setAdapter(adapterAccounts);
 				} else {
@@ -262,9 +273,8 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 				NotificationUtil.showPhotosAdapterToast(getActivity()
 						.getApplicationContext(), adapterAccounts.getCount());
 			}
-			UIUtil.setFragmentLabel(getActivity().getApplicationContext(),
-					textViewSelectMedia, supportImages, supportVideos,
-					isMultipicker);
+			UIUtil.setFragmentLabel(getActivity(), textViewServiceTitle,
+					accountType, filterType);
 		}
 
 	}
@@ -358,15 +368,6 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 
 	}
 
-	private final class CancelClickListener implements OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			getActivity().finish();
-		}
-
-	}
-
 	private final class OkClickListener implements OnClickListener {
 
 		@Override
@@ -375,7 +376,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 				if (!adapterAccounts.getPhotoCollection().isEmpty()) {
 					ImageDataResponseLoader.postImageData(getActivity()
 							.getApplicationContext(), adapterAccounts
-							.getPhotoCollection(), accountListener, accountType);
+							.getPhotoCollection(), accountListener, account);
 				}
 			} else if ((filterType == PhotoFilterType.ALL_MEDIA)
 					|| (filterType == PhotoFilterType.CAMERA_ROLL)) {
@@ -409,7 +410,31 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener {
 					.getItem(position));
 			ImageDataResponseLoader.postImageData(getActivity()
 					.getApplicationContext(), accountMediaModelList,
-					accountListener, accountType);
+					accountListener, account);
+		}
+
+	}
+
+	@Override
+	public void onSelectedImagesCount(int count) {
+		imagesCount = count;
+		int itemCount = imagesCount + videosCount;
+		UIUtil.setSelectedItemsCount(getActivity(), textViewUseMedia, itemCount);
+
+	}
+
+	@Override
+	public void onSelectedVideosCount(int count) {
+		videosCount = count;
+		int itemCount = imagesCount + videosCount;
+		UIUtil.setSelectedItemsCount(getActivity(), textViewUseMedia, itemCount);
+	}
+
+	private final class OnBackClickListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			fragmetRootListener.onFragmentRootNavigationBack();
 		}
 
 	}

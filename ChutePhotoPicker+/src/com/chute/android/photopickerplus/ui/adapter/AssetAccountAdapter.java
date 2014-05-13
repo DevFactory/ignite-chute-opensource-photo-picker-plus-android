@@ -43,6 +43,7 @@ import com.chute.android.photopickerplus.models.enums.DisplayType;
 import com.chute.android.photopickerplus.ui.activity.AssetActivity;
 import com.chute.android.photopickerplus.ui.activity.ServicesActivity;
 import com.chute.android.photopickerplus.ui.listener.ListenerAccountAssetsSelection;
+import com.chute.android.photopickerplus.ui.listener.ListenerItemCount;
 import com.chute.sdk.v2.model.AccountAlbumModel;
 import com.chute.sdk.v2.model.AccountBaseModel;
 import com.chute.sdk.v2.model.AccountMediaModel;
@@ -62,6 +63,7 @@ public class AssetAccountAdapter extends BaseAdapter implements
 	private final FragmentActivity context;
 	private List<AccountMedia> rows;
 	private AdapterItemClickListener adapterItemClickListener;
+	private ListenerItemCount itemCountListener;
 	private DisplayType displayType;
 
 	public interface AdapterItemClickListener {
@@ -74,9 +76,10 @@ public class AssetAccountAdapter extends BaseAdapter implements
 	public AssetAccountAdapter(FragmentActivity context,
 			AccountBaseModel baseModel,
 			AdapterItemClickListener adapterItemClicklistener,
-			DisplayType displayType) {
+			DisplayType displayType, ListenerItemCount itemCountListener) {
 		this.context = context;
 		this.adapterItemClickListener = adapterItemClicklistener;
+		this.itemCountListener = itemCountListener;
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		loader = ImageLoader.getLoader(context.getApplicationContext());
@@ -129,6 +132,7 @@ public class AssetAccountAdapter extends BaseAdapter implements
 		public ImageView imageViewTick;
 		public ImageView imageVewVideo;
 		public TextView textViewFolderTitle;
+		public View viewSelect;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -155,6 +159,7 @@ public class AssetAccountAdapter extends BaseAdapter implements
 			holder.imageViewTick.setTag(position);
 			holder.textViewFolderTitle = (TextView) convertView
 					.findViewById(R.id.gcTextViewAlbumTitle);
+			holder.viewSelect = convertView.findViewById(R.id.gcViewSelect);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -168,13 +173,13 @@ public class AssetAccountAdapter extends BaseAdapter implements
 					.getName();
 			holder.textViewFolderTitle.setText(folderName != null ? folderName
 					: "");
+			holder.textViewFolderTitle.setTextSize(12f);
 			if (displayType == DisplayType.LIST) {
-				holder.textViewFolderTitle.setTextSize(16f);
 				holder.textViewFolderTitle.setTextColor(context.getResources()
 						.getColor(R.color.grey));
-			}
+			} 
 			holder.imageViewThumb.setBackgroundDrawable(context.getResources()
-					.getDrawable(R.drawable.album_default));
+					.getDrawable(R.drawable.folder));
 			convertView
 					.setOnClickListener(new OnFolderClickedListener(position));
 		} else if (type == AccountMediaType.FILE.ordinal()) {
@@ -198,12 +203,14 @@ public class AssetAccountAdapter extends BaseAdapter implements
 		if (tick.containsKey(position)) {
 			holder.imageViewTick.setVisibility(View.VISIBLE);
 			if (displayType == DisplayType.GRID) {
+				holder.viewSelect.setVisibility(View.VISIBLE);
 				convertView.setBackgroundColor(context.getResources().getColor(
 						R.color.sky_blue));
 			}
 		} else {
 			holder.imageViewTick.setVisibility(View.GONE);
 			if (displayType == DisplayType.GRID) {
+				holder.viewSelect.setVisibility(View.GONE);
 				convertView.setBackgroundColor(context.getResources().getColor(
 						R.color.gray_light));
 			}
@@ -228,6 +235,7 @@ public class AssetAccountAdapter extends BaseAdapter implements
 				} else {
 					tick.put(position, (AccountMediaModel) getItem(position));
 				}
+				itemCountListener.onSelectedImagesCount(tick.size());
 			}
 		}
 		notifyDataSetChanged();

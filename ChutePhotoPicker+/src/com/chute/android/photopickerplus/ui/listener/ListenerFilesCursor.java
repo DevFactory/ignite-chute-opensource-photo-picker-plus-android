@@ -55,5 +55,6 @@ public interface ListenerFilesCursor {
    *          the activity that started the PhotoPicker.
    */
   public void onDeliverCursorAssets(List<DeliverMediaModel> deliverList);
+  
 
 }

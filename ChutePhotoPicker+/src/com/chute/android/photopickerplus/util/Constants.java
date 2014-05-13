@@ -29,10 +29,6 @@ public class Constants {
 	public static final int CAMERA_PIC_REQUEST = 2500;
 	public static final int CAMERA_VIDEO_REQUEST = 2501;
 
-	public static final String TAG_FRAGMENT_FOLDER = "FolderFrag";
-	public static final String TAG_FRAGMENT_FILES = "FilesFrag";
-	public static final String TAG_FRAGMENT_EMPTY = "EmptyFrag";
-
 	public static final String KEY_SELECTED_ACCOUNTS_ITEMS = "keySelectedAccountsItems";
 	public static final String KEY_SELECTED_IMAGES_ITEMS = "keySelectedImagesItems";
 	public static final String KEY_SELECTED_VIDEOS_ITEMS = "keySelectedVideosItems";

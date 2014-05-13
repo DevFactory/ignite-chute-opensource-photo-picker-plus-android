@@ -29,8 +29,8 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
 import com.chute.android.photopickerplus.ui.activity.ServicesActivity;
+import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.AssetModel;
-import com.chute.sdk.v2.model.enums.AccountType;
 
 /**
  * Helper class that contains methods for delivering the result to the main
@@ -41,20 +41,20 @@ public class IntentUtil {
 
 	public static void deliverDataToInitialActivity(
 			final FragmentActivity context, final AssetModel model,
-			AccountType accountTupe) {
+			AccountModel accountModel) {
 		List<AssetModel> mediaCollection = new ArrayList<AssetModel>();
 		mediaCollection.add(model);
-		deliverDataToInitialActivity(context, mediaCollection, accountTupe);
+		deliverDataToInitialActivity(context, mediaCollection, accountModel);
 	}
 
 	public static void deliverDataToInitialActivity(
 			final FragmentActivity context, final List<AssetModel> collection,
-			AccountType accountType) {
+			AccountModel accountModel) {
 		final PhotoPickerPlusIntentWrapper wrapper = new PhotoPickerPlusIntentWrapper(
 				new Intent(context, ServicesActivity.class));
 		wrapper.setMediaCollection(collection);
-		if (accountType != null) {
-			wrapper.setAccountType(accountType);
+		if (accountModel != null) {
+			wrapper.setAccountModel(accountModel);
 		}
 		wrapper.getIntent().addFlags(
 				Intent.FLAG_ACTIVITY_CLEAR_TOP
