@@ -27,7 +27,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,7 +52,6 @@ public class ServicesAdapter extends BaseAdapter {
 
 	private static final int VIEW_TYPE_REMOTE_ACCOUNT = 1;
 	private static final int VIEW_TYPE_LOCAL_ACCOUNT = 0;
-
 
 	private static LayoutInflater inflater;
 	private final boolean supportsImages;
@@ -147,14 +149,16 @@ public class ServicesAdapter extends BaseAdapter {
 	}
 
 	private void setupLocalService(ViewHolder holder, LocalServiceType type) {
-		Uri lastVideoThumbFromAllVideos = MediaDAO.getLastVideoThumbnailFromAllVideos(context
+		Uri lastVideoThumbFromAllVideos = MediaDAO
+				.getLastVideoThumbnailFromAllVideos(context
+						.getApplicationContext());
+		Uri lastVideoThumbFromCameraVideos = MediaDAO
+				.getLastVideoThumbnailFromCameraVideos(context
+						.getApplicationContext());
+		Uri lastImageFromAllPhotos = MediaDAO.getLastPhotoFromAllPhotos(context
 				.getApplicationContext());
-		Uri lastVideoThumbFromCameraVideos = MediaDAO.getLastVideoThumbnailFromCameraVideos(context
-				.getApplicationContext());
-		Uri	lastImageFromAllPhotos = MediaDAO.getLastPhotoFromAllPhotos(context
-					.getApplicationContext());
-		Uri	lastImageFromCameraPhotos = MediaDAO.getLastPhotoFromCameraPhotos(context
-					.getApplicationContext());
+		Uri lastImageFromCameraPhotos = MediaDAO
+				.getLastPhotoFromCameraPhotos(context.getApplicationContext());
 		switch (type) {
 		case TAKE_PHOTO:
 			holder.imageView.setBackgroundResource(R.drawable.take_photo);
@@ -167,11 +171,13 @@ public class ServicesAdapter extends BaseAdapter {
 			} else {
 				uriCameraMedia = lastVideoThumbFromCameraVideos;
 			}
-			loader.displayImage(uriCameraMedia.toString(), holder.imageView, null);
+			loader.displayImage(uriCameraMedia.toString(), holder.imageView,
+					null);
 			holder.textViewServiceTitle.setText(R.string.camera_media);
 			break;
 		case LAST_PHOTO_TAKEN:
-			loader.displayImage(lastImageFromCameraPhotos.toString(), holder.imageView, null);
+			loader.displayImage(lastImageFromCameraPhotos.toString(),
+					holder.imageView, null);
 			holder.textViewServiceTitle.setText(context.getResources()
 					.getString(R.string.last_photo));
 			break;
@@ -187,7 +193,10 @@ public class ServicesAdapter extends BaseAdapter {
 					.getString(R.string.all_media));
 			break;
 		case LAST_VIDEO_CAPTURED:
-			loader.displayImage(lastVideoThumbFromCameraVideos.toString(), holder.imageView, null);
+			String thumbnail = MediaDAO.getLastVideoThumbnailFromCurosr(context);
+			Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(thumbnail,
+					MediaStore.Images.Thumbnails.MINI_KIND);
+			holder.imageView.setImageBitmap(bitmap);
 			holder.textViewServiceTitle.setText(context.getResources()
 					.getString(R.string.last_video_captured));
 			break;
@@ -303,8 +312,11 @@ public class ServicesAdapter extends BaseAdapter {
 					.getDrawable(R.drawable.dropbox));
 			break;
 		case YOUTUBE:
-			holder.imageView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.youtube));
-		break;
+			holder.imageView.setBackgroundDrawable(context.getResources()
+					.getDrawable(R.drawable.youtube));
+			break;
+		default:
+			break;
 		}
 	}
 

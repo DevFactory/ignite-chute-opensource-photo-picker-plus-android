@@ -29,9 +29,9 @@ import android.content.Context;
 
 import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplus.R;
-import com.chute.android.photopickerplus.models.MediaResponseModel;
 import com.chute.android.photopickerplus.models.MediaDataModel;
 import com.chute.android.photopickerplus.models.MediaModel;
+import com.chute.android.photopickerplus.models.MediaResponseModel;
 import com.chute.android.photopickerplus.models.OptionsModel;
 import com.chute.android.photopickerplus.models.enums.MediaType;
 import com.chute.android.photopickerplus.ui.listener.ListenerFilesAccount;
@@ -43,7 +43,6 @@ import com.chute.sdk.v2.api.authentication.TokenAuthenticationProvider;
 import com.chute.sdk.v2.model.AccountMediaModel;
 import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.AssetModel;
-import com.chute.sdk.v2.model.enums.AccountType;
 import com.chute.sdk.v2.model.response.ResponseModel;
 import com.dg.libs.rest.HttpRequest;
 import com.dg.libs.rest.callbacks.HttpCallback;

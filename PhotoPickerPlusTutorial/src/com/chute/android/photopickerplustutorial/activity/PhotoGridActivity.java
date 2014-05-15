@@ -34,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
+import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplus.models.enums.MediaType;
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.android.photopickerplustutorial.adapter.GridAdapter;
@@ -54,6 +55,9 @@ public class PhotoGridActivity extends FragmentActivity {
 		grid = (GridView) findViewById(R.id.gcGrid);
 		accountMediaList = getIntent().getExtras().getParcelableArrayList(
 				PhotoPickerPlusTutorialActivity.KEY_MEDIA_LSIT);
+		if (accountMediaList != null) {
+			ALog.d("grid activity: " + accountMediaList.toString());
+		}
 		adapter = new GridAdapter(PhotoGridActivity.this, accountMediaList);
 		grid.setAdapter(adapter);
 		grid.setOnItemClickListener(new MediaItemClickListener());

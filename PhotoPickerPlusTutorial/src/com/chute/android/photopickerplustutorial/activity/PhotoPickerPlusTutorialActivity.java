@@ -75,11 +75,10 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 		accountMediaList = wrapper.getMediaCollection();
 		accountModel = wrapper.getAccountModel();
 
-		ALog.d(wrapper.getMediaCollection().toString());
+		ALog.d(accountMediaList.toString());
 		Intent intent = new Intent(getApplicationContext(),
 				PhotoGridActivity.class);
-		intent.putExtra(KEY_MEDIA_LSIT,
-				(ArrayList<AssetModel>) accountMediaList);
+		intent.putParcelableArrayListExtra(KEY_MEDIA_LSIT, accountMediaList);
 		startActivity(intent);
 
 	}

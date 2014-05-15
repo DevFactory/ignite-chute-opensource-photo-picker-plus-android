@@ -24,14 +24,18 @@ package com.chute.android.photopickerplus.dao;
 
 import java.io.File;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.webkit.MimeTypeMap;
 
 import com.araneaapps.android.libs.logger.ALog;
+import com.chute.android.photopickerplus.util.AppUtil;
 
 /**
  * The definition of the Database Access Objects that handles the reading and
@@ -164,6 +168,7 @@ public class MediaDAO {
 	 * @return Cursor object enabling read-write access to all video thumbnails
 	 *         on the device.
 	 */
+	// TODO
 	public static Cursor getAllMediaVideosThumbnails(final Context context) {
 		final String[] projection = new String[] {
 				MediaStore.Video.Thumbnails._ID,
@@ -303,13 +308,52 @@ public class MediaDAO {
 	 * @return The URI for the requested query.
 	 */
 	public static Uri getLastVideoFromCameraVideos(final Context context) {
-		Cursor cameraVideos = getCameraVideos(context);
-		Uri uri = getFirstVideoItemUri(cameraVideos);
-		safelyCloseCursor(cameraVideos);
+		Uri uri = null;
+		Cursor cursor = getLastVideoCursor(context);
+		if (cursor != null && cursor.moveToLast()) {
+			uri = Uri.fromFile(new File(cursor.getString(cursor
+					.getColumnIndex(MediaStore.Video.Media.DATA))));
+		}
+		safelyCloseCursor(cursor);
 		if (uri == null) {
 			return Uri.parse("");
 		}
 		return uri;
+	}
+
+	/**
+	 * Gets the last video thumbnail path.
+	 * 
+	 * @param context
+	 *            The application context.
+	 * @return Last video thumbnail path.
+	 */
+	public static String getLastVideoThumbnailFromCurosr(final Context context) {
+		String thumbnail = "";
+		Cursor cursor = getLastVideoCursor(context);
+		if (cursor != null && cursor.moveToLast()) {
+			thumbnail = cursor.getString(cursor
+					.getColumnIndex(MediaStore.Video.Media.DATA));
+		}
+		safelyCloseCursor(cursor);
+		return thumbnail;
+	}
+
+	/**
+	 * Request a specific record in {@link MediaStore.Video.Media} database.
+	 * 
+	 * @param context
+	 *            The application context.
+	 * @return Cursor object enabling read-write access to all videos on the
+	 *         device.
+	 */
+	public static Cursor getLastVideoCursor(final Context context) {
+		final String[] projection = new String[] { MediaStore.Video.Media._ID,
+				MediaStore.Video.Media.DATA };
+		final Uri videos = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+		final String query = MediaStore.Video.Media.DATA + " LIKE \"%DCIM%\"";
+		return context.getContentResolver().query(videos, projection, query,
+				null, MediaStore.Video.Media.DATE_TAKEN);
 	}
 
 	/**
@@ -321,7 +365,7 @@ public class MediaDAO {
 	 */
 	public static Uri getLastVideoFromAllVideos(final Context context) {
 		Cursor allVideos = getAllMediaVideos(context);
-		Uri uri = getFirstVideoItemUri(allVideos);
+		Uri uri = getLastVideoItemUri(allVideos);
 		safelyCloseCursor(allVideos);
 		if (uri == null) {
 			return Uri.parse("");
@@ -437,8 +481,8 @@ public class MediaDAO {
 	 *            device.
 	 * @return The URI for the requested query.
 	 */
-	private static Uri getFirstVideoItemUri(Cursor cursor) {
-		if (cursor != null && cursor.moveToFirst()) {
+	private static Uri getLastVideoItemUri(Cursor cursor) {
+		if (cursor != null && cursor.moveToLast()) {
 			return Uri.fromFile(new File(cursor.getString(cursor
 					.getColumnIndex(MediaStore.Video.Media.DATA))));
 		}
@@ -463,6 +507,28 @@ public class MediaDAO {
 	}
 
 	/**
+	 * Inserts a row into {@link MediaStore.Video.Media} table.
+	 * 
+	 * @param context
+	 *            The application context.
+	 * @param videoPath
+	 *            Path of the video file inserted into
+	 *            {@link MediaStore.Video.Media.Data}.
+	 * @return The URL of the newly inserted row.
+	 */
+	public static Uri insertVideoInMediaStore(Context context, String videoPath) {
+		ContentValues values = new ContentValues();
+		String mimeType = "video/".concat(MimeTypeMap
+				.getFileExtensionFromUrl(videoPath));
+		values.put(MediaStore.Video.Media.MIME_TYPE, mimeType);
+		values.put(MediaStore.Video.Media.DATA, videoPath);
+		values.put(MediaStore.Video.Media.DATE_TAKEN,
+				System.currentTimeMillis());
+		return context.getContentResolver().insert(
+				MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+	}
+
+	/**
 	 * Created a thumbnail of the specified image ID.
 	 * 
 	 * @param context
@@ -481,6 +547,43 @@ public class MediaDAO {
 				context.getContentResolver(), id,
 				MediaStore.Video.Thumbnails.MICRO_KIND,
 				(BitmapFactory.Options) null);
+	}
+
+	/**
+	 * Gets the image path from the indicated content Uri.
+	 * 
+	 * @param context
+	 *            The application context.
+	 * @param contentUri
+	 *            Image content Uri.
+	 * @return The value of the requested column as a String.
+	 */
+	private static String getPathFromContentURI(Context context, Uri contentUri) {
+		String path = "";
+		String[] proj = { MediaStore.Images.Media.DATA };
+		Cursor cursor = context.getContentResolver().query(contentUri, proj,
+				null, null, null);
+		if (cursor != null && cursor.moveToFirst()) {
+			path = cursor.getString(cursor
+					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
+		}
+
+		return path;
+	}
+
+	/**
+	 * Gets the path of the last video thumbnail.
+	 * 
+	 * @param context
+	 *            The application context.
+	 * @return The path of the last video thumbnail.
+	 */
+	public static String getLastVideoThumbnail(Context context) {
+		String thumbnail = getLastVideoThumbnailFromCurosr(context);
+		Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(thumbnail,
+				MediaStore.Images.Thumbnails.MINI_KIND);
+		String bitmapPath = AppUtil.getImagePath(context, bitmap);
+		return getPathFromContentURI(context, Uri.parse(bitmapPath));
 	}
 
 	/**

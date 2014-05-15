@@ -27,7 +27,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -161,6 +160,28 @@ public class ServicesActivity extends FragmentActivity implements
 	}
 
 	@Override
+	public void lastVideo() {
+		Uri videoUrl = MediaDAO
+				.getLastVideoFromCameraVideos(getApplicationContext());
+		String videoThumbnail = MediaDAO
+				.getLastVideoThumbnail(getApplicationContext());
+
+		if (videoUrl.toString().equals("")) {
+			NotificationUtil.makeToast(getApplicationContext(), getResources()
+					.getString(R.string.no_camera_photos));
+		} else {
+			final AssetModel model = new AssetModel();
+			model.setThumbnail(Uri.fromFile(new File(videoThumbnail))
+					.toString());
+			model.setUrl(Uri.fromFile(new File(videoThumbnail)).toString());
+			model.setVideoUrl(videoUrl.toString());
+			model.setType(MediaType.VIDEO.name().toLowerCase());
+			IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
+					model, null);
+		}
+	}
+
+	@Override
 	public void recordVideo() {
 		Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 		Uri uri = AppUtil.getTempVideoFile();
@@ -170,26 +191,6 @@ public class ServicesActivity extends FragmentActivity implements
 		intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
 		startTheCamera(intent, Constants.CAMERA_VIDEO_REQUEST);
 
-	}
-
-	@Override
-	public void lastVideo() {
-		Uri lastVideoThumbnailFromCameraVideos = MediaDAO
-				.getLastVideoThumbnailFromCameraVideos(getApplicationContext());
-		Uri lastVideoItemFromCameraVideos = MediaDAO
-				.getLastVideoFromCameraVideos(getApplicationContext());
-		if (lastVideoThumbnailFromCameraVideos.toString().equals("")) {
-			NotificationUtil.makeToast(getApplicationContext(), getResources()
-					.getString(R.string.no_camera_photos));
-		} else {
-			final AssetModel model = new AssetModel();
-			model.setThumbnail(lastVideoThumbnailFromCameraVideos.toString());
-			model.setUrl(lastVideoThumbnailFromCameraVideos.toString());
-			model.setVideoUrl(lastVideoItemFromCameraVideos.toString());
-			model.setType(MediaType.VIDEO.name().toLowerCase());
-			IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-					model, null);
-		}
 	}
 
 	@Override
@@ -312,7 +313,6 @@ public class ServicesActivity extends FragmentActivity implements
 
 	}
 
-	@SuppressLint("NewApi")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -370,15 +370,14 @@ public class ServicesActivity extends FragmentActivity implements
 			model.setThumbnail(path);
 			model.setUrl(path);
 			model.setType(MediaType.IMAGE.name().toLowerCase());
-			ArrayList<AssetModel> mediaCollection = new ArrayList<AssetModel>();
-			mediaCollection.add(model);
-			setResult(Activity.RESULT_OK, new Intent().putExtra(
-					PhotosIntentWrapper.KEY_PHOTO_COLLECTION, mediaCollection));
-			finish();
+			IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
+					model, null);
 		}
 		if (requestCode == Constants.CAMERA_VIDEO_REQUEST) {
 			Uri uriVideo = data.getData();
 			File file = new File(uriVideo.getPath());
+			MediaDAO.insertVideoInMediaStore(getApplicationContext(),
+					file.getAbsolutePath());
 
 			Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(
 					file.getAbsolutePath(),
@@ -391,11 +390,8 @@ public class ServicesActivity extends FragmentActivity implements
 			model.setUrl(AppUtil.getImagePath(getApplicationContext(),
 					thumbnail));
 			model.setType(MediaType.VIDEO.name().toLowerCase());
-			ArrayList<AssetModel> mediaCollection = new ArrayList<AssetModel>();
-			mediaCollection.add(model);
-			setResult(Activity.RESULT_OK, new Intent().putExtra(
-					PhotosIntentWrapper.KEY_PHOTO_COLLECTION, mediaCollection));
-			finish();
+			IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
+					model, null);
 		}
 
 	}
