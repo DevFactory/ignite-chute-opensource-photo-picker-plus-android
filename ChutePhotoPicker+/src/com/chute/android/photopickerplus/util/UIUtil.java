@@ -146,8 +146,8 @@ public class UIUtil {
 		}
 	}
 
-	public static void setSelectedItemsCount(Context context, TextView textView,
-			int count) {
+	public static void setSelectedItemsCount(Context context,
+			TextView textView, int count) {
 		String useMedia = context.getResources().getString(
 				R.string.button_use_media);
 		if (count > 0) {
@@ -156,7 +156,7 @@ public class UIUtil {
 			textView.setText(useMedia);
 		}
 	}
-	
+
 	public static View initActionBar(FragmentActivity activity, int resId) {
 		activity.getActionBar().setIcon(
 				new ColorDrawable(activity.getResources().getColor(
@@ -164,7 +164,8 @@ public class UIUtil {
 		activity.getActionBar().setDisplayShowTitleEnabled(false);
 		activity.getActionBar().setDisplayShowCustomEnabled(true);
 		activity.getActionBar().setCustomView(resId);
-		
+
 		return activity.getActionBar().getCustomView();
 	}
+
 }

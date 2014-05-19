@@ -62,10 +62,12 @@ import com.chute.android.photopickerplus.ui.listener.ListenerItemCount;
 import com.chute.android.photopickerplus.util.AppUtil;
 import com.chute.android.photopickerplus.util.AssetUtil;
 import com.chute.android.photopickerplus.util.Constants;
+import com.chute.android.photopickerplus.util.FragmentUtil;
 import com.chute.android.photopickerplus.util.NotificationUtil;
 import com.chute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
 import com.chute.android.photopickerplus.util.UIUtil;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
+import com.chute.sdk.v2.api.authentication.TokenAuthenticationProvider;
 import com.chute.sdk.v2.model.AccountAlbumModel;
 import com.chute.sdk.v2.model.AccountBaseModel;
 import com.chute.sdk.v2.model.AccountMediaModel;
@@ -87,12 +89,15 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener,
 	private TextView textViewServiceTitle;
 	private TextView textViewBack;
 	private TextView textViewUseMedia;
+	private TextView textViewClose;
+	private TextView textViewLogout;
 	private ProgressBar progressBar;
 	private RelativeLayout relativeLayoutRoot;
 
 	private boolean supportVideos;
 	private boolean supportImages;
 	private boolean isMultipicker;
+	private boolean dualPanes;
 	private List<Integer> selectedAccountsPositions;
 	private List<Integer> selectedImagePositions;
 	private List<Integer> selectedVideoPositions;
@@ -150,6 +155,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener,
 		accountMap = PhotoPicker.getInstance().getAccountDisplayType();
 		displayType = AppUtil.getDisplayType(accountMap, PhotoPicker
 				.getInstance().getDefaultAccountDisplayType(), accountType);
+		dualPanes = getResources().getBoolean(R.bool.has_two_panes);
 
 		View view = inflater.inflate(R.layout.gc_fragment_assets_grid,
 				container, false);
@@ -159,8 +165,6 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener,
 			updateFragment(account, filterType, selectedAccountsPositions,
 					selectedImagePositions, selectedVideoPositions);
 		}
-		UIUtil.setFragmentLabel(getActivity(), textViewServiceTitle,
-				accountType, filterType);
 		return view;
 	}
 
@@ -176,15 +180,38 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener,
 			relativeLayoutRoot.addView(gridView);
 		}
 
+		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+		initActionBar();
+
+	}
+	
+	private void initActionBar() {
+		boolean dualPanes = getActivity().getResources().getBoolean(
+				R.bool.has_two_panes);
 		View titleView = getActivity().getActionBar().getCustomView();
-		textViewServiceTitle = (TextView) titleView
-				.findViewById(R.id.gcTextViewLabelAccount);
 		textViewUseMedia = (TextView) titleView
 				.findViewById(R.id.gcTextViewUse);
 		textViewUseMedia.setOnClickListener(new OkClickListener());
-		textViewBack = (TextView) titleView.findViewById(R.id.gcTextViewBack);
-		textViewBack.setOnClickListener(new OnBackClickListener());
-		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+		if (dualPanes) {
+			textViewUseMedia.setVisibility(View.VISIBLE);
+			textViewServiceTitle = (TextView) titleView
+					.findViewById(R.id.gcTextViewLabelChooseService);
+			textViewClose = (TextView) titleView
+					.findViewById(R.id.gcTextViewClose);
+			textViewLogout = (TextView) titleView
+					.findViewById(R.id.gcTextViewLogout);
+			textViewLogout.setOnClickListener(new LogoutListener());
+			textViewClose.setOnClickListener(new CloseListener());
+		} else {
+			textViewServiceTitle = (TextView) titleView
+					.findViewById(R.id.gcTextViewLabelAccount);
+			textViewBack = (TextView) titleView
+					.findViewById(R.id.gcTextViewBack);
+			textViewBack.setOnClickListener(new OnBackClickListener());
+		}
+		
+		UIUtil.setFragmentLabel(getActivity(), textViewServiceTitle,
+				accountType, filterType);
 
 	}
 
@@ -435,6 +462,32 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener,
 		@Override
 		public void onClick(View v) {
 			fragmetRootListener.onFragmentRootNavigationBack();
+		}
+
+	}
+
+	private final class LogoutListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			if (dualPanes) {
+				FragmentUtil.replaceContentWithEmptyFragment(getActivity());
+			}
+			NotificationUtil.makeToast(getActivity().getApplicationContext(),
+					R.string.toast_signed_out);
+			TokenAuthenticationProvider.getInstance().clearAuth();
+			PhotoPickerPreferenceUtil.get().clearAll();
+
+		}
+
+	}
+
+	private final class CloseListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			getActivity().finish();
+
 		}
 
 	}
