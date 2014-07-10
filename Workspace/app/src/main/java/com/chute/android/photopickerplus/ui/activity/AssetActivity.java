@@ -22,9 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplus.ui.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,6 +59,9 @@ import com.chute.sdk.v2.model.response.ListResponseModel;
 import com.chute.sdk.v2.utils.PreferenceUtil;
 import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.domain.ResponseStatus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity for displaying the content of the selected service.
@@ -229,8 +229,7 @@ public class AssetActivity extends FragmentActivity implements
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
-			GCAccounts.allUserAccounts(getApplicationContext(),
-					new AccountsCallback()).executeAsync();
+			GCAccounts.allUserAccounts(new AccountsCallback()).executeAsync();
 		}
 	}
 
@@ -238,7 +237,7 @@ public class AssetActivity extends FragmentActivity implements
 			HttpCallback<ListResponseModel<AccountModel>> {
 
 		@Override
-		public void onSuccess(ListResponseModel<AccountModel> responseData) {
+		public void onSuccess(ListResponseModel<AccountModel> responseData, ResponseStatus status) {
 			if (accountType == null) {
 				accountType = PhotoPickerPreferenceUtil.get().getAccountType();
 			}

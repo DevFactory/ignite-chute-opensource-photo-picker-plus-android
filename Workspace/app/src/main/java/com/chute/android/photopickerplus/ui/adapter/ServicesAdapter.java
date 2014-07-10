@@ -22,9 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplus.ui.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -45,8 +42,10 @@ import com.chute.android.photopickerplus.dao.MediaDAO;
 import com.chute.android.photopickerplus.models.enums.LocalServiceType;
 import com.chute.android.photopickerplus.ui.fragment.FragmentServices.ServiceClickedListener;
 import com.chute.sdk.v2.model.enums.AccountType;
+import com.squareup.picasso.Picasso;
 
-import darko.imagedownloader.ImageLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServicesAdapter extends BaseAdapter {
 
@@ -55,7 +54,6 @@ public class ServicesAdapter extends BaseAdapter {
 
 	private static LayoutInflater inflater;
 	private final boolean supportsImages;
-	public ImageLoader loader;
 	private final Activity context;
 
 	private List<AccountType> remoteAccounts = new ArrayList<AccountType>();
@@ -72,7 +70,6 @@ public class ServicesAdapter extends BaseAdapter {
 		this.serviceClickedListener = serviceClickedListener;
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		loader = ImageLoader.getLoader(context.getApplicationContext());
 		supportsImages = PhotoPicker.getInstance().supportImages();
 
 	}
@@ -171,13 +168,12 @@ public class ServicesAdapter extends BaseAdapter {
 			} else {
 				uriCameraMedia = lastVideoThumbFromCameraVideos;
 			}
-			loader.displayImage(uriCameraMedia.toString(), holder.imageView,
-					null);
+      Picasso.with(context).load(uriCameraMedia).centerCrop().into(holder.imageView);
+
 			holder.textViewServiceTitle.setText(R.string.camera_media);
 			break;
 		case LAST_PHOTO_TAKEN:
-			loader.displayImage(lastImageFromCameraPhotos.toString(),
-					holder.imageView, null);
+      Picasso.with(context).load(lastImageFromCameraPhotos).centerCrop().into(holder.imageView);
 			holder.textViewServiceTitle.setText(context.getResources()
 					.getString(R.string.last_photo));
 			break;
@@ -188,7 +184,7 @@ public class ServicesAdapter extends BaseAdapter {
 			} else {
 				uriAllMedia = lastVideoThumbFromAllVideos;
 			}
-			loader.displayImage(uriAllMedia.toString(), holder.imageView, null);
+      Picasso.with(context).load(uriAllMedia).centerCrop().into(holder.imageView);
 			holder.textViewServiceTitle.setText(context.getResources()
 					.getString(R.string.all_media));
 			break;

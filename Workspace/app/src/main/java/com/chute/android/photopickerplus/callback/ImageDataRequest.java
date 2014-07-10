@@ -22,10 +22,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplus.callback;
 
-import android.content.Context;
-
-import com.chute.android.photopickerplus.models.MediaResponseModel;
 import com.chute.android.photopickerplus.models.MediaModel;
+import com.chute.android.photopickerplus.models.MediaResponseModel;
 import com.chute.android.photopickerplus.util.Constants;
 import com.chute.sdk.v2.api.parsers.ResponseParser;
 import com.chute.sdk.v2.model.response.ResponseModel;
@@ -44,10 +42,9 @@ public class ImageDataRequest extends
 
 	private MediaModel imageData;
 
-	public ImageDataRequest(Context context, MediaModel imageData,
+	public ImageDataRequest(MediaModel imageData,
 			HttpCallback<ResponseModel<MediaResponseModel>> callback) {
 		super(
-				context,
 				RequestMethod.POST,
 				new ResponseParser<MediaResponseModel>(MediaResponseModel.class),
 				callback);

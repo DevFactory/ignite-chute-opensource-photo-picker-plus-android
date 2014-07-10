@@ -22,9 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplus.ui.adapter;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
@@ -38,13 +35,14 @@ import android.widget.ImageView;
 
 import com.chute.android.photopickerplus.R;
 
-import darko.imagedownloader.ImageLoader;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public abstract class BaseCursorAdapter extends CursorAdapter implements
 		OnScrollListener {
 
 	private static LayoutInflater inflater = null;
-	public ImageLoader loader;
 	protected int dataIndex;
 	public Map<Integer, String> tick = new HashMap<Integer, String>();
 	protected boolean shouldLoadImages = true;
@@ -54,7 +52,6 @@ public abstract class BaseCursorAdapter extends CursorAdapter implements
 		super(context, c, 0);
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		loader = ImageLoader.getLoader(context.getApplicationContext());
 		dataIndex = getDataIndex(c);
 
 	}

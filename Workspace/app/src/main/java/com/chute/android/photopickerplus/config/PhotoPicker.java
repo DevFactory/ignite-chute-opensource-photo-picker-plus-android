@@ -22,12 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplus.config;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplus.models.enums.DisplayType;
 import com.chute.android.photopickerplus.models.enums.LocalServiceType;
@@ -35,6 +29,12 @@ import com.chute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
 import com.chute.sdk.v2.model.enums.AccountType;
 import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.domain.ResponseStatus;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The {@link com.chute.android.photopickerplus.config.PhotoPicker} class is a singleton object, maintaining a
@@ -231,7 +231,7 @@ public class PhotoPicker {
 	 *            containing the services.
 	 */
 	public void fetchConfigFromServer(String url) {
-		new ServiceRequest(configuration.context, url,
+		new ServiceRequest(url,
 				new ConfigServicesCallback()).executeAsync();
 	}
 
@@ -255,7 +255,7 @@ public class PhotoPicker {
 		}
 
 		@Override
-		public void onSuccess(ServiceResponseModel data) {
+		public void onSuccess(ServiceResponseModel data,  ResponseStatus status) {
 			remoteServices = new ArrayList<AccountType>();
 			localServices = new ArrayList<LocalServiceType>();
 			if (data.getServices() != null) {

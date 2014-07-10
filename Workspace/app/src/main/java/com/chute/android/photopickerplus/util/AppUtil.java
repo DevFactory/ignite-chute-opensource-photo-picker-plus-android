@@ -22,17 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplus.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
@@ -46,6 +35,17 @@ import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplus.models.enums.DisplayType;
 import com.chute.sdk.v2.model.enums.AccountType;
 import com.chute.sdk.v2.utils.Utils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * The {@link com.chute.android.photopickerplus.util.AppUtil} class contains helper methods including:
@@ -61,8 +61,6 @@ import com.chute.sdk.v2.utils.Utils;
  */
 public class AppUtil {
 
-	private static String SDCARD_FOLDER_CACHE = Environment
-			.getExternalStorageDirectory() + "/Android/data/%s/files/";
 
 	public static String getThumbSmallUrl(String urlNormal) {
 		return Utils.getCustomSizePhotoURL(urlNormal, 100, 100);
@@ -113,8 +111,7 @@ public class AppUtil {
 	}
 
 	private static File getAppCacheDir(Context context) {
-		return new File(String.format(SDCARD_FOLDER_CACHE,
-				context.getPackageName()));
+    return context.getExternalCacheDir();
 	}
 
 	public static boolean hasImageCaptureBug() {

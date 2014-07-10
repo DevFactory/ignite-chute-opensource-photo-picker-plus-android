@@ -22,9 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplus.callback;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 
 import com.araneaapps.android.libs.logger.ALog;
@@ -47,6 +44,9 @@ import com.chute.sdk.v2.model.response.ResponseModel;
 import com.dg.libs.rest.HttpRequest;
 import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.domain.ResponseStatus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The {@link com.chute.android.photopickerplus.callback.ImageDataResponseLoader} has the responsibility for uploading the
@@ -90,16 +90,16 @@ public class ImageDataResponseLoader {
 		imageDataModel.setOptions(options);
 		imageDataModel.setMedia(mediaModelList);
 
-		getImageData(context, imageDataModel,
+		getImageData(imageDataModel,
 				new ImageDataCallback(context, accountListener, accountModel))
 				.executeAsync();
 
 	}
 
-	private static HttpRequest getImageData(final Context context,
+	private static HttpRequest getImageData(
 			MediaModel imageData,
 			final HttpCallback<ResponseModel<MediaResponseModel>> callback) {
-		return new ImageDataRequest(context, imageData, callback);
+		return new ImageDataRequest(imageData, callback);
 	}
 
 	private static final class ImageDataCallback implements
@@ -125,7 +125,7 @@ public class ImageDataResponseLoader {
 		}
 
 		@Override
-		public void onSuccess(ResponseModel<MediaResponseModel> responseData) {
+		public void onSuccess(ResponseModel<MediaResponseModel> responseData, ResponseStatus status) {
 			if (responseData.getData() != null) {
 				List<AssetModel> assetList = responseData.getData()
 						.getAssetList();

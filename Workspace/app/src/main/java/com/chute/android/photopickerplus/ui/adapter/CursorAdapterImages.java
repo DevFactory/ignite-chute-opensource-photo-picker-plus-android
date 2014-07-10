@@ -49,6 +49,7 @@ import com.chute.android.photopickerplus.ui.listener.ListenerFilesCursor;
 import com.chute.android.photopickerplus.ui.listener.ListenerImageSelection;
 import com.chute.android.photopickerplus.ui.listener.ListenerItemCount;
 import com.chute.android.photopickerplus.util.AssetUtil;
+import com.squareup.picasso.Picasso;
 
 public class CursorAdapterImages extends BaseCursorAdapter implements
 		ListenerImageSelection {
@@ -107,7 +108,7 @@ public class CursorAdapterImages extends BaseCursorAdapter implements
 	public void loadImageView(ImageView imageView, Cursor cursor) {
 		String path = cursor.getString(dataIndex);
 		Uri uri = Uri.fromFile(new File(path));
-		loader.displayImage(uri.toString(), imageView, null);
+    Picasso.with(context).load(uri).centerCrop().into(imageView);
 
 	}
 

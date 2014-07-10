@@ -22,8 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplus.config;
 
-import android.content.Context;
-
 import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.client.BaseRestClient.RequestMethod;
 import com.dg.libs.rest.requests.ParameterHttpRequestImpl;
@@ -38,9 +36,9 @@ public class ServiceRequest extends ParameterHttpRequestImpl<ServiceResponseMode
 
   private String url;
 
-  public ServiceRequest(Context context, String url,
+  public ServiceRequest(String url,
       HttpCallback<ServiceResponseModel> callback) {
-    super(context, RequestMethod.GET, new ServiceResponseParser(), callback);
+    super(RequestMethod.GET, new ServiceResponseParser(), callback);
     this.url = url;
   }
 

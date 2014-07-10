@@ -23,42 +23,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.chute.android.photopickerplus;
 
 import android.app.Application;
-import android.content.Context;
-import android.util.TypedValue;
 
 import com.chute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
 import com.chute.sdk.v2.utils.PreferenceUtil;
 
-import darko.imagedownloader.ImageLoader;
-
 public class PhotoPickerPlusApp extends Application {
-
-  private static ImageLoader createImageLoader(Context context) {
-    ImageLoader imageLoader = new ImageLoader(context, R.drawable.photo_placeholder);
-    imageLoader.setDefaultBitmapSize((int) TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, 75, context
-            .getResources().getDisplayMetrics()));
-    return imageLoader;
-  }
-
-  private ImageLoader mImageLoader;
 
   @Override
   public void onCreate() {
     super.onCreate();
-    mImageLoader = createImageLoader(this);
     PreferenceUtil.init(getApplicationContext());
     PhotoPickerPreferenceUtil.init(getApplicationContext());
-
-  }
-
-  @Override
-  public Object getSystemService(String name) {
-    if (ImageLoader.IMAGE_LOADER_SERVICE.equals(name)) {
-      return mImageLoader;
-    } else {
-      return super.getSystemService(name);
-    }
   }
 
 }

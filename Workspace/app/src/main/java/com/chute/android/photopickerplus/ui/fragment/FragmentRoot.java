@@ -248,8 +248,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener,
 			if (!supportVideos && accountType.equals(AccountType.YOUTUBE)) {
 				progressBar.setVisibility(View.GONE);
 			} else {
-				GCAccounts.accountRoot(getActivity().getApplicationContext(),
-						accountType.name().toLowerCase(),
+				GCAccounts.accountRoot(accountType.name().toLowerCase(),
 						account.getShortcut(), new RootCallback())
 						.executeAsync();
 			}
@@ -278,7 +277,7 @@ public class FragmentRoot extends Fragment implements AdapterItemClickListener,
 		}
 
 		@Override
-		public void onSuccess(ResponseModel<AccountBaseModel> responseData) {
+		public void onSuccess(ResponseModel<AccountBaseModel> responseData, ResponseStatus responseStatus) {
 			progressBar.setVisibility(View.GONE);
 			if (responseData != null && getActivity() != null) {
 				adapterAccounts = new AssetAccountAdapter(getActivity(),

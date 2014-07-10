@@ -187,7 +187,6 @@ public class FragmentSingle extends Fragment implements
 		String encodedId = Uri.encode(folderId);
 		if (getActivity() != null) {
 			GCAccounts.accountSingle(
-					getActivity(),
 					PhotoPickerPreferenceUtil.get().getAccountType().name()
 							.toLowerCase(), account.getShortcut(), encodedId,
 					new AccountSingleCallback()).executeAsync();
@@ -208,7 +207,7 @@ public class FragmentSingle extends Fragment implements
 		}
 
 		@Override
-		public void onSuccess(ResponseModel<AccountBaseModel> responseData) {
+		public void onSuccess(ResponseModel<AccountBaseModel> responseData,ResponseStatus responseStatus) {
 			progressBar.setVisibility(View.GONE);
 			boolean supportImages = PhotoPicker.getInstance().supportImages();
 			boolean supportVideos = PhotoPicker.getInstance().supportVideos();

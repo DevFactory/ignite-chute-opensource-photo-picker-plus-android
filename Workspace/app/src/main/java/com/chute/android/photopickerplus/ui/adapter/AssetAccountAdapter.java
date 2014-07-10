@@ -22,12 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplus.ui.adapter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -49,8 +43,13 @@ import com.chute.sdk.v2.model.AccountBaseModel;
 import com.chute.sdk.v2.model.AccountMediaModel;
 import com.chute.sdk.v2.model.enums.AccountMediaType;
 import com.chute.sdk.v2.model.interfaces.AccountMedia;
+import com.squareup.picasso.Picasso;
 
-import darko.imagedownloader.ImageLoader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class AssetAccountAdapter extends BaseAdapter implements
 		ListenerAccountAssetsSelection {
@@ -58,7 +57,6 @@ public class AssetAccountAdapter extends BaseAdapter implements
 	private static final int TYPE_MAX_COUNT = 2;
 
 	private static LayoutInflater inflater;
-	public ImageLoader loader;
 	public Map<Integer, AccountMediaModel> tick;
 	private final FragmentActivity context;
 	private List<AccountMedia> rows;
@@ -82,7 +80,6 @@ public class AssetAccountAdapter extends BaseAdapter implements
 		this.itemCountListener = itemCountListener;
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		loader = ImageLoader.getLoader(context.getApplicationContext());
 		tick = new HashMap<Integer, AccountMediaModel>();
 		rows = new ArrayList<AccountMedia>();
 
@@ -192,8 +189,8 @@ public class AssetAccountAdapter extends BaseAdapter implements
 						.getColor(R.color.grey));
 			}
 			holder.imageViewTick.setVisibility(View.VISIBLE);
-			loader.displayImage(file.getThumbnail(), holder.imageViewThumb,
-					null);
+
+      Picasso.with(context).load(file.getThumbnail()).centerCrop().into(holder.imageViewThumb);
 			convertView.setOnClickListener(new OnFileClickedListener(position));
 			if (file.getVideoUrl() != null) {
 				holder.imageVewVideo.setVisibility(View.VISIBLE);
