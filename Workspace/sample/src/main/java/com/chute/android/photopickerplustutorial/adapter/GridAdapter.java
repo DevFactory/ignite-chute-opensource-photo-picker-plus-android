@@ -30,7 +30,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.chute.android.photopickerplus.models.enums.MediaType;
+import com.getchute.android.photopickerplus.models.enums.MediaType;
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.sdk.v2.model.AssetModel;
 import com.squareup.picasso.Picasso;
@@ -77,18 +77,17 @@ public class GridAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View vi = convertView;
 		ViewHolder holder;
 		if (convertView == null) {
-			vi = inflater.inflate(R.layout.gc_grid_adapter_item, null);
+      convertView = inflater.inflate(R.layout.gc_grid_adapter_item, null);
 			holder = new ViewHolder();
-			holder.imageView = (ImageView) vi
+			holder.imageView = (ImageView) convertView
 					.findViewById(R.id.gcImageViewThumb);
-			holder.videoIcon = (ImageView) vi
+			holder.videoIcon = (ImageView) convertView
 					.findViewById(R.id.gcImageViewVideo);
-			vi.setTag(holder);
+      convertView.setTag(holder);
 		} else {
-			holder = (ViewHolder) vi.getTag();
+			holder = (ViewHolder) convertView.getTag();
 		}
 		AssetModel asset = getItem(position);
     Picasso.with(convertView.getContext()).load(asset.getThumbnail()).into(holder.imageView);
@@ -98,7 +97,7 @@ public class GridAdapter extends BaseAdapter {
 		} else {
 			holder.videoIcon.setVisibility(View.GONE);
 		}
-		return vi;
+		return convertView;
 	}
 
 	public void changeData(ArrayList<AssetModel> collection) {

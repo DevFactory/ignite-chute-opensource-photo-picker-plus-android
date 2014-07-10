@@ -33,7 +33,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.araneaapps.android.libs.logger.ALog;
-import com.chute.android.photopickerplus.util.intent.PhotoPickerPlusIntentWrapper;
+import com.getchute.android.photopickerplus.util.intent.PhotoPickerPlusIntentWrapper;
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.AssetModel;

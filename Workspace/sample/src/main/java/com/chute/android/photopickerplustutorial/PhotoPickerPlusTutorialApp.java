@@ -27,11 +27,11 @@ import java.util.Map;
 
 import com.araneaapps.android.libs.logger.ALog;
 import com.araneaapps.android.libs.logger.ALog.DebugLevel;
-import com.chute.android.photopickerplus.PhotoPickerPlusApp;
-import com.chute.android.photopickerplus.config.PhotoPicker;
-import com.chute.android.photopickerplus.config.PhotoPickerConfiguration;
-import com.chute.android.photopickerplus.models.enums.DisplayType;
-import com.chute.android.photopickerplus.models.enums.LocalServiceType;
+import com.getchute.android.photopickerplus.PhotoPickerPlusApp;
+import com.getchute.android.photopickerplus.config.PhotoPicker;
+import com.getchute.android.photopickerplus.config.PhotoPickerConfiguration;
+import com.getchute.android.photopickerplus.models.enums.DisplayType;
+import com.getchute.android.photopickerplus.models.enums.LocalServiceType;
 import com.chute.android.photopickerplustutorial.config.ConfigEndpointURLs;
 import com.chute.sdk.v2.api.Chute;
 import com.chute.sdk.v2.api.authentication.AuthConstants;

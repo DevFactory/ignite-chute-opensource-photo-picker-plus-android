@@ -1,12 +1,24 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionCode="1"
-          android:versionName="1.0.0"
-    package="com.chute.android.photopickerplus">
+<manifest
+  package="com.getchute.android.photopickerplus"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:versionCode="1"
+  android:versionName="1.0.0">
 
-    <application
-        android:theme="@style/PhotoPickerTheme">
-    </application>
-
-  <service android:name="com.araneaapps.android.libs.asyncrunners.services.ExecutorService"/>
-
+  <application
+    android:theme="@style/PhotoPickerTheme">
+    <service android:name="com.araneaapps.android.libs.asyncrunners.services.ExecutorService"/>
+    <activity
+      android:name="com.getchute.android.photopickerplus.ui.activity.ServicesActivity"
+      android:theme="@style/PhotoPickerTheme">
+    </activity>
+    <activity
+      android:name="com.getchute.android.photopickerplus.ui.activity.AssetActivity"
+      android:theme="@style/PhotoPickerTheme">
+    </activity>
+    <activity
+      android:name="com.chute.sdk.v2.api.authentication.AuthenticationActivity"
+      android:configChanges="orientation|screenSize"
+      android:theme="@style/PhotoPickerTheme">
+    </activity>
+  </application>
 </manifest>

@@ -33,7 +33,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 import com.araneaapps.android.libs.logger.ALog;
-import com.chute.android.photopickerplus.models.enums.MediaType;
+import com.getchute.android.photopickerplus.models.enums.MediaType;
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.android.photopickerplustutorial.adapter.GridAdapter;
 import com.chute.sdk.v2.model.AssetModel;

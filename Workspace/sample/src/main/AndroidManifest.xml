@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.chute.android.photopickerplustutorial"
-    android:versionCode="2"
-    android:versionName="1.2" >
+    package="com.chute.android.photopickerplustutorial">
 
-    <uses-sdk
-        android:minSdkVersion="11"
-        android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -25,35 +20,23 @@
 
         <activity
             android:name="com.chute.android.photopickerplustutorial.activity.PhotoPickerPlusTutorialActivity"
-            android:label="@string/app_name"
-            android:theme="@style/PhotoPickerTheme" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.chute.android.photopickerplustutorial.activity.VideoPlayerActivity"
-            android:theme="@style/PhotoPickerTheme" >
-        </activity>
-        <activity
-            android:name="com.chute.android.photopickerplustutorial.activity.PhotoGridActivity"
-            android:theme="@style/PhotoPickerTheme" >
-        </activity>
-        <activity
-            android:name="com.chute.android.photopickerplus.ui.activity.ServicesActivity"
-            android:theme="@style/PhotoPickerTheme" >
-        </activity>
-        <activity
-            android:name="com.chute.android.photopickerplus.ui.activity.AssetActivity"
-            android:theme="@style/PhotoPickerTheme" >
-        </activity>
-        <activity
-            android:name="com.chute.sdk.v2.api.authentication.AuthenticationActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/PhotoPickerTheme" >
-        </activity>
+
+      <activity
+        android:name="com.chute.android.photopickerplustutorial.activity.VideoPlayerActivity"
+        android:theme="@style/PhotoPickerTheme">
+      </activity>
+      <activity
+        android:name="com.chute.android.photopickerplustutorial.activity.PhotoGridActivity"
+        android:theme="@style/PhotoPickerTheme">
+      </activity>
+
     </application>
 
 </manifest>
