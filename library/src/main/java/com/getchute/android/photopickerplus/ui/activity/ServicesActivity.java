@@ -41,13 +41,28 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.araneaapps.android.libs.logger.ALog;
+import com.chute.sdk.v2.api.accounts.CurrentUserAccountsRequest;
+import com.chute.sdk.v2.api.accounts.GCAccounts;
+import com.chute.sdk.v2.api.authentication.AuthenticationActivity;
+import com.chute.sdk.v2.api.authentication.AuthenticationFactory;
+import com.chute.sdk.v2.api.authentication.AuthenticationOptions;
+import com.chute.sdk.v2.api.authentication.TokenAuthenticationProvider;
+import com.chute.sdk.v2.model.AccountModel;
+import com.chute.sdk.v2.model.AssetModel;
+import com.chute.sdk.v2.model.enums.AccountType;
+import com.chute.sdk.v2.model.response.ListResponseModel;
+import com.chute.sdk.v2.utils.PreferenceUtil;
+import com.dg.libs.rest.callbacks.HttpCallback;
+import com.dg.libs.rest.domain.ResponseStatus;
 import com.getchute.android.photopickerplus.R;
 import com.getchute.android.photopickerplus.callback.CustomAuthenticationProvider;
+import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.dao.MediaDAO;
 import com.getchute.android.photopickerplus.models.DeliverMediaModel;
 import com.getchute.android.photopickerplus.models.enums.MediaType;
 import com.getchute.android.photopickerplus.models.enums.PhotoFilterType;
 import com.getchute.android.photopickerplus.ui.fragment.FragmentRoot;
+import com.getchute.android.photopickerplus.ui.fragment.FragmentServices;
 import com.getchute.android.photopickerplus.ui.fragment.FragmentSingle;
 import com.getchute.android.photopickerplus.ui.listener.ListenerAccountAssetsSelection;
 import com.getchute.android.photopickerplus.ui.listener.ListenerFilesAccount;
@@ -65,20 +80,6 @@ import com.getchute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
 import com.getchute.android.photopickerplus.util.UIUtil;
 import com.getchute.android.photopickerplus.util.intent.IntentUtil;
 import com.getchute.android.photopickerplus.util.intent.PhotosIntentWrapper;
-import com.chute.sdk.v2.api.accounts.CurrentUserAccountsRequest;
-import com.chute.sdk.v2.api.accounts.GCAccounts;
-import com.chute.sdk.v2.api.authentication.AuthenticationActivity;
-import com.chute.sdk.v2.api.authentication.AuthenticationFactory;
-import com.chute.sdk.v2.api.authentication.AuthenticationOptions;
-import com.chute.sdk.v2.api.authentication.TokenAuthenticationProvider;
-import com.chute.sdk.v2.model.AccountModel;
-import com.chute.sdk.v2.model.AssetModel;
-import com.chute.sdk.v2.model.enums.AccountType;
-import com.chute.sdk.v2.model.response.ListResponseModel;
-import com.chute.sdk.v2.utils.PreferenceUtil;
-import com.dg.libs.rest.callbacks.HttpCallback;
-import com.dg.libs.rest.domain.ResponseStatus;
-import com.getchute.android.photopickerplus.ui.fragment.FragmentServices;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -139,7 +140,7 @@ public class ServicesActivity extends FragmentActivity implements
 		textViewSignOut = (TextView) actionBarView
 				.findViewById(R.id.gcTextViewLogout);
 		textViewSignOut.setOnClickListener(new SignOutListener());
-        if (PhotoPicker.getInstance().enableLogout() == false) {
+        if (!PhotoPicker.getInstance().hasLogoutOption()) {
             textViewSignOut.setVisibility(View.GONE);
         }
 		textViewClose.setOnClickListener(new CloseListener());

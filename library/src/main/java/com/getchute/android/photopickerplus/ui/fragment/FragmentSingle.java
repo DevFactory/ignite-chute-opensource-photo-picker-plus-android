@@ -22,10 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,6 +37,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.araneaapps.android.libs.logger.ALog;
+import com.chute.sdk.v2.api.accounts.GCAccounts;
+import com.chute.sdk.v2.api.authentication.TokenAuthenticationProvider;
+import com.chute.sdk.v2.model.AccountAlbumModel;
+import com.chute.sdk.v2.model.AccountBaseModel;
+import com.chute.sdk.v2.model.AccountMediaModel;
+import com.chute.sdk.v2.model.AccountModel;
+import com.chute.sdk.v2.model.enums.AccountType;
+import com.chute.sdk.v2.model.response.ResponseModel;
+import com.dg.libs.rest.callbacks.HttpCallback;
+import com.dg.libs.rest.domain.ResponseStatus;
 import com.getchute.android.photopickerplus.R;
 import com.getchute.android.photopickerplus.callback.ImageDataResponseLoader;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
@@ -56,16 +62,10 @@ import com.getchute.android.photopickerplus.util.FragmentUtil;
 import com.getchute.android.photopickerplus.util.NotificationUtil;
 import com.getchute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
 import com.getchute.android.photopickerplus.util.UIUtil;
-import com.chute.sdk.v2.api.accounts.GCAccounts;
-import com.chute.sdk.v2.api.authentication.TokenAuthenticationProvider;
-import com.chute.sdk.v2.model.AccountAlbumModel;
-import com.chute.sdk.v2.model.AccountBaseModel;
-import com.chute.sdk.v2.model.AccountMediaModel;
-import com.chute.sdk.v2.model.AccountModel;
-import com.chute.sdk.v2.model.enums.AccountType;
-import com.chute.sdk.v2.model.response.ResponseModel;
-import com.dg.libs.rest.callbacks.HttpCallback;
-import com.dg.libs.rest.domain.ResponseStatus;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class FragmentSingle extends Fragment implements
   AssetAccountAdapter.AdapterItemClickListener, ListenerItemCount {
@@ -148,7 +148,7 @@ public class FragmentSingle extends Fragment implements
 
 		return view;
 	}
-	
+
 	private void initActionBar() {
 		boolean dualPanes = getActivity().getResources().getBoolean(
 				R.bool.has_two_panes);
@@ -165,7 +165,7 @@ public class FragmentSingle extends Fragment implements
 			textViewLogout = (TextView) titleView
 					.findViewById(R.id.gcTextViewLogout);
 			textViewLogout.setOnClickListener(new LogoutListener());
-            if (PhotoPicker.getInstance().enableLogout() == false) {
+            if (!PhotoPicker.getInstance().hasLogoutOption()) {
                 textViewLogout.setVisibility(View.GONE);
             }
 			textViewClose.setOnClickListener(new CloseListener());

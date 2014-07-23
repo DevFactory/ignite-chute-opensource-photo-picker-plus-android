@@ -22,20 +22,20 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplustutorial;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.araneaapps.android.libs.logger.ALog;
 import com.araneaapps.android.libs.logger.ALog.DebugLevel;
+import com.chute.android.photopickerplustutorial.config.ConfigEndpointURLs;
+import com.chute.sdk.v2.api.Chute;
+import com.chute.sdk.v2.api.authentication.AuthConstants;
+import com.chute.sdk.v2.model.enums.AccountType;
 import com.getchute.android.photopickerplus.PhotoPickerPlusApp;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.config.PhotoPickerConfiguration;
 import com.getchute.android.photopickerplus.models.enums.DisplayType;
 import com.getchute.android.photopickerplus.models.enums.LocalServiceType;
-import com.chute.android.photopickerplustutorial.config.ConfigEndpointURLs;
-import com.chute.sdk.v2.api.Chute;
-import com.chute.sdk.v2.api.authentication.AuthConstants;
-import com.chute.sdk.v2.model.enums.AccountType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PhotoPickerPlusTutorialApp extends PhotoPickerPlusApp {
 	
@@ -65,6 +65,7 @@ public class PhotoPickerPlusTutorialApp extends PhotoPickerPlusApp {
 				.isMultiPicker(true)
 				.defaultAccountDisplayType(DisplayType.GRID)
 //				.accountDisplayType(map)
+                .enableLogout(false)
 				.accountList(AccountType.FLICKR, AccountType.DROPBOX,
 						AccountType.INSTAGRAM, AccountType.GOOGLE,
 						AccountType.YOUTUBE)
