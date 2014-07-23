@@ -165,6 +165,9 @@ public class FragmentSingle extends Fragment implements
 			textViewLogout = (TextView) titleView
 					.findViewById(R.id.gcTextViewLogout);
 			textViewLogout.setOnClickListener(new LogoutListener());
+            if (PhotoPicker.getInstance().enableLogout() == false) {
+                textViewLogout.setVisibility(View.GONE);
+            }
 			textViewClose.setOnClickListener(new CloseListener());
 		} else {
 			textViewServiceTitle = (TextView) titleView

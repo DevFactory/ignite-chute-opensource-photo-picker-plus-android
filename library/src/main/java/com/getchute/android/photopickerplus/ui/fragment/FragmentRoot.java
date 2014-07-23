@@ -200,6 +200,9 @@ public class FragmentRoot extends Fragment implements AssetAccountAdapter.Adapte
 			textViewLogout = (TextView) titleView
 					.findViewById(R.id.gcTextViewLogout);
 			textViewLogout.setOnClickListener(new LogoutListener());
+            if (PhotoPicker.getInstance().enableLogout() == false) {
+                textViewLogout.setVisibility(View.GONE);
+            }
 			textViewClose.setOnClickListener(new CloseListener());
 		} else {
 			textViewServiceTitle = (TextView) titleView

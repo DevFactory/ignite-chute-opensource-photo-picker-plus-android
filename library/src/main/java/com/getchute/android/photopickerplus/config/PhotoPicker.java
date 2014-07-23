@@ -314,6 +314,10 @@ public class PhotoPicker {
 
 	}
 
+    public boolean hasLogoutOption() {
+        return configuration.enableLogout;
+    }
+
 	/**
 	 * If true, PhotoPicker displays videos for selection. Note that
 	 * {@linkplain #supportImages()}, {@linkplain #supportVideos()} or both

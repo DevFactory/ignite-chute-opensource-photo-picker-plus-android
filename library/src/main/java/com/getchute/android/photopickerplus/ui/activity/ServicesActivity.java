@@ -139,6 +139,9 @@ public class ServicesActivity extends FragmentActivity implements
 		textViewSignOut = (TextView) actionBarView
 				.findViewById(R.id.gcTextViewLogout);
 		textViewSignOut.setOnClickListener(new SignOutListener());
+        if (PhotoPicker.getInstance().enableLogout() == false) {
+            textViewSignOut.setVisibility(View.GONE);
+        }
 		textViewClose.setOnClickListener(new CloseListener());
 
 		dualPanes = getResources().getBoolean(R.bool.has_two_panes);
