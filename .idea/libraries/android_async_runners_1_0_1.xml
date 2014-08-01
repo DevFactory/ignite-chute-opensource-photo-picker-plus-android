@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="android-async-runners-1.0.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.aranea-apps.android.libs/android-async-runners/1.0.1/67be87a2bea1cabd45d91a0a0b8600654b962d81/android-async-runners-1.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.aranea-apps.android.libs/android-async-runners/1.0.1/8b964ff461fd799b595af0b5cbef1cfbdfd3c2fb/android-async-runners-1.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

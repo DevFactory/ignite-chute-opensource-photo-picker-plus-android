@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+
+android {
+  compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
+  buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+
+
+  defaultConfig {
+    applicationId "com.getchute.android.photopickerplus"
+    targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
+    minSdkVersion 8
+
+    buildTypes {
+      release {
+        runProguard false
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      }
+    }
+  }
+
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile 'com.android.support:appcompat-v7:20.+'
+  compile 'com.android.support:support-v4:20.+'
+  compile 'com.getchute.android.sdk.v2:chute-sdk-v2-android:2.3.2'
+  compile 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
+  compile 'com.squareup.picasso:picasso:2.3.2'
+}
+
+apply from: '../gradle-mvn-push.gradle'
