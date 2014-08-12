@@ -22,19 +22,21 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.araneaapps.android.libs.logger.ALog;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
@@ -52,6 +54,8 @@ import com.getchute.android.photopickerplus.callback.ImageDataResponseLoader;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.models.enums.DisplayType;
 import com.getchute.android.photopickerplus.models.enums.PhotoFilterType;
+import com.getchute.android.photopickerplus.ui.activity.AssetActivity;
+import com.getchute.android.photopickerplus.ui.activity.ServicesActivity;
 import com.getchute.android.photopickerplus.ui.adapter.AssetAccountAdapter;
 import com.getchute.android.photopickerplus.ui.listener.ListenerFilesAccount;
 import com.getchute.android.photopickerplus.ui.listener.ListenerFragmentSingle;
@@ -72,11 +76,6 @@ public class FragmentSingle extends Fragment implements
 
 	private GridView gridView;
 	private ListView listView;
-	private TextView textViewServiceTitle;
-	private TextView textViewUseMedia;
-	private TextView textViewBack;
-	private TextView textViewClose;
-	private TextView textViewLogout;
 	private ProgressBar progressBar;
 	private RelativeLayout relativeLayoutRoot;
 
@@ -85,7 +84,6 @@ public class FragmentSingle extends Fragment implements
 	private DisplayType displayType;
 	private String folderId;
 	private boolean isMultipicker;
-	private boolean dualPanes;
 	private List<Integer> selectedItemsPositions;
 
 	private AssetAccountAdapter accountAssetAdapter;
@@ -118,17 +116,19 @@ public class FragmentSingle extends Fragment implements
 		this.setHasOptionsMenu(true);
 	}
 
-	@Override
+	@SuppressLint("NewApi")
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		isMultipicker = PhotoPicker.getInstance().isMultiPicker();
-		dualPanes = getResources().getBoolean(R.bool.has_two_panes);
 		accountType = PhotoPickerPreferenceUtil.get().getAccountType();
 		Map<AccountType, DisplayType> accountMap = PhotoPicker.getInstance()
 				.getAccountDisplayType();
 		displayType = AppUtil.getDisplayType(accountMap, PhotoPicker
 				.getInstance().getDefaultAccountDisplayType(), accountType);
+
+        getActivity().getActionBar().setTitle(UIUtil.getActionBarTitle(getActivity(), accountType, PhotoFilterType.SOCIAL_MEDIA));
 
 		View view = inflater.inflate(R.layout.gc_fragment_assets_grid,
 				container, false);
@@ -142,42 +142,52 @@ public class FragmentSingle extends Fragment implements
 			relativeLayoutRoot.addView(gridView);
 		}
 
-		initActionBar();
 		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 		updateFragment(account, folderId, selectedItemsPositions);
 
 		return view;
 	}
 
-	private void initActionBar() {
-		boolean dualPanes = getActivity().getResources().getBoolean(
-				R.bool.has_two_panes);
-		View titleView = getActivity().getActionBar().getCustomView();
-		textViewUseMedia = (TextView) titleView
-				.findViewById(R.id.gcTextViewUse);
-		textViewUseMedia.setOnClickListener(new OkClickListener());
-		if (dualPanes) {
-			textViewUseMedia.setVisibility(View.VISIBLE);
-			textViewServiceTitle = (TextView) titleView
-					.findViewById(R.id.gcTextViewLabelChooseService);
-			textViewClose = (TextView) titleView
-					.findViewById(R.id.gcTextViewClose);
-			textViewLogout = (TextView) titleView
-					.findViewById(R.id.gcTextViewLogout);
-			textViewLogout.setOnClickListener(new LogoutListener());
-            if (!PhotoPicker.getInstance().hasLogoutOption()) {
-                textViewLogout.setVisibility(View.GONE);
-            }
-			textViewClose.setOnClickListener(new CloseListener());
-		} else {
-			textViewServiceTitle = (TextView) titleView
-					.findViewById(R.id.gcTextViewLabelAccount);
-			textViewBack = (TextView) titleView
-					.findViewById(R.id.gcTextViewBack);
-			textViewBack.setOnClickListener(new OnBackClickListener());
-		}
-		
-	}
+
+    @SuppressLint("NewApi")
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem menuItemUse = menu.add(0, AssetActivity.USE_ITEM, 0, R.string.button_use_media);
+        menuItemUse.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case ServicesActivity.LOGOUT_ITEM:
+                if (getResources().getBoolean(R.bool.has_two_panes)) {
+                    FragmentUtil
+                            .replaceContentWithEmptyFragment(getActivity());
+                }
+                NotificationUtil.makeToast(getActivity().getApplicationContext(),
+                        R.string.toast_signed_out);
+                TokenAuthenticationProvider.getInstance().clearAuth();
+                PhotoPickerPreferenceUtil.get().clearAll();
+                break;
+            case AssetActivity.USE_ITEM:
+                if (!accountAssetAdapter.getPhotoCollection().isEmpty()) {
+                    ImageDataResponseLoader.postImageData(getActivity()
+                            .getApplicationContext(), accountAssetAdapter
+                            .getPhotoCollection(), accountListener, account);
+                }
+                break;
+            case android.R.id.home:
+                if (getResources().getBoolean(R.bool.has_two_panes)) {
+                    getActivity().finish();
+                }else {
+                    fragmentSingleListener.onFragmentSingleNavigationBack();
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 	public void updateFragment(AccountModel account, String folderId,
 			List<Integer> selectedItemsPositions) {
@@ -208,7 +218,8 @@ public class FragmentSingle extends Fragment implements
 
 		}
 
-		@Override
+		@SuppressLint("NewApi")
+        @Override
 		public void onSuccess(ResponseModel<AccountBaseModel> responseData,ResponseStatus responseStatus) {
 			progressBar.setVisibility(View.GONE);
 			boolean supportImages = PhotoPicker.getInstance().supportImages();
@@ -230,14 +241,12 @@ public class FragmentSingle extends Fragment implements
 					}
 				}
 
-				UIUtil.setFragmentLabel(getActivity(), textViewServiceTitle,
-						accountType, PhotoFilterType.SOCIAL_MEDIA);
+                getActivity().getActionBar().setTitle(UIUtil.getActionBarTitle(getActivity(), accountType, PhotoFilterType.SOCIAL_MEDIA));
 				NotificationUtil.showPhotosAdapterToast(getActivity()
 						.getApplicationContext(), accountAssetAdapter
 						.getCount());
 
 			}
-
 		}
 
 	}
@@ -266,21 +275,9 @@ public class FragmentSingle extends Fragment implements
 
 	}
 
-	private final class OkClickListener implements OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			if (!accountAssetAdapter.getPhotoCollection().isEmpty()) {
-				ImageDataResponseLoader.postImageData(getActivity()
-						.getApplicationContext(), accountAssetAdapter
-						.getPhotoCollection(), accountListener, account);
-			}
-		}
-	}
 
 	@Override
 	public void onSelectedImagesCount(int count) {
-		UIUtil.setSelectedItemsCount(getActivity(), textViewUseMedia, count);
 	}
 
 	@Override
@@ -288,40 +285,6 @@ public class FragmentSingle extends Fragment implements
 
 	}
 
-	private final class OnBackClickListener implements OnClickListener {
 
-		@Override
-		public void onClick(View v) {
-			fragmentSingleListener.onFragmentSingleNavigationBack();
-
-		}
-
-	}
-
-	private final class LogoutListener implements OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			if (dualPanes) {
-				FragmentUtil.replaceContentWithEmptyFragment(getActivity());
-			}
-			NotificationUtil.makeToast(getActivity().getApplicationContext(),
-					R.string.toast_signed_out);
-			TokenAuthenticationProvider.getInstance().clearAuth();
-			PhotoPickerPreferenceUtil.get().clearAll();
-
-		}
-
-	}
-
-	private final class CloseListener implements OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			getActivity().finish();
-
-		}
-
-	}
 
 }

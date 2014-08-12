@@ -65,7 +65,7 @@ public class PhotoPickerPlusTutorialApp extends PhotoPickerPlusApp {
 				.isMultiPicker(true)
 				.defaultAccountDisplayType(DisplayType.GRID)
 //				.accountDisplayType(map)
-                .enableLogout(false)
+                .enableLogout(true)
 				.accountList(AccountType.FLICKR, AccountType.DROPBOX,
 						AccountType.INSTAGRAM, AccountType.GOOGLE,
 						AccountType.YOUTUBE)

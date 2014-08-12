@@ -22,8 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.fragment;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,11 +30,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.chute.sdk.v2.model.enums.AccountType;
 import com.getchute.android.photopickerplus.R;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.models.enums.LocalServiceType;
 import com.getchute.android.photopickerplus.ui.adapter.ServicesAdapter;
-import com.chute.sdk.v2.model.enums.AccountType;
+
+import java.util.List;
 
 public class FragmentServices extends Fragment {
 

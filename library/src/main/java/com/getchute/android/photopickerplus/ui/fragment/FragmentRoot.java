@@ -22,6 +22,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -29,14 +30,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.chute.sdk.v2.api.accounts.GCAccounts;
 import com.chute.sdk.v2.api.authentication.TokenAuthenticationProvider;
@@ -56,6 +58,8 @@ import com.getchute.android.photopickerplus.loaders.LocalVideosAsyncTaskLoader;
 import com.getchute.android.photopickerplus.models.DeliverMediaModel;
 import com.getchute.android.photopickerplus.models.enums.DisplayType;
 import com.getchute.android.photopickerplus.models.enums.PhotoFilterType;
+import com.getchute.android.photopickerplus.ui.activity.AssetActivity;
+import com.getchute.android.photopickerplus.ui.activity.ServicesActivity;
 import com.getchute.android.photopickerplus.ui.adapter.AssetAccountAdapter;
 import com.getchute.android.photopickerplus.ui.adapter.CursorAdapterImages;
 import com.getchute.android.photopickerplus.ui.adapter.CursorAdapterVideos;
@@ -85,18 +89,12 @@ public class FragmentRoot extends Fragment implements AssetAccountAdapter.Adapte
 	private CursorAdapterVideos adapterVideos;
 	private AssetAccountAdapter adapterAccounts;
 	private MergeAdapter adapterMerge;
-	private TextView textViewServiceTitle;
-	private TextView textViewBack;
-	private TextView textViewUseMedia;
-	private TextView textViewClose;
-	private TextView textViewLogout;
 	private ProgressBar progressBar;
 	private RelativeLayout relativeLayoutRoot;
 
 	private boolean supportVideos;
 	private boolean supportImages;
 	private boolean isMultipicker;
-	private boolean dualPanes;
 	private List<Integer> selectedAccountsPositions;
 	private List<Integer> selectedImagePositions;
 	private List<Integer> selectedVideoPositions;
@@ -143,6 +141,7 @@ public class FragmentRoot extends Fragment implements AssetAccountAdapter.Adapte
 		setHasOptionsMenu(true);
 	}
 
+    @SuppressLint("NewApi")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -153,12 +152,13 @@ public class FragmentRoot extends Fragment implements AssetAccountAdapter.Adapte
 		accountType = PhotoPickerPreferenceUtil.get().getAccountType();
 		accountMap = PhotoPicker.getInstance().getAccountDisplayType();
 		displayType = AppUtil.getDisplayType(accountMap, PhotoPicker
-				.getInstance().getDefaultAccountDisplayType(), accountType);
-		dualPanes = getResources().getBoolean(R.bool.has_two_panes);
+                .getInstance().getDefaultAccountDisplayType(), accountType);
 
 		View view = inflater.inflate(R.layout.gc_fragment_assets_grid,
 				container, false);
 		initView(view);
+
+        getActivity().getActionBar().setTitle(UIUtil.getActionBarTitle(getActivity(), accountType, filterType));
 
 		if (savedInstanceState == null) {
 			updateFragment(account, filterType, selectedAccountsPositions,
@@ -180,43 +180,45 @@ public class FragmentRoot extends Fragment implements AssetAccountAdapter.Adapte
 		}
 
 		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-		initActionBar();
 
 	}
+
+    @SuppressLint("NewApi")
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem menuItemUse = menu.add(0, AssetActivity.USE_ITEM, 0, R.string.button_use_media);
+        menuItemUse.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case ServicesActivity.LOGOUT_ITEM:
+                if (getResources().getBoolean(R.bool.has_two_panes)) {
+                    FragmentUtil
+                            .replaceContentWithEmptyFragment(getActivity());
+                }
+                NotificationUtil.makeToast(getActivity().getApplicationContext(),
+                        R.string.toast_signed_out);
+                TokenAuthenticationProvider.getInstance().clearAuth();
+                PhotoPickerPreferenceUtil.get().clearAll();
+                break;
+            case AssetActivity.USE_ITEM:
+                useMedia();
+                break;
+            case android.R.id.home:
+                if (getResources().getBoolean(R.bool.has_two_panes)) {
+                    getActivity().finish();
+                }else {
+                    fragmetRootListener.onFragmentRootNavigationBack();
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 	
-	private void initActionBar() {
-		boolean dualPanes = getActivity().getResources().getBoolean(
-				R.bool.has_two_panes);
-		View titleView = getActivity().getActionBar().getCustomView();
-		textViewUseMedia = (TextView) titleView
-				.findViewById(R.id.gcTextViewUse);
-		textViewUseMedia.setOnClickListener(new OkClickListener());
-		if (dualPanes) {
-			textViewUseMedia.setVisibility(View.VISIBLE);
-			textViewServiceTitle = (TextView) titleView
-					.findViewById(R.id.gcTextViewLabelChooseService);
-			textViewClose = (TextView) titleView
-					.findViewById(R.id.gcTextViewClose);
-			textViewLogout = (TextView) titleView
-					.findViewById(R.id.gcTextViewLogout);
-			textViewLogout.setOnClickListener(new LogoutListener());
-            if (!PhotoPicker.getInstance().hasLogoutOption()) {
-                textViewLogout.setVisibility(View.GONE);
-            }
-			textViewClose.setOnClickListener(new CloseListener());
-		} else {
-			textViewServiceTitle = (TextView) titleView
-					.findViewById(R.id.gcTextViewLabelAccount);
-			textViewBack = (TextView) titleView
-					.findViewById(R.id.gcTextViewBack);
-			textViewBack.setOnClickListener(new OnBackClickListener());
-		}
-		
-		UIUtil.setFragmentLabel(getActivity(), textViewServiceTitle,
-				accountType, filterType);
-
-	}
-
 	public void updateFragment(AccountModel account,
 			PhotoFilterType filterType,
 			List<Integer> selectedAccountsPositions,
@@ -301,8 +303,7 @@ public class FragmentRoot extends Fragment implements AssetAccountAdapter.Adapte
 				NotificationUtil.showPhotosAdapterToast(getActivity()
 						.getApplicationContext(), adapterAccounts.getCount());
 			}
-			UIUtil.setFragmentLabel(getActivity(), textViewServiceTitle,
-					accountType, filterType);
+
 		}
 
 	}
@@ -383,9 +384,6 @@ public class FragmentRoot extends Fragment implements AssetAccountAdapter.Adapte
 				}
 			}
 
-			// NotificationUtil.showPhotosAdapterToast(getActivity()
-			// .getApplicationContext(), adapterImages.getCount());
-
 		}
 
 		@Override
@@ -396,10 +394,8 @@ public class FragmentRoot extends Fragment implements AssetAccountAdapter.Adapte
 
 	}
 
-	private final class OkClickListener implements OnClickListener {
 
-		@Override
-		public void onClick(View v) {
+		public void useMedia() {
 			if (filterType == PhotoFilterType.SOCIAL_MEDIA) {
 				if (!adapterAccounts.getPhotoCollection().isEmpty()) {
 					ImageDataResponseLoader.postImageData(getActivity()
@@ -417,7 +413,6 @@ public class FragmentRoot extends Fragment implements AssetAccountAdapter.Adapte
 				}
 				cursorListener.onDeliverCursorAssets(deliverList);
 			}
-		}
 	}
 
 	@Override
@@ -446,51 +441,14 @@ public class FragmentRoot extends Fragment implements AssetAccountAdapter.Adapte
 	@Override
 	public void onSelectedImagesCount(int count) {
 		imagesCount = count;
-		int itemCount = imagesCount + videosCount;
-		UIUtil.setSelectedItemsCount(getActivity(), textViewUseMedia, itemCount);
 
 	}
 
 	@Override
 	public void onSelectedVideosCount(int count) {
 		videosCount = count;
-		int itemCount = imagesCount + videosCount;
-		UIUtil.setSelectedItemsCount(getActivity(), textViewUseMedia, itemCount);
 	}
 
-	private final class OnBackClickListener implements OnClickListener {
 
-		@Override
-		public void onClick(View v) {
-			fragmetRootListener.onFragmentRootNavigationBack();
-		}
-
-	}
-
-	private final class LogoutListener implements OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			if (dualPanes) {
-				FragmentUtil.replaceContentWithEmptyFragment(getActivity());
-			}
-			NotificationUtil.makeToast(getActivity().getApplicationContext(),
-					R.string.toast_signed_out);
-			TokenAuthenticationProvider.getInstance().clearAuth();
-			PhotoPickerPreferenceUtil.get().clearAll();
-
-		}
-
-	}
-
-	private final class CloseListener implements OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			getActivity().finish();
-
-		}
-
-	}
 
 }

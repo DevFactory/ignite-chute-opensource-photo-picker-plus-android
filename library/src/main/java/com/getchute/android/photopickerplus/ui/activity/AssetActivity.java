@@ -22,14 +22,25 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Window;
 
 import com.araneaapps.android.libs.logger.ALog;
+import com.chute.sdk.v2.api.accounts.GCAccounts;
+import com.chute.sdk.v2.api.authentication.AuthenticationFactory;
+import com.chute.sdk.v2.model.AccountModel;
+import com.chute.sdk.v2.model.AssetModel;
+import com.chute.sdk.v2.model.enums.AccountType;
+import com.chute.sdk.v2.model.response.ListResponseModel;
+import com.chute.sdk.v2.utils.PreferenceUtil;
+import com.dg.libs.rest.callbacks.HttpCallback;
+import com.dg.libs.rest.domain.ResponseStatus;
 import com.getchute.android.photopickerplus.R;
 import com.getchute.android.photopickerplus.models.DeliverMediaModel;
 import com.getchute.android.photopickerplus.models.enums.PhotoFilterType;
@@ -47,18 +58,8 @@ import com.getchute.android.photopickerplus.util.Constants;
 import com.getchute.android.photopickerplus.util.FragmentUtil;
 import com.getchute.android.photopickerplus.util.NotificationUtil;
 import com.getchute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
-import com.getchute.android.photopickerplus.util.UIUtil;
 import com.getchute.android.photopickerplus.util.intent.IntentUtil;
 import com.getchute.android.photopickerplus.util.intent.PhotosIntentWrapper;
-import com.chute.sdk.v2.api.accounts.GCAccounts;
-import com.chute.sdk.v2.api.authentication.AuthenticationFactory;
-import com.chute.sdk.v2.model.AccountModel;
-import com.chute.sdk.v2.model.AssetModel;
-import com.chute.sdk.v2.model.enums.AccountType;
-import com.chute.sdk.v2.model.response.ListResponseModel;
-import com.chute.sdk.v2.utils.PreferenceUtil;
-import com.dg.libs.rest.callbacks.HttpCallback;
-import com.dg.libs.rest.domain.ResponseStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,8 @@ import java.util.List;
 public class AssetActivity extends FragmentActivity implements
   ListenerFilesCursor, ListenerFilesAccount, ListenerFragmentRoot,
 		ListenerFragmentSingle {
+
+    public static final int USE_ITEM = 5;
 
 	private PhotoFilterType filterType;
 	private PhotosIntentWrapper wrapper;
@@ -101,14 +104,16 @@ public class AssetActivity extends FragmentActivity implements
 		this.listenerVideosSelection = adapterListener;
 	}
 
-	@Override
+	@SuppressLint("NewApi")
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		requestWindowFeature(Window.FEATURE_ACTION_BAR);
-
 		setContentView(R.layout.gc_activity_assets);
-		UIUtil.initActionBar(this, R.layout.gc_view_assets_title_bar);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setIcon(new ColorDrawable(android.R.color.transparent));
+        getActionBar().setTitle(R.string.choose_service);
 
 		retrieveSavedValuesFromBundle(savedInstanceState);
 
