@@ -265,7 +265,7 @@ public class PhotoPicker {
 								.toUpperCase());
 						remoteServices.add(accountType);
 					} else {
-						ALog.w(WARNING_UNSUPPORTED_REMOTE_SERVICES);
+						ALog.w(WARNING_UNSUPPORTED_REMOTE_SERVICES + " " + service);
 					}
 				}
 				PhotoPickerPreferenceUtil
