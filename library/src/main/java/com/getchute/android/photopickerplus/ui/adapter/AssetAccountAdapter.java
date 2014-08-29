@@ -190,7 +190,7 @@ public class AssetAccountAdapter extends BaseAdapter implements
 			}
 			holder.imageViewTick.setVisibility(View.VISIBLE);
 
-      Picasso.with(context).load(file.getThumbnail()).into(holder.imageViewThumb);
+      Picasso.with(context).load(file.getThumbnail()).fit().centerCrop().into(holder.imageViewThumb);
 			convertView.setOnClickListener(new OnFileClickedListener(position));
 			if (file.getVideoUrl() != null) {
 				holder.imageVewVideo.setVisibility(View.VISIBLE);

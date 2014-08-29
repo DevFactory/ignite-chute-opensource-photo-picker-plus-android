@@ -168,12 +168,12 @@ public class ServicesAdapter extends BaseAdapter {
 			} else {
 				uriCameraMedia = lastVideoThumbFromCameraVideos;
 			}
-      Picasso.with(context).load(uriCameraMedia).into(holder.imageView);
+      Picasso.with(context).load(uriCameraMedia).fit().centerCrop().into(holder.imageView);
 
 			holder.textViewServiceTitle.setText(R.string.camera_media);
 			break;
 		case LAST_PHOTO_TAKEN:
-      Picasso.with(context).load(lastImageFromCameraPhotos).into(holder.imageView);
+      Picasso.with(context).load(lastImageFromCameraPhotos).fit().centerCrop().into(holder.imageView);
 			holder.textViewServiceTitle.setText(context.getResources()
 					.getString(R.string.last_photo));
 			break;
@@ -184,7 +184,7 @@ public class ServicesAdapter extends BaseAdapter {
 			} else {
 				uriAllMedia = lastVideoThumbFromAllVideos;
 			}
-      Picasso.with(context).load(uriAllMedia).into(holder.imageView);
+      Picasso.with(context).load(uriAllMedia).fit().centerCrop().into(holder.imageView);
 			holder.textViewServiceTitle.setText(context.getResources()
 					.getString(R.string.all_media));
 			break;

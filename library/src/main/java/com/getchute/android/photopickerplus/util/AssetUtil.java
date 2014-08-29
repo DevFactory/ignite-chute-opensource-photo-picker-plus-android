@@ -22,17 +22,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.util;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.net.Uri;
 
-import com.getchute.android.photopickerplus.models.DeliverMediaModel;
 import com.chute.sdk.v2.model.AccountAlbumModel;
 import com.chute.sdk.v2.model.AccountBaseModel;
 import com.chute.sdk.v2.model.AccountMediaModel;
 import com.chute.sdk.v2.model.AssetModel;
+import com.getchute.android.photopickerplus.models.DeliverMediaModel;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helper class containing with static methods regarding {@link AssetModel}s.
@@ -68,6 +68,7 @@ public class AssetUtil {
 	 */
 	public static AssetModel getMediaModel(DeliverMediaModel model) {
 		final AssetModel asset = new AssetModel();
+    asset.setId(model.getLocalMediaUri().toString());
 		asset.setThumbnail(Uri.fromFile(new File(model.getThumbnail()))
 				.toString());
 		asset.setUrl(Uri.fromFile(new File(model.getImageUrl())).toString());

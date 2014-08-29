@@ -22,13 +22,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.adapter;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,6 +43,11 @@ import com.getchute.android.photopickerplus.ui.listener.ListenerFilesCursor;
 import com.getchute.android.photopickerplus.ui.listener.ListenerItemCount;
 import com.getchute.android.photopickerplus.ui.listener.ListenerVideoSelection;
 import com.getchute.android.photopickerplus.util.AssetUtil;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class CursorAdapterVideos extends BaseCursorAdapter implements
   ListenerVideoSelection {
@@ -123,10 +125,16 @@ public class CursorAdapterVideos extends BaseCursorAdapter implements
 			if (PhotoPicker.getInstance().isMultiPicker()) {
 				toggleTick(position);
 			} else {
+        Uri uri = null;
+        if (getCursor().moveToPosition(position)) {
+          int id = getCursor().getInt(getCursor()
+            .getColumnIndex(MediaStore.Video.Media._ID));
+          uri = ContentUris.withAppendedId(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI, id);
+        }
 				String thumb = MediaDAO.getVideoThumbnailFromCursor(context,
 						getCursor(), position);
 				filesCursorListener.onCursorAssetsSelect(AssetUtil
-						.getMediaModel(createMediaResultModel(thumb, path)));
+						.getMediaModel(createMediaResultModel(thumb, path, uri)));
 			}
 
 		}
@@ -140,10 +148,15 @@ public class CursorAdapterVideos extends BaseCursorAdapter implements
 			Entry<Integer, String> pairs = iterator.next();
 			String path = pairs.getValue();
 			int position = pairs.getKey();
-
+      Uri uri = null;
+      if (getCursor().moveToPosition(position)) {
+        int id = getCursor().getInt(getCursor()
+          .getColumnIndex(MediaStore.Video.Media._ID));
+        uri = ContentUris.withAppendedId(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI, id);
+      }
 			String thumbnail = MediaDAO.getVideoThumbnailFromCursor(context,
 					getCursor(), position);
-			deliverList.add(createMediaResultModel(thumbnail, path));
+			deliverList.add(createMediaResultModel(thumbnail, path, uri));
 		}
 		return deliverList;
 	}
@@ -161,11 +174,12 @@ public class CursorAdapterVideos extends BaseCursorAdapter implements
 	}
 
 	private DeliverMediaModel createMediaResultModel(String thumb,
-			String videoUrl) {
+                                                   String videoUrl, Uri uri) {
 		ALog.d("video thumb: " + thumb);
 		ALog.d("video url: " + videoUrl);
 		ALog.d("video image url: " + thumb);
 		DeliverMediaModel model = new DeliverMediaModel();
+    model.setLocalMediaUri(uri);
 		model.setVideoUrl(videoUrl);
 		model.setMediaType(MediaType.VIDEO);
 		model.setImageUrl(thumb);

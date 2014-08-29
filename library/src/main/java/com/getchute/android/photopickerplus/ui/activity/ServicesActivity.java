@@ -246,6 +246,7 @@ public class ServicesActivity extends FragmentActivity implements
                     .getString(R.string.no_camera_photos));
         } else {
             final AssetModel model = new AssetModel();
+            //model.setId(MediaDAO.getLastPhotoContentUri(getApplicationContext()).toString());
             model.setThumbnail(uri.toString());
             model.setUrl(uri.toString());
             model.setType(MediaType.IMAGE.name().toLowerCase());
@@ -371,19 +372,22 @@ public class ServicesActivity extends FragmentActivity implements
         }
         if (requestCode == Constants.CAMERA_PIC_REQUEST) {
             String path = "";
+            Uri uri = null;
             File tempFile = AppUtil.getTempImageFile(getApplicationContext());
             if (AppUtil.hasImageCaptureBug() == false && tempFile.length() > 0) {
                 try {
-                    MediaStore.Images.Media.insertImage(
+                    uri = Uri.parse(MediaStore.Images.Media.insertImage(
                             getContentResolver(), tempFile.getAbsolutePath(),
-                            null, null);
+                            null, null));
                     tempFile.delete();
+
                     path = MediaDAO.getLastPhotoFromCameraPhotos(
                             getApplicationContext()).toString();
                 } catch (FileNotFoundException e) {
                     ALog.d("", e);
                 }
             } else {
+                uri = data.getData();
                 ALog.e("Bug " + data.getData().getPath());
                 path = Uri.fromFile(
                         new File(AppUtil.getPath(getApplicationContext(),
@@ -391,6 +395,9 @@ public class ServicesActivity extends FragmentActivity implements
                 ).toString();
             }
             final AssetModel model = new AssetModel();
+            if(uri!=null ) {
+              model.setId(uri.toString());
+            }
             model.setThumbnail(path);
             model.setUrl(path);
             model.setType(MediaType.IMAGE.name().toLowerCase());

@@ -1,27 +1,28 @@
 /**
  * The MIT License (MIT)
 
-Copyright (c) 2013 Chute
+ Copyright (c) 2013 Chute
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy of
+ this software and associated documentation files (the "Software"), to deal in
+ the Software without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ the Software, and to permit persons to whom the Software is furnished to do so,
+ subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.adapter;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -51,129 +52,141 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class CursorAdapterImages extends BaseCursorAdapter implements
-		ListenerImageSelection {
+  ListenerImageSelection {
 
-	private ListenerFilesCursor filesCursorListener;
-	private ListenerItemCount itemCountListener;
-	private Context context;
-	private int position;
-	private int count = 0;
+  private ListenerFilesCursor filesCursorListener;
+  private ListenerItemCount itemCountListener;
+  private Context context;
+  private int position;
+  private int count = 0;
 
-	public CursorAdapterImages(Context context, Cursor c,
-			ListenerFilesCursor filesCursorListener, ListenerItemCount itemCountListener) {
-		super(context, c);
-		this.context = context;
-		this.filesCursorListener = filesCursorListener;
-		this.itemCountListener = itemCountListener;
-		if (context.getResources().getBoolean(R.bool.has_two_panes)) {
-			((ServicesActivity) context).setImagesSelectListener(this);
-		} else {
-			((AssetActivity) context).setImagesSelectListener(this);
-		}
-	}
+  public CursorAdapterImages(Context context, Cursor c,
+                             ListenerFilesCursor filesCursorListener, ListenerItemCount itemCountListener) {
+    super(context, c);
+    this.context = context;
+    this.filesCursorListener = filesCursorListener;
+    this.itemCountListener = itemCountListener;
+    if (context.getResources().getBoolean(R.bool.has_two_panes)) {
+      ((ServicesActivity) context).setImagesSelectListener(this);
+    } else {
+      ((AssetActivity) context).setImagesSelectListener(this);
+    }
+  }
 
-	@Override
-	public List<Integer> getCursorImagesSelection() {
-		final List<Integer> positions = new ArrayList<Integer>();
-		final Iterator<Integer> iterator = tick.keySet().iterator();
-		while (iterator.hasNext()) {
-			positions.add(iterator.next());
-		}
-		return positions;
-	}
+  @Override
+  public List<Integer> getCursorImagesSelection() {
+    final List<Integer> positions = new ArrayList<Integer>();
+    final Iterator<Integer> iterator = tick.keySet().iterator();
+    while (iterator.hasNext()) {
+      positions.add(iterator.next());
+    }
+    return positions;
+  }
 
-	@Override
-	public int getDataIndex(Cursor cursor) {
-		if (cursor == null) {
-			return 0;
-		} else {
-			return cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA);
-		}
-	}
+  @Override
+  public int getDataIndex(Cursor cursor) {
+    if (cursor == null) {
+      return 0;
+    } else {
+      return cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA);
+    }
+  }
 
-	@Override
-	public void setViewClickListener(View view, String path, int position) {
-		view.setOnClickListener(new ImageClickListener(path, position));
+  @Override
+  public void setViewClickListener(View view, String path, int position) {
+    view.setOnClickListener(new ImageClickListener(path, position));
 
-	}
+  }
 
-	@Override
-	public void setPlayButtonVisibility(ImageView imageView) {
-		imageView.setVisibility(View.GONE);
+  @Override
+  public void setPlayButtonVisibility(ImageView imageView) {
+    imageView.setVisibility(View.GONE);
 
-	}
+  }
 
-	@Override
-	public void loadImageView(ImageView imageView, Cursor cursor) {
-		String path = cursor.getString(dataIndex);
-		Uri uri = Uri.fromFile(new File(path));
-    Picasso.with(context).load(uri).into(imageView);
+  @Override
+  public void loadImageView(ImageView imageView, Cursor cursor) {
+    String path = cursor.getString(dataIndex);
+    Uri uri = Uri.fromFile(new File(path));
+    Picasso.with(context).load(uri).fit().centerCrop().into(imageView);
 
-	}
+  }
 
-	private final class ImageClickListener implements OnClickListener {
-		private String thumbnail;
-		private int selectedPosition;
+  private final class ImageClickListener implements OnClickListener {
+    private String thumbnail;
+    private int selectedPosition;
 
-		private ImageClickListener(String thumbnail, int selectedPosition) {
-			this.thumbnail = thumbnail;
-			this.selectedPosition = selectedPosition;
-		}
+    private ImageClickListener(String thumbnail, int selectedPosition) {
+      this.thumbnail = thumbnail;
+      this.selectedPosition = selectedPosition;
+    }
 
-		@Override
-		public void onClick(View v) {
-			position = selectedPosition;
-			if (PhotoPicker.getInstance().isMultiPicker()) {
-				toggleTick(position);
-			} else {
-				String imagePath = MediaDAO.getImagePathFromCursor(context,
-						getCursor(), position);
-				ALog.d("single image thumb: " + thumbnail);
-				ALog.d("single image url: " + imagePath);
-				filesCursorListener.onCursorAssetsSelect(AssetUtil
-						.getMediaModel(createMediaResultModel(thumbnail, imagePath)));
-			}
-		}
+    @Override
+    public void onClick(View v) {
+      position = selectedPosition;
+      if (PhotoPicker.getInstance().isMultiPicker()) {
+        toggleTick(position);
+      } else {
+        Uri uri = null;
+        if (getCursor().moveToPosition(position)) {
+          int id = getCursor().getInt(getCursor()
+            .getColumnIndex(MediaStore.Images.Thumbnails.IMAGE_ID));
+          uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+        }
+        String imagePath = MediaDAO.getImagePathFromCursor(context,
+          getCursor(), position);
+        ALog.d("single image thumb: " + thumbnail);
+        ALog.d("single image url: " + imagePath);
+        filesCursorListener.onCursorAssetsSelect(AssetUtil
+          .getMediaModel(createMediaResultModel(thumbnail, imagePath, uri)));
+      }
+    }
 
-	}
+  }
 
-	public List<DeliverMediaModel> getSelectedFilePaths() {
-		final List<DeliverMediaModel> deliverList = new ArrayList<DeliverMediaModel>();
-		Iterator<Entry<Integer, String>> iterator = tick.entrySet().iterator();
-		while (iterator.hasNext()) {
-			Entry<Integer, String> pairs = iterator.next();
-			String thumbnail = pairs.getValue();
-			int position = pairs.getKey();
+  public List<DeliverMediaModel> getSelectedFilePaths() {
+    final List<DeliverMediaModel> deliverList = new ArrayList<DeliverMediaModel>();
+    Iterator<Entry<Integer, String>> iterator = tick.entrySet().iterator();
+    while (iterator.hasNext()) {
+      Entry<Integer, String> pairs = iterator.next();
+      String thumbnail = pairs.getValue();
+      int position = pairs.getKey();
+      Uri uri = null;
+      if (getCursor().moveToPosition(position)) {
+        int id = getCursor().getInt(getCursor()
+          .getColumnIndex(MediaStore.Images.Thumbnails.IMAGE_ID));
+        uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+      }
+      String path = MediaDAO.getImagePathFromCursor(context,
+        getCursor(), position);
+      ALog.d("multi image thumb: " + thumbnail);
+      ALog.d("multi image url: " + path);
+      deliverList.add(createMediaResultModel(thumbnail, path, uri));
+    }
+    return deliverList;
+  }
 
-			String path = MediaDAO.getImagePathFromCursor(context,
-					getCursor(), position);
-			ALog.d("multi image thumb: " + thumbnail);
-			ALog.d("multi image url: " + path);
-			deliverList.add(createMediaResultModel(thumbnail, path));
-		}
-		return deliverList;
-	}
+  public void toggleTick(int selectedPosition) {
+    if (tick.containsKey(selectedPosition)) {
+      tick.remove(selectedPosition);
+      count--;
+    } else {
+      tick.put(selectedPosition, getItem(selectedPosition));
+      count++;
+    }
+    itemCountListener.onSelectedImagesCount(count);
+    notifyDataSetChanged();
+  }
 
-	public void toggleTick(int selectedPosition) {
-		if (tick.containsKey(selectedPosition)) {
-			tick.remove(selectedPosition);
-			count--;
-		} else {
-			tick.put(selectedPosition, getItem(selectedPosition));
-			count++;
-		}
-		itemCountListener.onSelectedImagesCount(count);
-		notifyDataSetChanged();
-	}
-
-	private DeliverMediaModel createMediaResultModel(String thumbnail, String path) {
-		ALog.d("image thumb: " + thumbnail);
-		ALog.d("image url: " + path);
-		DeliverMediaModel model = new DeliverMediaModel();
-		model.setImageUrl(path);
-		model.setThumbnail(thumbnail);
-		model.setMediaType(MediaType.IMAGE);
-		return model;
-	}
+  private DeliverMediaModel createMediaResultModel(String thumbnail, String path, Uri uri) {
+    ALog.d("image thumb: " + thumbnail);
+    ALog.d("image url: " + path);
+    DeliverMediaModel model = new DeliverMediaModel();
+    model.setLocalMediaUri(uri);
+    model.setImageUrl(path);
+    model.setThumbnail(thumbnail);
+    model.setMediaType(MediaType.IMAGE);
+    return model;
+  }
 
 }
