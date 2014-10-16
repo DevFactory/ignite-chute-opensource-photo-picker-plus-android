@@ -26,7 +26,7 @@ Adding PhotoPicker+ library to your project
 ```  
   Add the dependency to your project by navigating from File -> Project Structure -> Modules -> Add Module Dependency
   
-  ![moduledependency](/screenshots/moduledependency)
+  ![moduledependency](/screenshots/moduledependency.png)
   
   Add the dependency in your project's build.gradle file
 ```groovy  
@@ -51,12 +51,11 @@ or
 or
  
 * Add in PhotoPicker+ as a gradle dependency.   
- Add in 
+
 ``` groovy
 compile 'com.getchute.android.libs.photopickerplus:library:2.0.6'
 ```
-under dependencies in your project's build.gradle   
- Add in 
+
 ``` groovy 
 repositories { 
     mavenCentral()
