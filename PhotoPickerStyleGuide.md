@@ -1,4 +1,4 @@
-In order to define the way our application looks and offer a clean UI design, we can create styles that budle properties of a view. This way we only have to set common attributes once and change the appearance of the entire application from one central place.  
+In order to define the way our application looks and offer a clean UI design, we can create styles that budle properties of a view. This way we set common attributes once and change the appearance of the entire application from one central place.  
 pp_styles.xml defnies the pp+ application theme and styles for different views. 
 
 
