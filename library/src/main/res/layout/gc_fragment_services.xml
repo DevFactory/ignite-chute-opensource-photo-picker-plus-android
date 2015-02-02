@@ -26,7 +26,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <GridView
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/gcRecyclerViewServices"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+
+    <!--<GridView
         android:id="@+id/gcGridViewServices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,6 +45,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         android:paddingRight="20dp"
         android:paddingTop="20dp"
         android:scrollbars="none"
-        android:verticalSpacing="10dip" />
+        android:verticalSpacing="10dip" />-->
 
 </RelativeLayout>

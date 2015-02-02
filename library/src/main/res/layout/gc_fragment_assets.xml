@@ -22,24 +22,31 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/gcRelativeLayoutRoot"
-    style="@style/relativeLayoutAssetFragment"
+                android:id="@+id/gcRelativeLayoutRoot"
+                style="@style/relativeLayoutAssetFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+  <ImageView
+    android:id="@+id/gcImageViewDivider"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/fragment_title_divider"/>
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/gcRecyclerViewAssets"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:scrollbars="vertical"
+    android:layout_below="@+id/gcImageViewDivider"></android.support.v7.widget.RecyclerView>
 
-    <ImageView
-        android:id="@+id/gcImageViewDivider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/fragment_title_divider" />
+  <!-- Empty View -->
 
-    <!-- Empty View -->
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+  <ProgressBar
+    android:id="@+id/progressBar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"/>
 
 </RelativeLayout>

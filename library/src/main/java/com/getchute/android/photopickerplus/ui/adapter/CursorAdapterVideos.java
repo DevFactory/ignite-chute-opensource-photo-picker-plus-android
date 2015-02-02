@@ -31,7 +31,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
-import com.araneaapps.android.libs.logger.ALog;
 import com.getchute.android.photopickerplus.R;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.dao.MediaDAO;
@@ -49,7 +48,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class CursorAdapterVideos extends BaseCursorAdapter implements
+public class CursorAdapterVideos extends BaseRecyclerCursorAdapter implements
   ListenerVideoSelection {
 
 	private ListenerFilesCursor filesCursorListener;
@@ -175,9 +174,6 @@ public class CursorAdapterVideos extends BaseCursorAdapter implements
 
 	private DeliverMediaModel createMediaResultModel(String thumb,
                                                    String videoUrl, Uri uri) {
-		ALog.d("video thumb: " + thumb);
-		ALog.d("video url: " + videoUrl);
-		ALog.d("video image url: " + thumb);
 		DeliverMediaModel model = new DeliverMediaModel();
     model.setLocalMediaUri(uri);
 		model.setVideoUrl(videoUrl);

@@ -31,7 +31,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
-import com.araneaapps.android.libs.logger.ALog;
 import com.getchute.android.photopickerplus.R;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.dao.MediaDAO;
@@ -51,7 +50,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class CursorAdapterImages extends BaseCursorAdapter implements
+public class CursorAdapterImages extends BaseRecyclerCursorAdapter implements
   ListenerImageSelection {
 
   private ListenerFilesCursor filesCursorListener;
@@ -135,8 +134,6 @@ public class CursorAdapterImages extends BaseCursorAdapter implements
         }
         String imagePath = MediaDAO.getImagePathFromCursor(context,
           getCursor(), position);
-        ALog.d("single image thumb: " + thumbnail);
-        ALog.d("single image url: " + imagePath);
         filesCursorListener.onCursorAssetsSelect(AssetUtil
           .getMediaModel(createMediaResultModel(thumbnail, imagePath, uri)));
       }
@@ -159,8 +156,6 @@ public class CursorAdapterImages extends BaseCursorAdapter implements
       }
       String path = MediaDAO.getImagePathFromCursor(context,
         getCursor(), position);
-      ALog.d("multi image thumb: " + thumbnail);
-      ALog.d("multi image url: " + path);
       deliverList.add(createMediaResultModel(thumbnail, path, uri));
     }
     return deliverList;
@@ -179,8 +174,6 @@ public class CursorAdapterImages extends BaseCursorAdapter implements
   }
 
   private DeliverMediaModel createMediaResultModel(String thumbnail, String path, Uri uri) {
-    ALog.d("image thumb: " + thumbnail);
-    ALog.d("image url: " + path);
     DeliverMediaModel model = new DeliverMediaModel();
     model.setLocalMediaUri(uri);
     model.setImageUrl(path);

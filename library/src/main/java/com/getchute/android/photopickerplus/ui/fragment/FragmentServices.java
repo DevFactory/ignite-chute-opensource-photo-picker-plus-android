@@ -1,106 +1,107 @@
 /**
  * The MIT License (MIT)
 
-Copyright (c) 2013 Chute
+ Copyright (c) 2013 Chute
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy of
+ this software and associated documentation files (the "Software"), to deal in
+ the Software without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ the Software, and to permit persons to whom the Software is furnished to do so,
+ subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
 import com.chute.sdk.v2.model.enums.AccountType;
 import com.getchute.android.photopickerplus.R;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.models.enums.LocalServiceType;
-import com.getchute.android.photopickerplus.ui.adapter.ServicesAdapter;
+import com.getchute.android.photopickerplus.ui.adapter.ServicesRecyclerAdapter;
 
 import java.util.List;
 
 public class FragmentServices extends Fragment {
 
-	private GridView gridViewServices;
-	private ServicesAdapter adapter;
-	private ServiceClickedListener serviceClickedListener;
+  private ServicesRecyclerAdapter adapter;
+  private RecyclerView recyclerView;
+  private ServiceClickedListener serviceClickedListener;
 
-	public interface ServiceClickedListener {
+  public interface ServiceClickedListener {
 
-		public void accountLogin(AccountType accountType);
+    public void accountLogin(AccountType accountType);
 
-		public void photoStream();
+    public void photoStream();
 
-		public void cameraRoll();
+    public void cameraRoll();
 
-		public void lastPhoto();
+    public void lastPhoto();
 
-		public void takePhoto();
+    public void takePhoto();
 
-		public void recordVideo();
+    public void recordVideo();
 
-		public void lastVideo();
+    public void lastVideo();
 
-	}
+  }
 
-	public static FragmentServices newInstance(String[] services) {
-		FragmentServices frag = new FragmentServices();
-		Bundle args = new Bundle();
-		frag.setArguments(args);
-		return frag;
-	}
+  public static FragmentServices newInstance(String[] services) {
+    FragmentServices frag = new FragmentServices();
+    Bundle args = new Bundle();
+    frag.setArguments(args);
+    return frag;
+  }
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		serviceClickedListener = (ServiceClickedListener) activity;
-	}
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    serviceClickedListener = (ServiceClickedListener) activity;
+  }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = null;
-		view = inflater
-				.inflate(R.layout.gc_fragment_services, container, false);
-		gridViewServices = (GridView) view
-				.findViewById(R.id.gcGridViewServices);
-		gridViewServices.setNumColumns(getResources().getInteger(
-				R.integer.grid_columns_services));
-		return view;
-	}
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+    return inflater
+      .inflate(R.layout.gc_fragment_services, container, false);
+  }
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		PhotoPicker singleton = PhotoPicker.getInstance();
-		configureServices(singleton.getRemoteServices(),
-				singleton.getLocalServices());
-	}
+  @Override
+  public void onViewCreated(View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-	private void configureServices(List<AccountType> remoteServices,
-			List<LocalServiceType> localServices) {
-		adapter = new ServicesAdapter(getActivity(), remoteServices,
-				localServices, serviceClickedListener);
-		gridViewServices.setAdapter(adapter);
-	}
+    recyclerView = (RecyclerView) view
+      .findViewById(R.id.gcRecyclerViewServices);
+    final GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), R.integer.grid_columns_services);
+    recyclerView.setLayoutManager(gridLayoutManager);
+
+    PhotoPicker singleton = PhotoPicker.getInstance();
+    configureServices(singleton.getRemoteServices(),
+      singleton.getLocalServices());
+  }
+
+  private void configureServices(List<AccountType> remoteServices,
+                                 List<LocalServiceType> localServices) {
+    adapter = new ServicesRecyclerAdapter(getActivity(), remoteServices,
+      localServices, serviceClickedListener);
+    recyclerView.setAdapter(adapter);
+  }
 
 }
