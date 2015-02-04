@@ -140,5 +140,12 @@ public abstract class BaseRecyclerCursorAdapter extends CursorRecyclerViewAdapte
     return cursor.getString(dataIndex);
   }
 
+  @Override
+  public void changeCursor(Cursor cursor) {
+    super.changeCursor(cursor);
+    dataIndex = getDataIndex(cursor);
+
+  }
+
 
 }

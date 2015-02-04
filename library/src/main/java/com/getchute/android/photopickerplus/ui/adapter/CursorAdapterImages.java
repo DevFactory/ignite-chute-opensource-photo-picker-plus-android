@@ -138,7 +138,6 @@ public class CursorAdapterImages extends BaseRecyclerCursorAdapter implements
           .getMediaModel(createMediaResultModel(thumbnail, imagePath, uri)));
       }
     }
-
   }
 
   public List<DeliverMediaModel> getSelectedFilePaths() {

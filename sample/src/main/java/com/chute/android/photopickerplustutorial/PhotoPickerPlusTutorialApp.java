@@ -63,7 +63,7 @@ public class PhotoPickerPlusTutorialApp extends PhotoPickerPlusApp {
 		PhotoPickerConfiguration config = new PhotoPickerConfiguration.Builder(
 				getApplicationContext())
 				.isMultiPicker(true)
-				.defaultAccountDisplayType(DisplayType.GRID)
+				.defaultAccountDisplayType(DisplayType.LIST)
 //				.accountDisplayType(map)
                 .enableLogout(true)
 				.accountList(AccountType.FLICKR, AccountType.DROPBOX,

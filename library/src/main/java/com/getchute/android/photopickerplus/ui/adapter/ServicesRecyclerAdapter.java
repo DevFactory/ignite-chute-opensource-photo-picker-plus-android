@@ -75,8 +75,7 @@ public class ServicesRecyclerAdapter extends RecyclerView.Adapter<ServicesRecycl
 		return remoteAccounts.size() + localAccounts.size();
 	}
 
-
-	@Override
+  @Override
 	public long getItemId(final int position) {
 		return position;
 	}

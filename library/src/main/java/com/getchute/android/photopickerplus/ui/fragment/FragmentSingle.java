@@ -144,7 +144,7 @@ public class FragmentSingle extends Fragment implements
       final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
       recyclerView.setLayoutManager(linearLayoutManager);
     } else {
-      final GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), R.integer.grid_columns_assets);
+      final GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.grid_columns_assets));
       recyclerView.setLayoutManager(gridLayoutManager);
     }
 

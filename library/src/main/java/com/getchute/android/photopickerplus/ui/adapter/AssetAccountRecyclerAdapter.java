@@ -1,24 +1,24 @@
 /**
  * The MIT License (MIT)
 
-Copyright (c) 2013 Chute
+ Copyright (c) 2013 Chute
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy of
+ this software and associated documentation files (the "Software"), to deal in
+ the Software without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ the Software, and to permit persons to whom the Software is furnished to do so,
+ subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.adapter;
 
@@ -51,51 +51,51 @@ import java.util.List;
 import java.util.Map;
 
 public class AssetAccountRecyclerAdapter extends RecyclerView.Adapter<AssetAccountRecyclerAdapter.ViewHolder> implements
-		ListenerAccountAssetsSelection {
+  ListenerAccountAssetsSelection {
 
-	private static final int TYPE_MAX_COUNT = 2;
+  private static final int TYPE_MAX_COUNT = 2;
 
-	public Map<Integer, AccountMediaModel> tick;
-	private final FragmentActivity context;
-	private List<AccountMedia> rows;
-	private AdapterItemClickListener adapterItemClickListener;
-	private ListenerItemCount itemCountListener;
-	private DisplayType displayType;
+  public Map<Integer, AccountMediaModel> tick;
+  private final FragmentActivity context;
+  private List<AccountMedia> rows;
+  private AdapterItemClickListener adapterItemClickListener;
+  private ListenerItemCount itemCountListener;
+  private DisplayType displayType;
 
-	public interface AdapterItemClickListener {
+  public interface AdapterItemClickListener {
 
-		public void onFolderClicked(int position);
+    public void onFolderClicked(int position);
 
-		public void onFileClicked(int position);
-	}
+    public void onFileClicked(int position);
+  }
 
-	public AssetAccountRecyclerAdapter(FragmentActivity context,
+  public AssetAccountRecyclerAdapter(FragmentActivity context,
                                      AccountBaseModel baseModel,
                                      AdapterItemClickListener adapterItemClicklistener,
                                      DisplayType displayType, ListenerItemCount itemCountListener) {
-		this.context = context;
-		this.adapterItemClickListener = adapterItemClicklistener;
-		this.itemCountListener = itemCountListener;
-		tick = new HashMap<Integer, AccountMediaModel>();
-		rows = new ArrayList<AccountMedia>();
+    this.context = context;
+    this.adapterItemClickListener = adapterItemClicklistener;
+    this.itemCountListener = itemCountListener;
+    tick = new HashMap<Integer, AccountMediaModel>();
+    rows = new ArrayList<AccountMedia>();
 
-		if (baseModel.getFiles() != null) {
-			for (AccountMediaModel file : baseModel.getFiles()) {
-				rows.add(file);
-			}
-		}
-		if (baseModel.getFolders() != null) {
-			for (AccountAlbumModel folder : baseModel.getFolders()) {
-				rows.add(folder);
-			}
-		}
-		if (context.getResources().getBoolean(R.bool.has_two_panes)) {
-			((ServicesActivity) context).setAssetsSelectListener(this);
-		} else {
-			((AssetActivity) context).setAssetsSelectListener(this);
-		}
-		this.displayType = displayType;
-	}
+    if (baseModel.getFiles() != null) {
+      for (AccountMediaModel file : baseModel.getFiles()) {
+        rows.add(file);
+      }
+    }
+    if (baseModel.getFolders() != null) {
+      for (AccountAlbumModel folder : baseModel.getFolders()) {
+        rows.add(folder);
+      }
+    }
+    if (context.getResources().getBoolean(R.bool.has_two_panes)) {
+      ((ServicesActivity) context).setAssetsSelectListener(this);
+    } else {
+      ((AssetActivity) context).setAssetsSelectListener(this);
+    }
+    this.displayType = displayType;
+  }
 
 
   @Override
@@ -148,104 +148,99 @@ public class AssetAccountRecyclerAdapter extends RecyclerView.Adapter<AssetAccou
 
     if (tick.containsKey(position)) {
       holder.imageViewTick.setVisibility(View.VISIBLE);
-      if (displayType == DisplayType.GRID) {
-        holder.viewSelect.setVisibility(View.VISIBLE);
-        holder.itemView.setBackgroundColor(context.getResources().getColor(
-          R.color.sky_blue));
-      }
+      holder.itemView.setBackgroundColor(context.getResources().getColor(
+        R.color.sky_blue));
+      holder.viewSelect.setVisibility(View.VISIBLE);
     } else {
       holder.imageViewTick.setVisibility(View.GONE);
-      if (displayType == DisplayType.GRID) {
-        holder.viewSelect.setVisibility(View.GONE);
-        holder.itemView.setBackgroundColor(context.getResources().getColor(
-          R.color.gray_light));
-      }
+      holder.itemView.setBackgroundColor(context.getResources().getColor(
+        R.color.gray_light));
+      holder.viewSelect.setVisibility(View.GONE);
     }
   }
 
   @Override
-	public int getItemViewType(int position) {
-		return rows.get(position).getViewType().ordinal();
-	}
+  public int getItemViewType(int position) {
+    return rows.get(position).getViewType().ordinal();
+  }
 
   @Override
-	public int getItemCount() {
-		return rows.size();
-	}
+  public int getItemCount() {
+    return rows.size();
+  }
 
-	public Object getItem(int position) {
-		return rows.get(position);
-	}
+  public Object getItem(int position) {
+    return rows.get(position);
+  }
 
-	public long getItemId(int position) {
-		return position;
-	}
+  public long getItemId(int position) {
+    return position;
+  }
 
 
+  public ArrayList<AccountMediaModel> getPhotoCollection() {
+    final ArrayList<AccountMediaModel> photos = new ArrayList<AccountMediaModel>();
+    final Iterator<AccountMediaModel> iterator = tick.values().iterator();
+    while (iterator.hasNext()) {
+      photos.add(iterator.next());
+    }
+    return photos;
+  }
 
-	public ArrayList<AccountMediaModel> getPhotoCollection() {
-		final ArrayList<AccountMediaModel> photos = new ArrayList<AccountMediaModel>();
-		final Iterator<AccountMediaModel> iterator = tick.values().iterator();
-		while (iterator.hasNext()) {
-			photos.add(iterator.next());
-		}
-		return photos;
-	}
+  public void toggleTick(final int position) {
+    if (getItemCount() > position) {
+      if (getItemViewType(position) == AccountMediaType.FILE.ordinal()) {
+        if (tick.containsKey(position)) {
+          tick.remove(position);
+        } else {
+          tick.put(position, (AccountMediaModel) getItem(position));
+        }
+        itemCountListener.onSelectedImagesCount(tick.size());
+      }
+    }
+    notifyDataSetChanged();
+  }
 
-	public void toggleTick(final int position) {
-		if (getItemCount() > position) {
-			if (getItemViewType(position) == AccountMediaType.FILE.ordinal()) {
-				if (tick.containsKey(position)) {
-					tick.remove(position);
-				} else {
-					tick.put(position, (AccountMediaModel) getItem(position));
-				}
-				itemCountListener.onSelectedImagesCount(tick.size());
-			}
-		}
-		notifyDataSetChanged();
-	}
+  private final class OnFolderClickedListener implements OnClickListener {
 
-	private final class OnFolderClickedListener implements OnClickListener {
+    int position;
 
-		int position;
+    private OnFolderClickedListener(int position) {
+      this.position = position;
+    }
 
-		private OnFolderClickedListener(int position) {
-			this.position = position;
-		}
+    @Override
+    public void onClick(View v) {
+      adapterItemClickListener.onFolderClicked(position);
 
-		@Override
-		public void onClick(View v) {
-			adapterItemClickListener.onFolderClicked(position);
+    }
 
-		}
+  }
 
-	}
+  private final class OnFileClickedListener implements OnClickListener {
+    int position;
 
-	private final class OnFileClickedListener implements OnClickListener {
-		int position;
+    private OnFileClickedListener(int position) {
+      this.position = position;
+    }
 
-		private OnFileClickedListener(int position) {
-			this.position = position;
-		}
+    @Override
+    public void onClick(View v) {
+      adapterItemClickListener.onFileClicked(position);
 
-		@Override
-		public void onClick(View v) {
-			adapterItemClickListener.onFileClicked(position);
+    }
 
-		}
+  }
 
-	}
-
-	@Override
-	public List<Integer> getSocialPhotosSelection() {
-		final ArrayList<Integer> positions = new ArrayList<Integer>();
-		final Iterator<Integer> iterator = tick.keySet().iterator();
-		while (iterator.hasNext()) {
-			positions.add(iterator.next());
-		}
-		return positions;
-	}
+  @Override
+  public List<Integer> getSocialPhotosSelection() {
+    final ArrayList<Integer> positions = new ArrayList<Integer>();
+    final Iterator<Integer> iterator = tick.keySet().iterator();
+    while (iterator.hasNext()) {
+      positions.add(iterator.next());
+    }
+    return positions;
+  }
 
   public static final class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -259,7 +254,7 @@ public class AssetAccountRecyclerAdapter extends RecyclerView.Adapter<AssetAccou
       super(itemView);
       imageViewThumb = (ImageView) itemView.findViewById(R.id.gcImageViewThumb);
       imageViewTick = (ImageView) itemView.findViewById(R.id.gcImageViewTick);
-      imageViewVideo= (ImageView) itemView.findViewById(R.id.gcImageViewVideo);
+      imageViewVideo = (ImageView) itemView.findViewById(R.id.gcImageViewVideo);
       textViewFolderTitle = (TextView) itemView.findViewById(R.id.gcTextViewAlbumTitle);
       viewSelect = itemView.findViewById(R.id.gcViewSelect);
     }

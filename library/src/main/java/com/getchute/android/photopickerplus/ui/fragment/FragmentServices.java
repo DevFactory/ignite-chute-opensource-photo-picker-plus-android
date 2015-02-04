@@ -89,7 +89,8 @@ public class FragmentServices extends Fragment {
 
     recyclerView = (RecyclerView) view
       .findViewById(R.id.gcRecyclerViewServices);
-    final GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), R.integer.grid_columns_services);
+    int columns = getResources().getInteger(R.integer.grid_columns_services);
+    final GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), columns);
     recyclerView.setLayoutManager(gridLayoutManager);
 
     PhotoPicker singleton = PhotoPicker.getInstance();
