@@ -27,9 +27,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Window;
 
 import com.araneaapps.android.libs.logger.ALog;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
@@ -71,7 +69,7 @@ import java.util.List;
  * services in a GridView or ListView.
  * 
  */
-public class AssetActivity extends FragmentActivity implements
+public class AssetActivity extends BaseActivity implements
   ListenerFilesCursor, ListenerFilesAccount, ListenerFragmentRoot,
 		ListenerFragmentSingle {
 
@@ -104,16 +102,19 @@ public class AssetActivity extends FragmentActivity implements
 		this.listenerVideosSelection = adapterListener;
 	}
 
-	@SuppressLint("NewApi")
+  @Override
+  protected int getLayoutResource() {
+    return R.layout.gc_activity_assets;
+  }
+
+  @SuppressLint("NewApi")
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_ACTION_BAR);
-		setContentView(R.layout.gc_activity_assets);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setIcon(new ColorDrawable(android.R.color.transparent));
-        getActionBar().setTitle(R.string.choose_service);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setIcon(new ColorDrawable(android.R.color.transparent));
+        getSupportActionBar().setTitle(R.string.choose_service);
 
 		retrieveSavedValuesFromBundle(savedInstanceState);
 

@@ -27,7 +27,6 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -72,7 +71,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class FragmentSingle extends Fragment implements
+public class FragmentSingle extends ActionBarFragment implements
   AssetAccountRecyclerAdapter.AdapterItemClickListener, ListenerItemCount {
 
   private ProgressBar progressBar;
@@ -127,7 +126,7 @@ public class FragmentSingle extends Fragment implements
     displayType = AppUtil.getDisplayType(accountMap, PhotoPicker
       .getInstance().getDefaultAccountDisplayType(), accountType);
 
-    getActivity().getActionBar().setTitle(UIUtil.getActionBarTitle(getActivity(), accountType, PhotoFilterType.SOCIAL_MEDIA));
+    getActionBarActivity().getSupportActionBar().setTitle(UIUtil.getActionBarTitle(getActivity(), accountType, PhotoFilterType.SOCIAL_MEDIA));
 
     View view = inflater.inflate(R.layout.gc_fragment_assets,
       container, false);
@@ -240,7 +239,7 @@ public class FragmentSingle extends Fragment implements
           }
         }
 
-        getActivity().getActionBar().setTitle(UIUtil.getActionBarTitle(getActivity(), accountType, PhotoFilterType.SOCIAL_MEDIA));
+        getActionBarActivity().getSupportActionBar().setTitle(UIUtil.getActionBarTitle(getActivity(), accountType, PhotoFilterType.SOCIAL_MEDIA));
         NotificationUtil.showPhotosAdapterToast(getActivity()
           .getApplicationContext(), accountAssetAdapter
           .getItemCount());

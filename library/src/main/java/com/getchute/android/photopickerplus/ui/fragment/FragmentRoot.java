@@ -27,7 +27,6 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
@@ -81,7 +80,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class FragmentRoot extends Fragment implements AssetAccountRecyclerAdapter.AdapterItemClickListener,
+public class FragmentRoot extends ActionBarFragment implements AssetAccountRecyclerAdapter.AdapterItemClickListener,
   ListenerItemCount {
 
   private CursorAdapterImages adapterImages;
@@ -156,7 +155,7 @@ public class FragmentRoot extends Fragment implements AssetAccountRecyclerAdapte
     View view = inflater.inflate(R.layout.gc_fragment_assets,
       container, false);
 
-    getActivity().getActionBar().setTitle(UIUtil.getActionBarTitle(getActivity(), accountType, filterType));
+    getActionBarActivity().getSupportActionBar().setTitle(UIUtil.getActionBarTitle(getActivity(), accountType, filterType));
 
     return view;
   }

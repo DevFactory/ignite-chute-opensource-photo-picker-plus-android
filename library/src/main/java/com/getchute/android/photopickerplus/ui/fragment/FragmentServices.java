@@ -24,7 +24,6 @@ package com.getchute.android.photopickerplus.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,7 +38,7 @@ import com.getchute.android.photopickerplus.ui.adapter.ServicesRecyclerAdapter;
 
 import java.util.List;
 
-public class FragmentServices extends Fragment {
+public class FragmentServices extends ActionBarFragment {
 
   private ServicesRecyclerAdapter adapter;
   private RecyclerView recyclerView;

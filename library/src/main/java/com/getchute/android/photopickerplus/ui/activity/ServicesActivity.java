@@ -34,11 +34,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 
 import com.araneaapps.android.libs.logger.ALog;
 import com.chute.sdk.v2.api.accounts.CurrentUserAccountsRequest;
@@ -91,7 +89,7 @@ import java.util.List;
  * This activity is used to display both local and remote services in a
  * GridView.
  */
-public class ServicesActivity extends FragmentActivity implements
+public class ServicesActivity extends BaseActivity implements
         ListenerFilesAccount, ListenerFilesCursor, FragmentServices.ServiceClickedListener,
         ListenerFragmentRoot, ListenerFragmentSingle {
 
@@ -125,18 +123,21 @@ public class ServicesActivity extends FragmentActivity implements
         this.listenerVideosSelection = adapterListener;
     }
 
-    @SuppressLint("NewApi")
+  @Override
+  protected int getLayoutResource() {
+    return R.layout.main_layout;
+  }
+
+  @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_ACTION_BAR);
 
         fragmentManager = getSupportFragmentManager();
-        setContentView(R.layout.main_layout);
 
-        getActionBar().setTitle(R.string.choose_service);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setIcon(new ColorDrawable(getResources().getColor(
+        getSupportActionBar().setTitle(R.string.choose_service);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setIcon(new ColorDrawable(getResources().getColor(
 						android.R.color.transparent)));
 
 

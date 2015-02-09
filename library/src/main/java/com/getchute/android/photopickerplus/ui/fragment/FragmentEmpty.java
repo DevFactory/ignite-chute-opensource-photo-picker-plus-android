@@ -23,14 +23,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.getchute.android.photopickerplus.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.getchute.android.photopickerplus.R;
 
-public class FragmentEmpty extends Fragment {
+public class FragmentEmpty extends ActionBarFragment {
 
 	public static FragmentEmpty newInstance() {
 		FragmentEmpty frag = new FragmentEmpty();

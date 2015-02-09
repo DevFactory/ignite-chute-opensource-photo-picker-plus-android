@@ -57,17 +57,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         android:scaleType="centerCrop">
       </ImageView>
 
-      <!--
+
       <ImageView
-        android:id="@+id/gcImageViewTick"
+        android:id="@+id/gcImageViewTickInvisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/tick_icon"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
-        android:visibility="gone">
-      </ImageView>-->
+        android:visibility="invisible">
+      </ImageView>
 
       <ImageView
         android:id="@+id/gcImageViewVideo"
@@ -86,6 +86,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/gcImageViewThumb"
+        android:layout_toLeftOf="@+id/gcImageViewTickInvisible"
         />
 
     </RelativeLayout>
