@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.drawable.ColorDrawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
@@ -134,12 +133,6 @@ public class ServicesActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
 
         fragmentManager = getSupportFragmentManager();
-
-        getSupportActionBar().setTitle(R.string.choose_service);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setIcon(new ColorDrawable(getResources().getColor(
-						android.R.color.transparent)));
-
 
         dualPanes = getResources().getBoolean(R.bool.has_two_panes);
 

@@ -74,7 +74,7 @@ public class UIUtil {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.BELOW, R.id.gcImageViewDivider);
+//        params.addRule(RelativeLayout.BELOW, R.id.gcImageViewDivider);
         grid.setLayoutParams(params);
         grid.setFadingEdgeLength(0);
         grid.setFastScrollEnabled(true);
@@ -100,7 +100,7 @@ public class UIUtil {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.BELOW, R.id.gcImageViewDivider);
+//        params.addRule(RelativeLayout.BELOW, R.id.gcImageViewDivider);
         list.setLayoutParams(params);
         list.setFadingEdgeLength(0);
         list.setFastScrollEnabled(true);

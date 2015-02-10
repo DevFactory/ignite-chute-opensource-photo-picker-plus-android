@@ -25,7 +25,6 @@ package com.getchute.android.photopickerplus.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
@@ -111,10 +110,6 @@ public class AssetActivity extends BaseActivity implements
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setIcon(new ColorDrawable(android.R.color.transparent));
-        getSupportActionBar().setTitle(R.string.choose_service);
 
 		retrieveSavedValuesFromBundle(savedInstanceState);
 

@@ -27,6 +27,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     android:baselineAligned="false"
     android:orientation="vertical" >
 
+  <include
+    android:id="@+id/gcToolbarLayout"
+    layout="@layout/gc_tool_bar"/>
+
     <FrameLayout
         android:id="@+id/gcFragments"
         android:layout_width="match_parent"

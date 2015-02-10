@@ -23,23 +23,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/gcRelativeLayoutRoot"
-                style="@style/relativeLayoutAssetFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-  <ImageView
-    android:id="@+id/gcImageViewDivider"
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@color/fragment_title_divider"/>
 
   <android.support.v7.widget.RecyclerView
     android:id="@+id/gcRecyclerViewAssets"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    android:layout_below="@+id/gcImageViewDivider"></android.support.v7.widget.RecyclerView>
+    android:padding="5dp"
+    ></android.support.v7.widget.RecyclerView>
 
   <!-- Empty View -->
 
