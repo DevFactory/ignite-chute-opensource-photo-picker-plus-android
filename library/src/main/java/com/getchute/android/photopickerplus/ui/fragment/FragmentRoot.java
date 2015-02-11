@@ -139,7 +139,6 @@ public class FragmentRoot extends ActionBarFragment implements AssetAccountRecyc
     setHasOptionsMenu(true);
   }
 
-  @SuppressLint("NewApi")
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
@@ -154,6 +153,7 @@ public class FragmentRoot extends ActionBarFragment implements AssetAccountRecyc
 
     View view = inflater.inflate(R.layout.gc_fragment_assets,
       container, false);
+
 
     getActionBarActivity().getSupportActionBar().setTitle(UIUtil.getActionBarTitle(getActivity(), accountType, filterType));
 

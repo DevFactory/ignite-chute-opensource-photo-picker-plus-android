@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 
 import com.araneaapps.android.libs.logger.ALog;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
@@ -87,6 +88,7 @@ public class AssetActivity extends BaseActivity implements
 	private ListenerImageSelection listenerImagesSelection;
 	private ListenerVideoSelection listenerVideosSelection;
 	private String folderId;
+  private Toolbar toolbar;
 
 	public void setAssetsSelectListener(
 			ListenerAccountAssetsSelection adapterListener) {
@@ -104,6 +106,15 @@ public class AssetActivity extends BaseActivity implements
   @Override
   protected int getLayoutResource() {
     return R.layout.gc_activity_assets;
+  }
+
+  @Override
+  protected void setToolBar(Toolbar toolbar) {
+    this.toolbar = toolbar;
+  }
+
+  public Toolbar getToolbar()  {
+    return toolbar;
   }
 
   @SuppressLint("NewApi")
