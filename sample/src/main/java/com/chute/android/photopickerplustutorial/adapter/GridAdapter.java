@@ -23,19 +23,21 @@
 package com.chute.android.photopickerplustutorial.adapter;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplustutorial.R;
+import com.chute.android.photopickerplustutorial.activity.PhotoGridActivity;
+import com.chute.android.photopickerplustutorial.activity.VideoPlayerActivity;
 import com.chute.sdk.v2.model.AssetModel;
 import com.getchute.android.photopickerplus.models.enums.MediaType;
 import com.squareup.picasso.Picasso;
@@ -43,11 +45,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 
-public class GridAdapter extends BaseAdapter {
+public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
 
-  private static LayoutInflater inflater;
-  private ArrayList<AssetModel> collection;
-  private Activity context;
+  private static ArrayList<AssetModel> collection;
+  private static Activity context;
 
   public GridAdapter(final Activity context,
                      final ArrayList<AssetModel> collection) {
@@ -57,18 +58,32 @@ public class GridAdapter extends BaseAdapter {
     } else {
       this.collection = collection;
     }
-    inflater = (LayoutInflater) context
-      .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
   }
 
-  @Override
-  public int getCount() {
-    return collection.size();
-  }
 
-  @Override
-  public AssetModel getItem(int position) {
+  public static AssetModel getItem(int position) {
     return collection.get(position);
+  }
+
+  @Override
+  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    View itemView = null;
+    LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+    itemView = layoutInflater.inflate(R.layout.gc_grid_adapter_item, parent, false);
+    return new ViewHolder(itemView);
+  }
+
+  @Override
+  public void onBindViewHolder(ViewHolder holder, int position) {
+    AssetModel asset = getItem(position);
+    int orientation = resolveImageOrientation(asset);
+    Picasso.with(holder.itemView.getContext()).load(asset.getThumbnail()).fit().centerCrop().into(holder.imageView);
+    if (asset.getType().equalsIgnoreCase(
+      MediaType.VIDEO.name().toLowerCase())) {
+      holder.videoIcon.setVisibility(View.VISIBLE);
+    } else {
+      holder.videoIcon.setVisibility(View.GONE);
+    }
   }
 
   @Override
@@ -76,38 +91,11 @@ public class GridAdapter extends BaseAdapter {
     return position;
   }
 
-  public static class ViewHolder {
-
-    public ImageView imageView;
-    public ImageView videoIcon;
-  }
-
   @Override
-  public View getView(int position, View convertView, ViewGroup parent) {
-    ViewHolder holder;
-    if (convertView == null) {
-      convertView = inflater.inflate(R.layout.gc_grid_adapter_item, null);
-      holder = new ViewHolder();
-      holder.imageView = (ImageView) convertView
-        .findViewById(R.id.gcImageViewThumb);
-      holder.videoIcon = (ImageView) convertView
-        .findViewById(R.id.gcImageViewVideo);
-      convertView.setTag(holder);
-    } else {
-      holder = (ViewHolder) convertView.getTag();
-    }
-    AssetModel asset = getItem(position);
-
-    int orientation = resolveImageOrientation(asset);
-    Picasso.with(convertView.getContext()).load(asset.getThumbnail()).fit().centerCrop().into(holder.imageView);
-    if (asset.getType().equalsIgnoreCase(
-      MediaType.VIDEO.name().toLowerCase())) {
-      holder.videoIcon.setVisibility(View.VISIBLE);
-    } else {
-      holder.videoIcon.setVisibility(View.GONE);
-    }
-    return convertView;
+  public int getItemCount() {
+    return collection.size();
   }
+
 
   public void changeData(ArrayList<AssetModel> collection) {
     this.collection = collection;
@@ -139,5 +127,36 @@ public class GridAdapter extends BaseAdapter {
     }
     ALog.d("Media Rotation " + rotation);
     return rotation;
+  }
+
+  public static final class ViewHolder extends RecyclerView.ViewHolder {
+
+    public ImageView imageView;
+    public ImageView videoIcon;
+
+    public ViewHolder(View itemView) {
+      super(itemView);
+      imageView = (ImageView) itemView.findViewById(R.id.gcImageViewThumb);
+      videoIcon = (ImageView) itemView.findViewById(R.id.gcImageViewVideo);
+      itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          AssetModel asset = getItem(getPosition());
+          String type = asset.getType();
+          if (type.equals(MediaType.VIDEO.name().toLowerCase())) {
+            if (asset.getVideoUrl().contains("http")) {
+              Intent intent = new Intent(Intent.ACTION_VIEW);
+              intent.setData(Uri.parse(asset.getVideoUrl()));
+              context.startActivity(intent);
+            } else {
+              Intent intent = new Intent(context,
+                VideoPlayerActivity.class);
+              intent.putExtra(PhotoGridActivity.KEY_VIDEO_PATH, asset.getVideoUrl());
+              context.startActivity(intent);
+            }
+          }
+        }
+      });
+    }
   }
 }
