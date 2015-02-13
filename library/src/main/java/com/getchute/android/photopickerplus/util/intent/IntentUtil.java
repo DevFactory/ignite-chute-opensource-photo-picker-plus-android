@@ -22,15 +22,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.util.intent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
-import com.getchute.android.photopickerplus.ui.activity.ServicesActivity;
 import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.AssetModel;
+import com.getchute.android.photopickerplus.ui.activity.ServicesActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helper class that contains methods for delivering the result to the main
@@ -59,7 +59,8 @@ public class IntentUtil {
 		wrapper.getIntent().addFlags(
 				Intent.FLAG_ACTIVITY_CLEAR_TOP
 						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		wrapper.startActivity(context);
+
+    wrapper.startActivity(context);
 	}
 
 }

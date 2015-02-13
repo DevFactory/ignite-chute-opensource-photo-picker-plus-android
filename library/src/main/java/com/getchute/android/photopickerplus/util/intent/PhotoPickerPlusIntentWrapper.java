@@ -87,4 +87,6 @@ public class PhotoPickerPlusIntentWrapper extends IntentWrapper {
 	public void startActivityForResult(Activity context) {
 		context.startActivityForResult(getIntent(), ACTIVITY_FOR_RESULT_KEY);
 	}
+
+
 }

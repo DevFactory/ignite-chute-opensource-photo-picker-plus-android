@@ -22,18 +22,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.util.intent;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
-import com.getchute.android.photopickerplus.ui.activity.AssetActivity;
-import com.getchute.android.photopickerplus.models.enums.PhotoFilterType;
 import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.AssetModel;
 import com.chute.sdk.v2.model.enums.AccountType;
+import com.getchute.android.photopickerplus.models.enums.PhotoFilterType;
+import com.getchute.android.photopickerplus.ui.activity.AssetActivity;
+
+import java.util.ArrayList;
 
 /**
  * {@link PhotosIntentWrapper} is a wrapper class that wraps the following
@@ -109,6 +109,6 @@ public class PhotosIntentWrapper extends IntentWrapper {
 	}
 
 	public void startActivityForResult(Activity context, int code) {
-		context.startActivityForResult(getIntent(), code);
+    context.startActivityForResult(getIntent(), code);
 	}
 }

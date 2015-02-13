@@ -22,11 +22,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.util.intent;
 
-import java.util.Iterator;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+
+import java.util.Iterator;
 
 /**
  * {@link IntentWrapper} is a helper class that wraps up the Intent object and
@@ -83,4 +83,5 @@ public class IntentWrapper {
   public void startActivity(Activity context) {
     context.startActivity(intent);
   }
+
 }

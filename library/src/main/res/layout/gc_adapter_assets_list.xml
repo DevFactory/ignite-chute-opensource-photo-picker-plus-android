@@ -21,8 +21,12 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
-
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.getchute.android.photopickerplus.ui.components.RippleView xmlns:android="http://schemas.android.com/apk/res/android"
+                                                               xmlns:ripple="http://schemas.android.com/apk/res-auto"
+                                                               android:layout_width="match_parent"
+                                                               android:layout_height="match_parent"
+                                                               ripple:rv_type="simpleRipple">
+<android.support.v7.widget.CardView
                                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -111,3 +115,4 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
   </FrameLayout>
 </android.support.v7.widget.CardView>
+  </com.getchute.android.photopickerplus.ui.components.RippleView>
