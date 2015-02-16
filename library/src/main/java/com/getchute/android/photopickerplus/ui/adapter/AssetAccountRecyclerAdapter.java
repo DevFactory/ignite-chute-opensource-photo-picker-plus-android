@@ -23,6 +23,7 @@
 package com.getchute.android.photopickerplus.ui.adapter;
 
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,7 @@ public class AssetAccountRecyclerAdapter extends RecyclerView.Adapter<AssetAccou
   private List<AccountMedia> rows;
   private AdapterItemClickListener adapterItemClickListener;
   private ListenerItemCount itemCountListener;
-  private DisplayType displayType;
+  private static DisplayType displayType;
 
   public interface AdapterItemClickListener {
 
@@ -148,13 +149,23 @@ public class AssetAccountRecyclerAdapter extends RecyclerView.Adapter<AssetAccou
 
     if (tick.containsKey(position)) {
       holder.imageViewTick.setVisibility(View.VISIBLE);
-      holder.itemView.setBackgroundColor(context.getResources().getColor(
-        R.color.sky_blue));
+      if (displayType == DisplayType.LIST) {
+        ((CardView) holder.itemView).setCardBackgroundColor(context.getResources().getColor(
+          R.color.sky_blue));
+      } else {
+        holder.itemView.setBackgroundColor(context.getResources().getColor(
+          R.color.sky_blue));
+      }
       holder.viewSelect.setVisibility(View.VISIBLE);
     } else {
       holder.imageViewTick.setVisibility(View.GONE);
-      holder.itemView.setBackgroundColor(context.getResources().getColor(
-        R.color.gray_light));
+      if (displayType == DisplayType.LIST) {
+        ((CardView) holder.itemView).setCardBackgroundColor(context.getResources().getColor(
+          R.color.gray_light));
+      } else {
+        holder.itemView.setBackgroundColor(context.getResources().getColor(
+          R.color.gray_light));
+      }
       holder.viewSelect.setVisibility(View.GONE);
     }
   }

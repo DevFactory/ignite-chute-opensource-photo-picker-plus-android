@@ -21,34 +21,29 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
-<com.getchute.android.photopickerplus.ui.components.RippleView xmlns:android="http://schemas.android.com/apk/res/android"
-                                                               xmlns:ripple="http://schemas.android.com/apk/res-auto"
-                                                               android:layout_width="match_parent"
-                                                               android:layout_height="match_parent"
-                                                               ripple:rv_type="doubleRipple">
 
-  <com.getchute.android.photopickerplus.ui.components.SquareFrameLayout
-    android:id="@+id/gcRelativeLayoutServicesRoot"
-    style="@style/relativeLayoutAdapterItemHolder"
+<com.getchute.android.photopickerplus.ui.components.SquareFrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/gcRelativeLayoutServicesRoot"
+  style="@style/relativeLayoutAdapterItemHolder"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_gravity="center">
+
+  <ImageView
+    android:id="@+id/gcImageViewService"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scaleType="centerCrop"
     android:layout_gravity="center">
+  </ImageView>
 
-    <ImageView
-      android:id="@+id/gcImageViewService"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:scaleType="centerCrop"
-      android:layout_gravity="center">
-    </ImageView>
+  <TextView
+    android:id="@+id/gcTextViewServiceTitle"
+    style="@style/textViewServiceName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|right"
+    />
 
-    <TextView
-      android:id="@+id/gcTextViewServiceTitle"
-      style="@style/textViewServiceName"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_gravity="bottom|right"
-      />
-
-  </com.getchute.android.photopickerplus.ui.components.SquareFrameLayout>
-</com.getchute.android.photopickerplus.ui.components.RippleView>
+</com.getchute.android.photopickerplus.ui.components.SquareFrameLayout>

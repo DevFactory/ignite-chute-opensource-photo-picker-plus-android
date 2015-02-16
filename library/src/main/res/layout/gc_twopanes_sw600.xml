@@ -22,7 +22,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/gcFragments"
               android:layout_width="match_parent"
               android:layout_height="match_parent" >
 
@@ -33,11 +32,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     android:id="@+id/toolbar"
     layout="@layout/gc_tool_bar"/>
 
+  <LinearLayout
+    android:id="@+id/gcFragments"
+    android:layout_below="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
   <fragment
     android:layout_below="@+id/toolbar"
     android:id="@+id/gcFragmentServices"
     android:layout_width="match_parent"
     android:layout_height="420dp"
     class="com.getchute.android.photopickerplus.ui.fragment.FragmentServices"/>
-
+</LinearLayout>
 </RelativeLayout>
