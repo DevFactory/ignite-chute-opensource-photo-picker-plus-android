@@ -1,30 +1,32 @@
 /**
  * The MIT License (MIT)
 
-Copyright (c) 2013 Chute
+ Copyright (c) 2013 Chute
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy of
+ this software and associated documentation files (the "Software"), to deal in
+ the Software without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ the Software, and to permit persons to whom the Software is furnished to do so,
+ subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.util.intent;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Parcelable;
 
 import com.chute.sdk.v2.model.AccountModel;
@@ -44,71 +46,74 @@ import java.util.ArrayList;
  * <li>List of {@link AssetModel}s
  * <li>{@link com.getchute.android.photopickerplus.models.enums.PhotoFilterType}
  * </ul>
- * 
  */
 public class PhotosIntentWrapper extends IntentWrapper {
 
-	public static final int ACTIVITY_FOR_RESULT_STREAM_KEY = 113;
+  public static final int ACTIVITY_FOR_RESULT_STREAM_KEY = 113;
 
-	// social photos
-	private static final String KEY_ACCOUNT = "account";
-	private static final String KEY_ALBUM_ID = "albumId";
-	public static final String KEY_PHOTO_COLLECTION = "photoCollection";
-	private static final String KEY_FILTER_TYPE = "filter_type";
-	private static final String KEY_ACCOUNT_TYPE = "account_type";
+  // social photos
+  private static final String KEY_ACCOUNT = "account";
+  private static final String KEY_ALBUM_ID = "albumId";
+  public static final String KEY_PHOTO_COLLECTION = "photoCollection";
+  private static final String KEY_FILTER_TYPE = "filter_type";
+  private static final String KEY_ACCOUNT_TYPE = "account_type";
 
-	public PhotosIntentWrapper(Context context) {
-		super(context, AssetActivity.class);
-	}
+  public PhotosIntentWrapper(Context context) {
+    super(context, AssetActivity.class);
+  }
 
-	public PhotosIntentWrapper(Intent intent) {
-		super(intent);
-	}
+  public PhotosIntentWrapper(Intent intent) {
+    super(intent);
+  }
 
-	public AccountModel getAccount() {
-		return getIntent().getExtras().getParcelable(KEY_ACCOUNT);
-	}
+  public AccountModel getAccount() {
+    return getIntent().getExtras().getParcelable(KEY_ACCOUNT);
+  }
 
-	public void setAccount(AccountModel account) {
-		getIntent().putExtra(KEY_ACCOUNT, account);
-	}
+  public void setAccount(AccountModel account) {
+    getIntent().putExtra(KEY_ACCOUNT, account);
+  }
 
-	public String getAlbumId() {
-		return getIntent().getExtras().getString(KEY_ALBUM_ID);
-	}
+  public String getAlbumId() {
+    return getIntent().getExtras().getString(KEY_ALBUM_ID);
+  }
 
-	public void setAlbumId(String albumId) {
-		getIntent().putExtra(KEY_ALBUM_ID, albumId);
-	}
+  public void setAlbumId(String albumId) {
+    getIntent().putExtra(KEY_ALBUM_ID, albumId);
+  }
 
-	@SuppressWarnings("unchecked")
-	public ArrayList<AssetModel> getMediaCollection() {
-		return (ArrayList<AssetModel>) getIntent().getExtras().getParcelable(
-				KEY_PHOTO_COLLECTION);
-	}
+  @SuppressWarnings("unchecked")
+  public ArrayList<AssetModel> getMediaCollection() {
+    return (ArrayList<AssetModel>) getIntent().getExtras().getParcelable(
+      KEY_PHOTO_COLLECTION);
+  }
 
-	public void setMediaCollection(ArrayList<AssetModel> mediaCollection) {
-		getIntent()
-				.putExtra(KEY_PHOTO_COLLECTION, (Parcelable) mediaCollection);
-	}
+  public void setMediaCollection(ArrayList<AssetModel> mediaCollection) {
+    getIntent()
+      .putExtra(KEY_PHOTO_COLLECTION, (Parcelable) mediaCollection);
+  }
 
-	public PhotoFilterType getFilterType() {
-		return (PhotoFilterType) getIntent().getExtras().get(KEY_FILTER_TYPE);
-	}
+  public PhotoFilterType getFilterType() {
+    return (PhotoFilterType) getIntent().getExtras().get(KEY_FILTER_TYPE);
+  }
 
-	public void setFilterType(PhotoFilterType type) {
-		getIntent().putExtra(KEY_FILTER_TYPE, type);
-	}
+  public void setFilterType(PhotoFilterType type) {
+    getIntent().putExtra(KEY_FILTER_TYPE, type);
+  }
 
-	public AccountType getAccountType() {
-		return (AccountType) getIntent().getExtras().get(KEY_ACCOUNT_TYPE);
-	}
+  public AccountType getAccountType() {
+    return (AccountType) getIntent().getExtras().get(KEY_ACCOUNT_TYPE);
+  }
 
-	public void setAccountType(AccountType type) {
-		getIntent().putExtra(KEY_ACCOUNT_TYPE, type);
-	}
+  public void setAccountType(AccountType type) {
+    getIntent().putExtra(KEY_ACCOUNT_TYPE, type);
+  }
 
-	public void startActivityForResult(Activity context, int code) {
-    context.startActivityForResult(getIntent(), code);
-	}
+  public void startActivityForResult(Activity context, int code) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      context.startActivityForResult(getIntent(), code, ActivityOptions.makeSceneTransitionAnimation(context).toBundle());
+    } else {
+      context.startActivityForResult(getIntent(), code);
+    }
+  }
 }
