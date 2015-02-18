@@ -35,6 +35,7 @@ import com.araneaapps.android.libs.logger.ALog;
 import com.getchute.android.photopickerplus.models.enums.DisplayType;
 import com.chute.sdk.v2.model.enums.AccountType;
 import com.chute.sdk.v2.utils.Utils;
+import com.getchute.android.photopickerplus.models.enums.MediaType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -160,6 +161,32 @@ public class AppUtil {
 	public static String capitalizeFirstLetter(String word) {
 		return word.substring(0,1).toUpperCase() + word.substring(1);
 	}
-	
+
+  public static Uri getOutputMediaFileUri(MediaType type) {
+    return Uri.fromFile(getOutputMediaFile(type));
+  }
+
+  private static File getOutputMediaFile(MediaType type) {
+    File mediaStorageDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "PhotoPickerPlus");
+
+    if (!mediaStorageDirectory.exists()) {
+      if (!mediaStorageDirectory.mkdirs()) {
+        ALog.d("Failed to create directory");
+        return null;
+      }
+    }
+
+    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+    File mediaFile;
+    if (type == MediaType.IMAGE) {
+      mediaFile = new File(mediaStorageDirectory.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+    } else if (type == MediaType.VIDEO) {
+      mediaFile = new File(mediaStorageDirectory.getPath() + File.separator + "VID_" + timeStamp + ".mp4");
+    } else {
+      return null;
+    }
+
+    return mediaFile;
+  }
 
 }

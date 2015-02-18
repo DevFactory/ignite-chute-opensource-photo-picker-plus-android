@@ -134,7 +134,7 @@ public class ServicesRecyclerAdapter extends RecyclerView.Adapter<ServicesRecycl
 		case CAMERA_MEDIA:
 			Uri uriCameraMedia = null;
 			if (supportsImages) {
-				uriCameraMedia = lastImageFromCameraPhotos;
+				uriCameraMedia = lastImageFromAllPhotos;
 			} else {
 				uriCameraMedia = lastVideoThumbFromCameraVideos;
 			}
@@ -143,7 +143,7 @@ public class ServicesRecyclerAdapter extends RecyclerView.Adapter<ServicesRecycl
 			holder.textViewServiceTitle.setText(R.string.camera_media);
 			break;
 		case LAST_PHOTO_TAKEN:
-      Picasso.with(context).load(lastImageFromCameraPhotos).fit().centerCrop().into(holder.imageViewService);
+      Picasso.with(context).load(lastImageFromAllPhotos).fit().centerCrop().into(holder.imageViewService);
 			holder.textViewServiceTitle.setText(context.getResources()
 					.getString(R.string.last_photo));
 			break;

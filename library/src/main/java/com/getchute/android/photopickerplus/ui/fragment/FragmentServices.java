@@ -29,20 +29,34 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.chute.sdk.v2.model.enums.AccountType;
 import com.getchute.android.photopickerplus.R;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.models.enums.LocalServiceType;
+import com.getchute.android.photopickerplus.ui.activity.ServicesActivity;
 import com.getchute.android.photopickerplus.ui.adapter.ServicesRecyclerAdapter;
+import com.getchute.android.photopickerplus.ui.listener.ListenerMediaScannerProgress;
 
 import java.util.List;
 
-public class FragmentServices extends ActionBarFragment {
+public class FragmentServices extends ActionBarFragment implements ListenerMediaScannerProgress {
 
   private ServicesRecyclerAdapter adapter;
   private RecyclerView recyclerView;
   private ServiceClickedListener serviceClickedListener;
+  private ProgressBar progressBar;
+
+  @Override
+  public void hideProgressBar() {
+   progressBar.setVisibility(View.GONE);
+  }
+
+  @Override
+  public void showProgressBar() {
+   progressBar.setVisibility(View.VISIBLE);
+  }
 
   public interface ServiceClickedListener {
 
@@ -73,6 +87,7 @@ public class FragmentServices extends ActionBarFragment {
   public void onAttach(Activity activity) {
     super.onAttach(activity);
     serviceClickedListener = (ServiceClickedListener) activity;
+    ((ServicesActivity) activity).setMediaScannerProgressListener(this);
   }
 
   @Override
@@ -88,6 +103,7 @@ public class FragmentServices extends ActionBarFragment {
 
     recyclerView = (RecyclerView) view
       .findViewById(R.id.gcRecyclerViewServices);
+    progressBar = (ProgressBar) view.findViewById(R.id.gcProgressBarMediaScanner);
     int columns = getResources().getInteger(R.integer.grid_columns_services);
     final GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), columns);
     recyclerView.setLayoutManager(gridLayoutManager);
