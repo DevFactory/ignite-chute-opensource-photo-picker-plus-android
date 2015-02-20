@@ -35,28 +35,16 @@ import com.chute.sdk.v2.model.enums.AccountType;
 import com.getchute.android.photopickerplus.R;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.models.enums.LocalServiceType;
-import com.getchute.android.photopickerplus.ui.activity.ServicesActivity;
 import com.getchute.android.photopickerplus.ui.adapter.ServicesRecyclerAdapter;
-import com.getchute.android.photopickerplus.ui.listener.ListenerMediaScannerProgress;
 
 import java.util.List;
 
-public class FragmentServices extends ActionBarFragment implements ListenerMediaScannerProgress {
+public class FragmentServices extends ActionBarFragment {
 
   private ServicesRecyclerAdapter adapter;
   private RecyclerView recyclerView;
   private ServiceClickedListener serviceClickedListener;
   private ProgressBar progressBar;
-
-  @Override
-  public void hideProgressBar() {
-   progressBar.setVisibility(View.GONE);
-  }
-
-  @Override
-  public void showProgressBar() {
-   progressBar.setVisibility(View.VISIBLE);
-  }
 
   public interface ServiceClickedListener {
 
@@ -87,7 +75,6 @@ public class FragmentServices extends ActionBarFragment implements ListenerMedia
   public void onAttach(Activity activity) {
     super.onAttach(activity);
     serviceClickedListener = (ServiceClickedListener) activity;
-    ((ServicesActivity) activity).setMediaScannerProgressListener(this);
   }
 
   @Override

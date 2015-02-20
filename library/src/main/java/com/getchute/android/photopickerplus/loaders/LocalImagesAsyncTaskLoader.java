@@ -47,9 +47,9 @@ public class LocalImagesAsyncTaskLoader extends
 	public Cursor loadInBackground() {
 		switch (filterType) {
 		case ALL_MEDIA:
-			return MediaDAO.getAllMediaThumbnails(getContext());
+			return MediaDAO.getAllMediaPhotos(getContext());
 		case CAMERA_ROLL:
-			return MediaDAO.getCameraThumbnails(getContext());
+			return MediaDAO.getCameraPhotos(getContext());
 		default:
 			return null;
 		}

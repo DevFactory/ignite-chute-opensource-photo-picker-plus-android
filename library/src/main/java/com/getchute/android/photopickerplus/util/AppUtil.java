@@ -90,7 +90,7 @@ public class AppUtil {
 		}
 		File mediaStorage = new File(
 				Environment
-						.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
+						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
 				"_VIDEO");
 		if (!mediaStorage.exists() && !mediaStorage.mkdirs()) {
 			ALog.e("Failed to create directory: " + mediaStorage);
@@ -167,7 +167,7 @@ public class AppUtil {
   }
 
   private static File getOutputMediaFile(MediaType type) {
-    File mediaStorageDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "PhotoPickerPlus");
+    File mediaStorageDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "PhotoPickerPlus");
 
     if (!mediaStorageDirectory.exists()) {
       if (!mediaStorageDirectory.mkdirs()) {

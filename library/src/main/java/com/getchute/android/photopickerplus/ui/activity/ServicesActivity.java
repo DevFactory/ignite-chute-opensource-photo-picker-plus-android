@@ -26,9 +26,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.media.MediaScannerConnection;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -59,6 +56,7 @@ import com.getchute.android.photopickerplus.dao.MediaDAO;
 import com.getchute.android.photopickerplus.models.DeliverMediaModel;
 import com.getchute.android.photopickerplus.models.enums.MediaType;
 import com.getchute.android.photopickerplus.models.enums.PhotoFilterType;
+import com.getchute.android.photopickerplus.ui.components.MediaScannerWrapper;
 import com.getchute.android.photopickerplus.ui.fragment.FragmentRoot;
 import com.getchute.android.photopickerplus.ui.fragment.FragmentServices;
 import com.getchute.android.photopickerplus.ui.fragment.FragmentSingle;
@@ -68,7 +66,6 @@ import com.getchute.android.photopickerplus.ui.listener.ListenerFilesCursor;
 import com.getchute.android.photopickerplus.ui.listener.ListenerFragmentRoot;
 import com.getchute.android.photopickerplus.ui.listener.ListenerFragmentSingle;
 import com.getchute.android.photopickerplus.ui.listener.ListenerImageSelection;
-import com.getchute.android.photopickerplus.ui.listener.ListenerMediaScannerProgress;
 import com.getchute.android.photopickerplus.ui.listener.ListenerVideoSelection;
 import com.getchute.android.photopickerplus.util.AppUtil;
 import com.getchute.android.photopickerplus.util.AssetUtil;
@@ -106,7 +103,6 @@ public class ServicesActivity extends BaseActivity implements
   private ListenerAccountAssetsSelection listenerAssetsSelection;
   private ListenerImageSelection listenerImagesSelection;
   private ListenerVideoSelection listenerVideosSelection;
-  private ListenerMediaScannerProgress listenerMediaScannerProgress;
   private FragmentSingle fragmentSingle;
   private FragmentRoot fragmentRoot;
   private int photoFilterType;
@@ -124,10 +120,6 @@ public class ServicesActivity extends BaseActivity implements
 
   public void setVideosSelectListener(ListenerVideoSelection adapterListener) {
     this.listenerVideosSelection = adapterListener;
-  }
-
-  public void setMediaScannerProgressListener(ListenerMediaScannerProgress listenerMediaScannerProgress) {
-    this.listenerMediaScannerProgress = listenerMediaScannerProgress;
   }
 
   @Override
@@ -378,71 +370,23 @@ public class ServicesActivity extends BaseActivity implements
       return;
     }
     if (requestCode == Constants.CAMERA_PIC_REQUEST) {
-      listenerMediaScannerProgress.showProgressBar();
-      MediaScannerConnection.scanFile(getApplicationContext(), new String[]{mediaPath.getPath()}, null, new OnMediaScannerListener(data));
+      if (mediaPath == null) {
+        mediaPath = AppUtil.getOutputMediaFileUri(MediaType.IMAGE);
+      }
+      startMediaScanner(mediaPath.getPath(), MediaType.IMAGE, data);
     }
 
     if (requestCode == Constants.CAMERA_VIDEO_REQUEST) {
       Uri uriVideo = data.getData();
-      File file = new File(uriVideo.getPath());
-      MediaDAO.insertVideoInMediaStore(getApplicationContext(),
-        file.getAbsolutePath());
-
-      Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(
-        file.getAbsolutePath(),
-        MediaStore.Images.Thumbnails.MINI_KIND);
-
-      final AssetModel model = new AssetModel();
-      model.setThumbnail(AppUtil.getImagePath(getApplicationContext(),
-        thumbnail));
-      model.setVideoUrl(uriVideo.toString());
-      model.setUrl(AppUtil.getImagePath(getApplicationContext(),
-        thumbnail));
-      model.setType(MediaType.VIDEO.name().toLowerCase());
-      IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-        model, null);
+      startMediaScanner(uriVideo.getPath(), MediaType.VIDEO, data);
     }
 
   }
 
-  private final class OnMediaScannerListener implements MediaScannerConnection.OnScanCompletedListener {
-
-    private Intent data;
-
-    private OnMediaScannerListener(Intent data) {
-      this.data = data;
-    }
-
-
-    @Override
-    public void onScanCompleted(String s, Uri uri) {
-      File file = new File(s);
-      Uri uriFromFile = Uri.fromFile(file);
-
-      String path = "";
-      if (AppUtil.hasImageCaptureBug() == false) {
-        path = uriFromFile.toString();
-      } else {
-        ALog.e("Bug " + data.getData().getPath());
-        path = Uri.fromFile(
-          new File(AppUtil.getPath(getApplicationContext(), data.getData()))).toString();
-      }
-      final AssetModel model = new AssetModel();
-      if (uri != null) {
-        model.setId(uri.toString());
-      }
-      model.setThumbnail(path);
-      model.setUrl(path);
-      model.setType(MediaType.IMAGE.name().toLowerCase());
-
-      listenerMediaScannerProgress.hideProgressBar();
-      IntentUtil.deliverDataToInitialActivity(ServicesActivity.this,
-        model, null);
-    }
-
-
+  private void startMediaScanner(String path, MediaType mediaType, Intent intent) {
+    MediaScannerWrapper mediaScannerWrapper = new MediaScannerWrapper(ServicesActivity.this, path, mediaType, intent);
+    mediaScannerWrapper.scan();
   }
-
 
   @Override
   protected void onNewIntent(Intent intent) {

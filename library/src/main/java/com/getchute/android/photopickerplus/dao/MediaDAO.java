@@ -484,7 +484,7 @@ public class MediaDAO {
    * @return The URI for the requested query.
    */
   private static Uri getFirstVideoThumbnailUri(Cursor cursor) {
-    if (cursor != null && cursor.moveToLast()) {
+    if (cursor != null && cursor.moveToFirst()) {
       return Uri.fromFile(new File(cursor.getString(cursor
         .getColumnIndex(MediaStore.Video.Thumbnails.DATA))));
     }
