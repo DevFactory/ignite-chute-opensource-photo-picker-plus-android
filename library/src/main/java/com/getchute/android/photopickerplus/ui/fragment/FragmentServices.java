@@ -29,7 +29,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.chute.sdk.v2.model.enums.AccountType;
 import com.getchute.android.photopickerplus.R;
@@ -44,7 +43,6 @@ public class FragmentServices extends ActionBarFragment {
   private ServicesRecyclerAdapter adapter;
   private RecyclerView recyclerView;
   private ServiceClickedListener serviceClickedListener;
-  private ProgressBar progressBar;
 
   public interface ServiceClickedListener {
 
@@ -90,7 +88,6 @@ public class FragmentServices extends ActionBarFragment {
 
     recyclerView = (RecyclerView) view
       .findViewById(R.id.gcRecyclerViewServices);
-    progressBar = (ProgressBar) view.findViewById(R.id.gcProgressBarMediaScanner);
     int columns = getResources().getInteger(R.integer.grid_columns_services);
     final GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), columns);
     recyclerView.setLayoutManager(gridLayoutManager);

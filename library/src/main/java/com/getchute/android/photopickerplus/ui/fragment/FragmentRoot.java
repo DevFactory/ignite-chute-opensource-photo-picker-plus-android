@@ -79,6 +79,7 @@ import com.getchute.android.photopickerplus.util.UIUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class FragmentRoot extends ActionBarFragment implements AssetAccountRecyclerAdapter.AdapterItemClickListener,
   ListenerItemCount {
@@ -241,12 +242,15 @@ public class FragmentRoot extends ActionBarFragment implements AssetAccountRecyc
       adapterMerge.addAdapter(adapterVideos);
       adapterMerge.addAdapter(adapterImages);
       recyclerView.setAdapter(adapterMerge);
+      Random random = new Random();
       if (supportImages) {
-        getActivity().getSupportLoaderManager().initLoader(1, null,
+        int imageLoaderId = random.nextInt(Integer.MAX_VALUE) + 1;
+        getActivity().getSupportLoaderManager().initLoader(imageLoaderId, null,
           new ImagesLoaderCallback(selectedImagePositions));
       }
       if (supportVideos) {
-        getActivity().getSupportLoaderManager().initLoader(2, null,
+        int videoLoaderId = random.nextInt(Integer.MAX_VALUE) + 1;
+        getActivity().getSupportLoaderManager().initLoader(videoLoaderId, null,
           new VideosLoaderCallback(selectedVideoPositions));
       }
     } else if (filterType == PhotoFilterType.SOCIAL_MEDIA
@@ -345,7 +349,7 @@ public class FragmentRoot extends ActionBarFragment implements AssetAccountRecyc
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
       // TODO Auto-generated method stub
-
+//     adapterImages.swapCursor(null);
     }
 
   }

@@ -51,10 +51,9 @@ public class PhotosIntentWrapper extends IntentWrapper {
 
   public static final int ACTIVITY_FOR_RESULT_STREAM_KEY = 113;
 
-  // social photos
+  public static final String KEY_PHOTO_COLLECTION = "photoCollection";
   private static final String KEY_ACCOUNT = "account";
   private static final String KEY_ALBUM_ID = "albumId";
-  public static final String KEY_PHOTO_COLLECTION = "photoCollection";
   private static final String KEY_FILTER_TYPE = "filter_type";
   private static final String KEY_ACCOUNT_TYPE = "account_type";
 

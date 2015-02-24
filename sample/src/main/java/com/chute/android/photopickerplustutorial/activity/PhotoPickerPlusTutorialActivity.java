@@ -22,8 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplustutorial.activity;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,16 +31,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.araneaapps.android.libs.logger.ALog;
-import com.getchute.android.photopickerplus.util.intent.PhotoPickerPlusIntentWrapper;
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.AssetModel;
+import com.getchute.android.photopickerplus.util.intent.PhotoPickerPlusIntentWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 
 	public static final String KEY_MEDIA_LSIT = "keyMediaList";
-	private ArrayList<AssetModel> accountMediaList;
-	private AccountModel accountModel;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,13 +71,13 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 		}
 		final PhotoPickerPlusIntentWrapper wrapper = new PhotoPickerPlusIntentWrapper(
 				data);
-		accountMediaList = wrapper.getMediaCollection();
-		accountModel = wrapper.getAccountModel();
+		List <AssetModel> accountMediaList = wrapper.getMediaCollection();
+		AccountModel accountModel = wrapper.getAccountModel();
 
 		ALog.d(accountMediaList.toString());
 		Intent intent = new Intent(getApplicationContext(),
 				PhotoGridActivity.class);
-		intent.putParcelableArrayListExtra(KEY_MEDIA_LSIT, accountMediaList);
+		intent.putParcelableArrayListExtra(KEY_MEDIA_LSIT, (ArrayList) accountMediaList);
 		startActivity(intent);
 
 	}

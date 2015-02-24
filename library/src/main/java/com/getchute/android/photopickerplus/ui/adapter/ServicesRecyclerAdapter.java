@@ -191,7 +191,6 @@ public class ServicesRecyclerAdapter extends RecyclerView.Adapter<ServicesRecycl
 					serviceClickedListener.cameraRoll();
 				}
 			});
-
 			break;
 		case TAKE_PHOTO:
 			holder.imageViewService.setOnClickListener(new OnClickListener() {
@@ -201,7 +200,6 @@ public class ServicesRecyclerAdapter extends RecyclerView.Adapter<ServicesRecycl
 					serviceClickedListener.takePhoto();
 				}
 			});
-
 			break;
 		case LAST_PHOTO_TAKEN:
 			holder.imageViewService.setOnClickListener(new OnClickListener() {

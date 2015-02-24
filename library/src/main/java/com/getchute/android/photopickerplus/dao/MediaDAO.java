@@ -415,15 +415,12 @@ public class MediaDAO {
                                               final Cursor dataCursor, int position) {
     String imagePath = null;
     if (dataCursor.moveToPosition(position)) {
-      int id = dataCursor.getInt(dataCursor
-        .getColumnIndex(MediaStore.Images.Thumbnails.IMAGE_ID));
+      int id = dataCursor.getInt(dataCursor.getColumnIndex(MediaStore.Images.Media._ID));
       Uri uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
-      Cursor imageCursor = context.getContentResolver().query(
-        uri, null, null, null, null);
+      Cursor imageCursor = context.getContentResolver().query(uri, null, null, null, null);
       if (imageCursor.moveToFirst()) {
-        imagePath = imageCursor.getString(imageCursor
-          .getColumnIndex(MediaStore.Images.Media.DATA));
+        imagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
       }
       safelyCloseCursor(imageCursor);
     }

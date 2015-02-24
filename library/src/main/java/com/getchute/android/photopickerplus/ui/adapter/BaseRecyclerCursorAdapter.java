@@ -30,14 +30,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.chute.sdk.v2.model.enums.AccountType;
 import com.getchute.android.photopickerplus.R;
-import com.getchute.android.photopickerplus.config.PhotoPicker;
-import com.getchute.android.photopickerplus.models.enums.DisplayType;
-import com.getchute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,9 +50,6 @@ public abstract class BaseRecyclerCursorAdapter extends CursorRecyclerViewAdapte
     super(context, c);
     this.context = context;
     dataIndex = getDataIndex(c);
-    AccountType accountType = PhotoPickerPreferenceUtil.get().getAccountType();
-    Map<AccountType, DisplayType> accountMap = PhotoPicker.getInstance().getAccountDisplayType();
-
   }
 
   public abstract int getDataIndex(Cursor cursor);
@@ -75,7 +67,6 @@ public abstract class BaseRecyclerCursorAdapter extends CursorRecyclerViewAdapte
     public ImageView imageViewTick;
     public ImageView imageViewVideo;
     public View viewSelect;
-    public FrameLayout frameLayout;
 
     public ViewHolder(View itemView) {
       super(itemView);

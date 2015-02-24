@@ -22,6 +22,7 @@
  */
 package com.getchute.android.photopickerplus.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -154,6 +155,7 @@ public class ServicesActivity extends BaseActivity implements
 
   }
 
+  @SuppressLint("NewApi")
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);

@@ -150,7 +150,7 @@ public class CursorAdapterImages extends BaseRecyclerCursorAdapter implements
       Uri uri = null;
       if (getCursor().moveToPosition(position)) {
         int id = getCursor().getInt(getCursor()
-          .getColumnIndex(MediaStore.Images.Thumbnails.IMAGE_ID));
+          .getColumnIndex(MediaStore.Images.Media._ID));
         uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
       }
       String path = MediaDAO.getImagePathFromCursor(context,
