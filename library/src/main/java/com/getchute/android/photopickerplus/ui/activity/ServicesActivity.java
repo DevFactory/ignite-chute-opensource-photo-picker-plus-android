@@ -372,15 +372,19 @@ public class ServicesActivity extends BaseActivity implements
       return;
     }
     if (requestCode == Constants.CAMERA_PIC_REQUEST) {
-      if (mediaPath == null) {
-        mediaPath = AppUtil.getOutputMediaFileUri(MediaType.IMAGE);
-      }
+      mediaPath = AppUtil.getOutputMediaFileUri(MediaType.IMAGE);
       startMediaScanner(mediaPath.getPath(), MediaType.IMAGE, data);
     }
 
     if (requestCode == Constants.CAMERA_VIDEO_REQUEST) {
-      Uri uriVideo = data.getData();
-      startMediaScanner(uriVideo.getPath(), MediaType.VIDEO, data);
+      String path = "";
+      Uri uriVideo = null;
+      if (data != null) {
+        uriVideo = data.getData();
+      }
+      path = (uriVideo != null) ? uriVideo.getPath() : AppUtil.getOutputMediaFileUri(MediaType.VIDEO).getPath();
+
+      startMediaScanner(path, MediaType.VIDEO, data);
     }
 
   }

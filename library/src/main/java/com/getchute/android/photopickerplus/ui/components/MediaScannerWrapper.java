@@ -86,7 +86,7 @@ public class MediaScannerWrapper implements
     if (mMimeType == MediaType.VIDEO) {
       Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(),
         MediaStore.Images.Thumbnails.MINI_KIND);
-      model.setThumbnail(AppUtil.getImagePath(context.getApplicationContext(), thumbnail));
+      model.setThumbnail(thumbnail != null ? (AppUtil.getImagePath(context.getApplicationContext(), thumbnail)) : null);
       model.setVideoUrl(imagePath);
     } else {
       model.setThumbnail(imagePath);
