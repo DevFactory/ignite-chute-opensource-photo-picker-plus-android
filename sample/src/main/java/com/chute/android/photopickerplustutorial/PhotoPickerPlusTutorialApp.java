@@ -62,7 +62,7 @@ public class PhotoPickerPlusTutorialApp extends PhotoPickerPlusApp {
 
 		PhotoPickerConfiguration config = new PhotoPickerConfiguration.Builder(
 				getApplicationContext())
-				.isMultiPicker(true)
+				.isMultiPicker(false)
 				.defaultAccountDisplayType(DisplayType.LIST)
 //				.accountDisplayType(map)
                 .enableLogout(true)
