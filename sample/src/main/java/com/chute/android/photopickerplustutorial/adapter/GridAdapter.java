@@ -77,9 +77,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
   public void onBindViewHolder(ViewHolder holder, int position) {
     AssetModel asset = getItem(position);
     int orientation = resolveImageOrientation(asset);
-    Picasso.with(holder.itemView.getContext()).load(asset.getThumbnail()).fit().centerCrop().into(holder.imageView);
-    if (asset.getType().equalsIgnoreCase(
-      MediaType.VIDEO.name().toLowerCase())) {
+    Picasso.with(holder.itemView.getContext()).load(asset.getThumbnail()).placeholder(R.drawable.placeholder).fit().centerCrop().into(holder.imageView);
+    if (asset.getType().equalsIgnoreCase(MediaType.VIDEO.name().toLowerCase())) {
       holder.videoIcon.setVisibility(View.VISIBLE);
     } else {
       holder.videoIcon.setVisibility(View.GONE);

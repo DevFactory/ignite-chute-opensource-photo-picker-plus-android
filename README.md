@@ -44,7 +44,7 @@ PhotoPicker+ uses [https://github.com/chute/Chute-SDK-V2-Android](https://github
 Implementation
 ==========
 
-Follow the [PhotoPicker+ tutorial](/PhotoPickerPlusTutorial) on how to setup and use the component.
+Follow [ProjectSetup.md](ProjectSetup.md) on how to setup and use the component.
 
 
 Localization
