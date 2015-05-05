@@ -26,11 +26,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.sdk.v2.model.AccountModel;
 import com.chute.sdk.v2.model.AssetModel;
@@ -42,6 +42,7 @@ import java.util.List;
 public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 
 	public static final String KEY_MEDIA_LSIT = "keyMediaList";
+	private static final String TAG = PhotoPickerPlusTutorialActivity.class.getSimpleName();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class PhotoPickerPlusTutorialActivity extends FragmentActivity {
 		List <AssetModel> accountMediaList = wrapper.getMediaCollection();
 		AccountModel accountModel = wrapper.getAccountModel();
 
-		ALog.d(accountMediaList.toString());
+		Log.d(TAG, accountMediaList.toString());
 		Intent intent = new Intent(getApplicationContext(),
 				PhotoGridActivity.class);
 		intent.putParcelableArrayListExtra(KEY_MEDIA_LSIT, (ArrayList) accountMediaList);

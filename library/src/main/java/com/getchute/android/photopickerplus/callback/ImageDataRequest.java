@@ -22,47 +22,41 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.callback;
 
+import com.chute.sdk.v2.utils.MediaTypes;
+import com.dg.libs.rest.client.RequestMethod;
+import com.dg.libs.rest.requests.RestClientRequest;
 import com.getchute.android.photopickerplus.models.MediaModel;
 import com.getchute.android.photopickerplus.models.MediaResponseModel;
 import com.getchute.android.photopickerplus.util.Constants;
 import com.chute.sdk.v2.api.parsers.ResponseParser;
 import com.chute.sdk.v2.model.response.ResponseModel;
 import com.dg.libs.rest.callbacks.HttpCallback;
-import com.dg.libs.rest.client.BaseRestClient.RequestMethod;
-import com.dg.libs.rest.requests.StringBodyHttpRequestImpl;
+import com.squareup.okhttp.RequestBody;
 
 /**
  * The {@link ImageDataRequest} class is used for exchanging messages with the server
- * (request-response). It uses the {@link StringBodyHttpRequestImpl}
+ * (request-response). It uses the {@link RestClientRequest}
  * implementation.
  * 
  */
 public class ImageDataRequest extends
-		StringBodyHttpRequestImpl<ResponseModel<MediaResponseModel>> {
-
-	private MediaModel imageData;
+	RestClientRequest<ResponseModel<MediaResponseModel>> {
 
 	public ImageDataRequest(MediaModel imageData,
 			HttpCallback<ResponseModel<MediaResponseModel>> callback) {
-		super(
-				RequestMethod.POST,
-				new ResponseParser<MediaResponseModel>(MediaResponseModel.class),
-				callback);
 		if (imageData == null) {
 			throw new IllegalArgumentException("Need to provide image data");
 		}
-		this.imageData = imageData;
-		getClient().addHeader("Content-Type", "application/json");
+
+		setRequestMethod(RequestMethod.POST, RequestBody.create(MediaTypes.JSON, bodyContents(imageData)));
+		setUrl(Constants.SELECTED_IMAGES_URL);
+		setCallback(callback);
+		setParser(new ResponseParser<MediaResponseModel>(MediaResponseModel.class));
 	}
 
-	@Override
-	public String bodyContents() {
-		return this.imageData.serializeImageDataModel();
+	public String bodyContents(MediaModel imageData) {
+		return imageData.serializeImageDataModel();
 	}
 
-	@Override
-	protected String getUrl() {
-		return Constants.SELECTED_IMAGES_URL;
-	}
 
 }

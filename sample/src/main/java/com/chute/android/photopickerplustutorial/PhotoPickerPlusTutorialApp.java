@@ -22,8 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.chute.android.photopickerplustutorial;
 
-import com.araneaapps.android.libs.logger.ALog;
-import com.araneaapps.android.libs.logger.ALog.DebugLevel;
 import com.chute.android.photopickerplustutorial.config.ConfigEndpointURLs;
 import com.chute.sdk.v2.api.Chute;
 import com.chute.sdk.v2.api.authentication.AuthConstants;
@@ -45,8 +43,6 @@ public class PhotoPickerPlusTutorialApp extends PhotoPickerPlusApp {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		ALog.setDebugTag("PhotoPicker");
-		ALog.setDebugLevel(DebugLevel.ALL);
 
 		/**
 		 * Fill in using "app_id" and "app_secret" values from your Chute

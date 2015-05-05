@@ -22,13 +22,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
-import com.araneaapps.android.libs.logger.ALog;
 import com.chute.sdk.v2.model.AssetModel;
 import com.chute.sdk.v2.utils.JsonUtil;
 import com.fasterxml.jackson.annotation.JsonFilter;
@@ -37,6 +34,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The {@link MediaModel} class encapsulates data needed for sending POST
@@ -51,6 +51,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 @JsonFilter("imageDataModelFilter")
 public class MediaModel implements Parcelable {
 
+	private static final String TAG = MediaModel.class.getSimpleName();
 	/**
 	 * {@link OptionsModel} object containing the client ID.
 	 */
@@ -96,7 +97,7 @@ public class MediaModel implements Parcelable {
 			result = JsonUtil.getMapper().writer(filters)
 					.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			ALog.d("", e);
+			Log.d(TAG, "", e);
 		}
 		return result;
 	}

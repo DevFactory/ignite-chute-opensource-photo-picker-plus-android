@@ -23,28 +23,19 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.getchute.android.photopickerplus.config;
 
 import com.dg.libs.rest.callbacks.HttpCallback;
-import com.dg.libs.rest.client.BaseRestClient.RequestMethod;
-import com.dg.libs.rest.requests.ParameterHttpRequestImpl;
+import com.dg.libs.rest.client.RequestMethod;
+import com.dg.libs.rest.requests.RestClientRequest;
 
-/**
- * The {@link ServiceRequest} used for exchanging messages with the server
- * (request-response). It uses the {@link ParameterHttpRequestImpl}
- * implementation.
- * 
- */
-public class ServiceRequest extends ParameterHttpRequestImpl<ServiceResponseModel> {
 
-  private String url;
+public class ServiceRequest extends RestClientRequest<ServiceResponseModel> {
+
 
   public ServiceRequest(String url,
       HttpCallback<ServiceResponseModel> callback) {
-    super(RequestMethod.GET, new ServiceResponseParser(), callback);
-    this.url = url;
-  }
-
-  @Override
-  protected String getUrl() {
-    return url;
+    setRequestMethod(RequestMethod.GET);
+    setUrl(url);
+    setParser(new ServiceResponseParser());
+    setCallback(callback);
   }
 
 }

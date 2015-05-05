@@ -22,13 +22,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.config;
 
-import com.araneaapps.android.libs.logger.ALog;
-import com.getchute.android.photopickerplus.models.enums.DisplayType;
-import com.getchute.android.photopickerplus.models.enums.LocalServiceType;
-import com.getchute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
+import android.util.Log;
+
 import com.chute.sdk.v2.model.enums.AccountType;
 import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.domain.ResponseStatus;
+import com.getchute.android.photopickerplus.models.enums.DisplayType;
+import com.getchute.android.photopickerplus.models.enums.LocalServiceType;
+import com.getchute.android.photopickerplus.util.PhotoPickerPreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +60,7 @@ public class PhotoPicker {
 	private static final String WARNING_UNSUPPORTED_REMOTE_SERVICES = "Invalid service type. Supported valid services: Facebook, Google, Googledrive, Instagram, Flickr, Picasa, Dropbox, Skydrive, YouTube";
 	private static final String WARNING_UNSUPPORTED_LOCAL_SERVICES = "Invalid service type. Supported valid services: Camera Media, All Media, Last Photo Taken, Take Photo, Record Video, Last Video Captured";
 	private static final String ERROR_INIT_CONFIG_WITH_FALSE_IMAGES_VIDEOS = "PhotoPicker should support images, videos or both.";
+	private static final String TAG = PhotoPicker.class.getSimpleName();
 
 	/**
 	 * List of {@link AccountType} objects representing the remote services to
@@ -123,10 +125,10 @@ public class PhotoPicker {
 			throw new IllegalArgumentException(ERROR_INIT_CONFIG_WITH_NULL);
 		}
 		if (this.configuration == null) {
-			ALog.d(LOG_INIT_CONFIG);
+			Log.d(TAG, LOG_INIT_CONFIG);
 			this.configuration = configuration;
 		} else {
-			ALog.w(WARNING_RE_INIT_CONFIG);
+			Log.w(TAG, WARNING_RE_INIT_CONFIG);
 		}
 		if (configuration.supportImages == false
 				&& configuration.supportVideos == false) {
@@ -250,8 +252,8 @@ public class PhotoPicker {
 
 		@Override
 		public void onHttpError(ResponseStatus status) {
-			ALog.d(ERROR_HTTP + status.getStatusMessage() + " "
-					+ status.getStatusCode());
+			Log.d(TAG, ERROR_HTTP + status.getStatusMessage() + " "
+				+ status.getStatusCode());
 		}
 
 		@Override
@@ -265,7 +267,7 @@ public class PhotoPicker {
 								.toUpperCase());
 						remoteServices.add(accountType);
 					} else {
-						ALog.w(WARNING_UNSUPPORTED_REMOTE_SERVICES + " " + service);
+						Log.w(TAG, WARNING_UNSUPPORTED_REMOTE_SERVICES + " " + service);
 					}
 				}
 				PhotoPickerPreferenceUtil
@@ -280,7 +282,7 @@ public class PhotoPicker {
 								.valueOf(localFeature.toUpperCase());
 						localServices.add(localMediaType);
 					} else {
-						ALog.w(WARNING_UNSUPPORTED_LOCAL_SERVICES);
+						Log.w(TAG, WARNING_UNSUPPORTED_LOCAL_SERVICES);
 					}
 				}
 				PhotoPickerPreferenceUtil
@@ -370,7 +372,7 @@ public class PhotoPicker {
 					&& !accountType.equals(AccountType.GOOGLEDRIVE)
 					&& !accountType.equals(AccountType.SKYDRIVE)
 					&& !accountType.equals(AccountType.YOUTUBE)) {
-				ALog.w(WARNING_UNSUPPORTED_REMOTE_SERVICES);
+				Log.w(TAG, WARNING_UNSUPPORTED_REMOTE_SERVICES);
 				iterator.remove();
 			}
 		}
@@ -409,7 +411,7 @@ public class PhotoPicker {
 					&& !localMediaType
 							.equals(LocalServiceType.LAST_VIDEO_CAPTURED)
 					&& !localMediaType.equals(LocalServiceType.RECORD_VIDEO)) {
-				ALog.w(WARNING_UNSUPPORTED_LOCAL_SERVICES);
+				Log.w(TAG, WARNING_UNSUPPORTED_LOCAL_SERVICES);
 				iterator.remove();
 			}
 		}
@@ -446,7 +448,7 @@ public class PhotoPicker {
 	 */
 	public void destroy() {
 		if (configuration != null)
-			ALog.d(LOG_DESTROY);
+			Log.w(TAG, LOG_DESTROY);
 		configuration = null;
 	}
 

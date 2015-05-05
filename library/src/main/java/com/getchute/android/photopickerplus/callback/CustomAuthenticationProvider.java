@@ -24,7 +24,7 @@ package com.getchute.android.photopickerplus.callback;
 
 import com.chute.sdk.v2.api.authentication.TokenAuthenticationProvider;
 import com.dg.libs.rest.authentication.AuthenticationProvider;
-import com.dg.libs.rest.client.BaseRestClient;
+import com.dg.libs.rest.requests.RestClientRequest;
 
 /**
  * {@link CustomAuthenticationProvider} is used for running the request with a
@@ -41,7 +41,7 @@ public final class CustomAuthenticationProvider implements
 	}
 
 	@Override
-	public void authenticateRequest(BaseRestClient client) {
+	public void authenticateRequest(RestClientRequest client) {
 		client.addHeader("Authorization", "Bearer " + token);
 	}
 

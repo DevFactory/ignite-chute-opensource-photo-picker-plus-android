@@ -24,8 +24,7 @@ package com.getchute.android.photopickerplus.loaders;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
-
-import com.araneaapps.android.libs.logger.ALog;
+import android.util.Log;
 
 /**
  * An abstract class that performs asynchronous data loading. While Loaders are
@@ -104,7 +103,7 @@ public abstract class AbstractSingleDataInstanceAsyncTaskLoader<D> extends
 
 	@Override
 	public void forceLoad() {
-		ALog.d(TAG, "forcing load");
+		Log.d(TAG, "forcing load");
 		super.forceLoad();
 	}
 

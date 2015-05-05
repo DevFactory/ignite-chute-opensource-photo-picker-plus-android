@@ -29,8 +29,8 @@ import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
-import com.araneaapps.android.libs.logger.ALog;
 import com.chute.sdk.v2.model.AssetModel;
 import com.getchute.android.photopickerplus.models.enums.MediaType;
 import com.getchute.android.photopickerplus.ui.activity.ServicesActivity;
@@ -41,6 +41,7 @@ import java.io.File;
 
 public class MediaScannerWrapper implements
   MediaScannerConnection.MediaScannerConnectionClient {
+  private static final String TAG = MediaScannerWrapper.class.getSimpleName();
   private MediaScannerConnection mConnection;
   private String mPath;
   private MediaType mMimeType;
@@ -72,7 +73,7 @@ public class MediaScannerWrapper implements
       if (AppUtil.hasImageCaptureBug() == false) {
         imagePath = uriFromFile.toString();
       } else {
-        ALog.e("Bug " + intent.getData().getPath());
+        Log.e(TAG, "Bug " + intent.getData().getPath());
         imagePath = Uri.fromFile(
           new File(AppUtil.getPath(context, intent.getData()))).toString();
       }

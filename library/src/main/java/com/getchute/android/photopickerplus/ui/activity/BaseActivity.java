@@ -31,9 +31,6 @@ import android.transition.Explode;
 
 import com.getchute.android.photopickerplus.R;
 
-/**
- * Created by Olga on 2/9/15.
- */
 public abstract class BaseActivity extends ActionBarActivity {
 
   protected abstract int getLayoutResource();

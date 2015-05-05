@@ -23,16 +23,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.getchute.android.photopickerplus.callback;
 
 import android.content.Context;
+import android.util.Log;
 
-import com.araneaapps.android.libs.logger.ALog;
-import com.getchute.android.photopickerplus.R;
-import com.getchute.android.photopickerplus.models.MediaDataModel;
-import com.getchute.android.photopickerplus.models.MediaModel;
-import com.getchute.android.photopickerplus.models.MediaResponseModel;
-import com.getchute.android.photopickerplus.models.OptionsModel;
-import com.getchute.android.photopickerplus.models.enums.MediaType;
-import com.getchute.android.photopickerplus.ui.listener.ListenerFilesAccount;
-import com.getchute.android.photopickerplus.util.NotificationUtil;
 import com.chute.sdk.v2.api.Chute;
 import com.chute.sdk.v2.api.authentication.AuthConstants;
 import com.chute.sdk.v2.api.authentication.AuthenticationFactory;
@@ -44,6 +36,14 @@ import com.chute.sdk.v2.model.response.ResponseModel;
 import com.dg.libs.rest.HttpRequest;
 import com.dg.libs.rest.callbacks.HttpCallback;
 import com.dg.libs.rest.domain.ResponseStatus;
+import com.getchute.android.photopickerplus.R;
+import com.getchute.android.photopickerplus.models.MediaDataModel;
+import com.getchute.android.photopickerplus.models.MediaModel;
+import com.getchute.android.photopickerplus.models.MediaResponseModel;
+import com.getchute.android.photopickerplus.models.OptionsModel;
+import com.getchute.android.photopickerplus.models.enums.MediaType;
+import com.getchute.android.photopickerplus.ui.listener.ListenerFilesAccount;
+import com.getchute.android.photopickerplus.util.NotificationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +105,7 @@ public class ImageDataResponseLoader {
 	private static final class ImageDataCallback implements
 			HttpCallback<ResponseModel<MediaResponseModel>> {
 
+		private static final String TAG = ImageDataCallback.class.getSimpleName();
 		private Context context;
 		private ListenerFilesAccount listener;
 		private AccountModel accountModel;
@@ -119,8 +120,8 @@ public class ImageDataResponseLoader {
 		@Override
 		public void onHttpError(ResponseStatus responseStatus) {
 			NotificationUtil.makeToast(context, R.string.general_error);
-			ALog.d("Http Error: " + responseStatus.getStatusCode() + " "
-					+ responseStatus.getStatusMessage());
+			Log.d(TAG, "Http Error: " + responseStatus.getStatusCode() + " "
+				+ responseStatus.getStatusMessage());
 
 		}
 

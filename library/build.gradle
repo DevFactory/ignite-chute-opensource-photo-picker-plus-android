@@ -20,12 +20,11 @@ android {
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
-  compile 'com.android.support:appcompat-v7:21.0.3'
-  compile 'com.android.support:cardview-v7:21.0.3'
-  compile 'com.android.support:recyclerview-v7:21.0.3'
-  compile 'com.getchute.android.sdk.v2:chute-sdk-v2-android:2.3.2'
-  compile 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
-  compile 'com.squareup.picasso:picasso:2.3.2'
+  compile 'com.android.support:appcompat-v7:22.1.1'
+  compile 'com.android.support:cardview-v7:22.1.1'
+  compile 'com.android.support:recyclerview-v7:22.1.1'
+  compile 'com.getchute.android.sdk.v2:chute-sdk-v2-android:2.4.0'
+  compile 'com.squareup.picasso:picasso:2.5.2'
 }
 
 apply from: '../gradle-mvn-push.gradle'

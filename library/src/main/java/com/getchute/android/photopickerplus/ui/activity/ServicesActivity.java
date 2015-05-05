@@ -33,10 +33,10 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.araneaapps.android.libs.logger.ALog;
 import com.chute.sdk.v2.api.accounts.CurrentUserAccountsRequest;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
 import com.chute.sdk.v2.api.authentication.AuthenticationActivity;
@@ -92,6 +92,7 @@ public class ServicesActivity extends BaseActivity implements
   ListenerFragmentRoot, ListenerFragmentSingle {
 
   public static final int LOGOUT_ITEM = 1;
+  private static final String TAG = ServicesActivity.class.getSimpleName();
 
   private static FragmentManager fragmentManager;
   private AccountType accountType;
@@ -190,13 +191,13 @@ public class ServicesActivity extends BaseActivity implements
   public void lastVideo() {
     Uri videoUrl = MediaDAO
       .getLastVideoFromAllVideos(getApplicationContext());
-    String videoThumbnail = MediaDAO
-      .getLastVideoThumbnail(getApplicationContext());
 
-    if (videoUrl.toString().equals("")) {
+    if (videoUrl == null || videoUrl.toString().equals("")) {
       NotificationUtil.makeToast(getApplicationContext(), getResources()
-        .getString(R.string.no_camera_photos));
+        .getString(R.string.no_camera_videos));
     } else {
+      String videoThumbnail = MediaDAO
+        .getLastVideoThumbnail(getApplicationContext());
       final AssetModel model = new AssetModel();
       model.setThumbnail(Uri.fromFile(new File(videoThumbnail))
         .toString());
@@ -357,7 +358,7 @@ public class ServicesActivity extends BaseActivity implements
           .getInstance().getToken();
         if (!newSessionToken.equals(previousSessionToken)) {
           CurrentUserAccountsRequest request = new CurrentUserAccountsRequest(new AccountsCallback());
-          request.getClient().setAuthentication(
+          request.setAuthenticationProvider(
             new CustomAuthenticationProvider(newSessionToken));
           request.executeAsync();
         }
@@ -583,7 +584,7 @@ public class ServicesActivity extends BaseActivity implements
 
     @Override
     public void onHttpError(ResponseStatus responseStatus) {
-      ALog.d("Http Error: " + responseStatus.getStatusCode() + " "
+      Log.d(TAG, "Http Error: " + responseStatus.getStatusCode() + " "
         + responseStatus.getStatusMessage());
     }
 
@@ -594,7 +595,7 @@ public class ServicesActivity extends BaseActivity implements
     try {
       startActivityForResult(intent, requestCode);
     } catch (Exception e) {
-      ALog.w("Could not start the camera. Memory is full.");
+      Log.w(TAG, "Could not start the camera. Memory is full.");
       NotificationUtil.makeToast(getApplicationContext(),
         R.string.toast_memory_full);
     }

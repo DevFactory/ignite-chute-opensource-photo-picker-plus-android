@@ -30,11 +30,11 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.MediaColumns;
+import android.util.Log;
 
-import com.araneaapps.android.libs.logger.ALog;
-import com.getchute.android.photopickerplus.models.enums.DisplayType;
 import com.chute.sdk.v2.model.enums.AccountType;
 import com.chute.sdk.v2.utils.Utils;
+import com.getchute.android.photopickerplus.models.enums.DisplayType;
 import com.getchute.android.photopickerplus.models.enums.MediaType;
 
 import java.io.ByteArrayOutputStream;
@@ -63,6 +63,8 @@ import java.util.Map.Entry;
 public class AppUtil {
 
 
+	private static final String TAG = AppUtil.class.getSimpleName();
+
 	public static String getThumbSmallUrl(String urlNormal) {
 		return Utils.getCustomSizePhotoURL(urlNormal, 100, 100);
 	}
@@ -77,7 +79,7 @@ public class AppUtil {
 			try {
 				f.createNewFile();
 			} catch (IOException e) {
-				ALog.w(e.getMessage() + " " + e);
+				Log.w(TAG, e.getMessage() + " " + e);
 			}
 		}
 		return f;
@@ -93,7 +95,7 @@ public class AppUtil {
 						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
 				"_VIDEO");
 		if (!mediaStorage.exists() && !mediaStorage.mkdirs()) {
-			ALog.e("Failed to create directory: " + mediaStorage);
+			Log.e(TAG, "Failed to create directory: " + mediaStorage);
 			return null;
 		}
 
@@ -171,7 +173,7 @@ public class AppUtil {
 
     if (!mediaStorageDirectory.exists()) {
       if (!mediaStorageDirectory.mkdirs()) {
-        ALog.d("Failed to create directory");
+        Log.d(TAG, "Failed to create directory");
         return null;
       }
     }

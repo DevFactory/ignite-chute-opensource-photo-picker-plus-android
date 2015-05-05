@@ -26,9 +26,6 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 
-/**
- * Created by Olga on 2/9/15.
- */
 public class ActionBarFragment extends Fragment {
 
   private ActionBarActivity actionBarActivity;

@@ -28,8 +28,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
-import com.araneaapps.android.libs.logger.ALog;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
 import com.chute.sdk.v2.api.authentication.AuthenticationFactory;
 import com.chute.sdk.v2.model.AccountModel;
@@ -74,6 +74,7 @@ public class AssetActivity extends BaseActivity implements
 		ListenerFragmentSingle {
 
     public static final int USE_ITEM = 5;
+	private static final String TAG = AssetActivity.class.getSimpleName();
 
 	private PhotoFilterType filterType;
 	private PhotosIntentWrapper wrapper;
@@ -269,8 +270,8 @@ public class AssetActivity extends BaseActivity implements
 
 		@Override
 		public void onHttpError(ResponseStatus responseStatus) {
-			ALog.d("Http Error: " + responseStatus.getStatusCode() + " "
-					+ responseStatus.getStatusMessage());
+			Log.d(TAG, "Http Error: " + responseStatus.getStatusCode() + " "
+				+ responseStatus.getStatusMessage());
 		}
 
 	}

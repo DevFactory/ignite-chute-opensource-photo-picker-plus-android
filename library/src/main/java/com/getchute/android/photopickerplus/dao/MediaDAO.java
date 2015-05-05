@@ -31,9 +31,9 @@ import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
-import com.araneaapps.android.libs.logger.ALog;
 import com.getchute.android.photopickerplus.util.AppUtil;
 
 import java.io.File;
@@ -43,6 +43,8 @@ import java.io.File;
  * writing a class from the database.
  */
 public class MediaDAO {
+
+  private static final String TAG = MediaDAO.class.getSimpleName();
 
   private MediaDAO() {
   }
@@ -574,7 +576,7 @@ public class MediaDAO {
         c.close();
       }
     } catch (Exception e) {
-      ALog.d("", e);
+      Log.d(TAG, "", e);
     }
   }
 

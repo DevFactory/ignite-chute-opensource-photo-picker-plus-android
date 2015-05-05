@@ -30,6 +30,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +39,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.araneaapps.android.libs.logger.ALog;
 import com.chute.sdk.v2.api.accounts.GCAccounts;
 import com.chute.sdk.v2.api.authentication.TokenAuthenticationProvider;
 import com.chute.sdk.v2.model.AccountAlbumModel;
@@ -74,6 +74,7 @@ import java.util.Map;
 public class FragmentSingle extends ActionBarFragment implements
   AssetAccountRecyclerAdapter.AdapterItemClickListener, ListenerItemCount {
 
+  private static final String TAG = FragmentSingle.class.getSimpleName();
   private ProgressBar progressBar;
   private RecyclerView recyclerView;
 
@@ -213,7 +214,7 @@ public class FragmentSingle extends ActionBarFragment implements
 
     @Override
     public void onHttpError(ResponseStatus responseStatus) {
-      ALog.d("Http Error: " + responseStatus.getStatusMessage() + " "
+      Log.d(TAG, "Http Error: " + responseStatus.getStatusMessage() + " "
         + responseStatus.getStatusCode());
       progressBar.setVisibility(View.GONE);
       NotificationUtil.makeConnectionProblemToast(getActivity());

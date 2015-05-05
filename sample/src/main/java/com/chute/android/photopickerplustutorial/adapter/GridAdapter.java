@@ -29,12 +29,12 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.araneaapps.android.libs.logger.ALog;
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.android.photopickerplustutorial.activity.PhotoGridActivity;
 import com.chute.android.photopickerplustutorial.activity.VideoPlayerActivity;
@@ -47,6 +47,7 @@ import java.util.ArrayList;
 
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
 
+  private static final String TAG = GridAdapter.class.getSimpleName();
   private static ArrayList<AssetModel> collection;
   private static Activity context;
 
@@ -119,12 +120,12 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     if (mediaCursor != null && mediaCursor.getCount() != 0) {
       while (mediaCursor.moveToNext()) {
         long size = mediaCursor.getLong(1);
-        ALog.d("Media Size " + size);
+        Log.d(TAG, "Media Size " + size);
         //Extra check to make sure that we are getting the orientation from the proper file
         rotation = mediaCursor.getInt(0);
       }
     }
-    ALog.d("Media Rotation " + rotation);
+    Log.d(TAG, "Media Rotation " + rotation);
     return rotation;
   }
 
