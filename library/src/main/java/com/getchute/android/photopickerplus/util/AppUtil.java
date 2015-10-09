@@ -24,10 +24,12 @@ package com.getchute.android.photopickerplus.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
@@ -129,7 +131,7 @@ public class AppUtil {
 		devices.add("SEMC/X10i_1232-9897/X10i");
 
 		return devices.contains(android.os.Build.BRAND + "/"
-				+ android.os.Build.PRODUCT + "/" + android.os.Build.DEVICE);
+			+ android.os.Build.PRODUCT + "/" + android.os.Build.DEVICE);
 	}
 
 	public static String getPath(Context context, Uri uri)
@@ -168,8 +170,8 @@ public class AppUtil {
     return Uri.fromFile(getOutputMediaFile(type));
   }
 
-  private static File getOutputMediaFile(MediaType type) {
-    File mediaStorageDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "PhotoPickerPlus");
+  public static File getOutputMediaFile(MediaType type) {
+    File mediaStorageDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "PhotoPickerPlus");
 
     if (!mediaStorageDirectory.exists()) {
       if (!mediaStorageDirectory.mkdirs()) {
@@ -190,5 +192,6 @@ public class AppUtil {
 
     return mediaFile;
   }
+
 
 }

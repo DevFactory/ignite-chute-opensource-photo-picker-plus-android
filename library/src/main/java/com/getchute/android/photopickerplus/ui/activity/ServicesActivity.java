@@ -1,24 +1,24 @@
 /**
  * The MIT License (MIT)
-
- Copyright (c) 2013 Chute
-
- Permission is hereby granted, free of charge, to any person obtaining a copy of
- this software and associated documentation files (the "Software"), to deal in
- the Software without restriction, including without limitation the rights to
- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- the Software, and to permit persons to whom the Software is furnished to do so,
- subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * <p/>
+ * Copyright (c) 2013 Chute
+ * <p/>
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ * <p/>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * <p/>
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.activity;
 
@@ -110,6 +110,7 @@ public class ServicesActivity extends BaseActivity implements
   private int photoFilterType;
   private Toolbar toolbar;
   private Uri mediaPath = null;
+  File photoFile = null;
 
   public void setAssetsSelectListener(
     ListenerAccountAssetsSelection adapterListener) {
@@ -219,6 +220,7 @@ public class ServicesActivity extends BaseActivity implements
 
   }
 
+
   @Override
   public void takePhoto() {
     if (!getPackageManager()
@@ -227,16 +229,20 @@ public class ServicesActivity extends BaseActivity implements
         R.string.toast_feature_camera);
       return;
     }
-    final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    if (AppUtil.hasImageCaptureBug() == false) {
-      mediaPath = AppUtil.getOutputMediaFileUri(MediaType.IMAGE);
-      intent.putExtra(MediaStore.EXTRA_OUTPUT, mediaPath);
-    } else {
-      intent.putExtra(
-        MediaStore.EXTRA_OUTPUT,
-        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    // Ensure that there's a camera activity to handle the intent
+    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+      photoFile = AppUtil.getOutputMediaFile(MediaType.IMAGE);
+      if (photoFile != null) {
+        if (AppUtil.hasImageCaptureBug() == false) {
+          takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+            Uri.fromFile(photoFile));
+        } else {
+          takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        }
+        startTheCamera(takePictureIntent, Constants.CAMERA_PIC_REQUEST);
+      }
     }
-    startTheCamera(intent, Constants.CAMERA_PIC_REQUEST);
   }
 
   @Override
@@ -373,8 +379,7 @@ public class ServicesActivity extends BaseActivity implements
       return;
     }
     if (requestCode == Constants.CAMERA_PIC_REQUEST) {
-      mediaPath = AppUtil.getOutputMediaFileUri(MediaType.IMAGE);
-      startMediaScanner(mediaPath.getPath(), MediaType.IMAGE, data);
+      startMediaScanner(photoFile.getAbsolutePath(), MediaType.IMAGE, data);
     }
 
     if (requestCode == Constants.CAMERA_VIDEO_REQUEST) {
@@ -390,7 +395,7 @@ public class ServicesActivity extends BaseActivity implements
 
   }
 
-  private void startMediaScanner(String path, MediaType mediaType, Intent intent) {
+  private void startMediaScanner(String path, final MediaType mediaType, final Intent intent) {
     MediaScannerWrapper mediaScannerWrapper = new MediaScannerWrapper(ServicesActivity.this, path, mediaType, intent);
     mediaScannerWrapper.scan();
   }

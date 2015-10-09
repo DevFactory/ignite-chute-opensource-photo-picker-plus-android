@@ -1,27 +1,28 @@
 /**
  * The MIT License (MIT)
-
- Copyright (c) 2013 Chute
-
- Permission is hereby granted, free of charge, to any person obtaining a copy of
- this software and associated documentation files (the "Software"), to deal in
- the Software without restriction, including without limitation the rights to
- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- the Software, and to permit persons to whom the Software is furnished to do so,
- subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * <p/>
+ * Copyright (c) 2013 Chute
+ * <p/>
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ * <p/>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * <p/>
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.dao;
 
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -432,7 +433,7 @@ public class MediaDAO {
   /**
    * Returns the URI of the first item from all photos on the device.
    *
-   * @param Cursor Cursor object enabling read-write access to all photos on the
+   * @param cursor Cursor object enabling read-write access to all photos on the
    *               device.
    * @return The URI for the requested query.
    */
@@ -447,7 +448,7 @@ public class MediaDAO {
   /**
    * Returns the URI of the first item from all thumbnails on the device.
    *
-   * @param Cursor Cursor object enabling read-write access to all photos on the
+   * @param cursor Cursor object enabling read-write access to all photos on the
    *               device.
    * @return The URI for the requested query.
    */
@@ -462,7 +463,7 @@ public class MediaDAO {
   /**
    * Returns the URI of the first item from all videos on the device.
    *
-   * @param Cursor Cursor object enabling read-write access to all videos on the
+   * @param cursor Cursor object enabling read-write access to all videos on the
    *               device.
    * @return The URI for the requested query.
    */
@@ -478,7 +479,7 @@ public class MediaDAO {
    * Returns the URI of the first item from all video thumbnails on the
    * device.
    *
-   * @param Cursor Cursor object enabling read-write access to all video
+   * @param cursor Cursor object enabling read-write access to all video
    *               thumbnails on the device.
    * @return The URI for the requested query.
    */
@@ -536,7 +537,7 @@ public class MediaDAO {
    * @param contentUri Image content Uri.
    * @return The value of the requested column as a String.
    */
-  private static String getPathFromContentURI(Context context, Uri contentUri) {
+  public static String getPathFromContentURI(Context context, Uri contentUri) {
     String path = "";
     String[] proj = {MediaStore.Images.Media.DATA};
     Cursor cursor = context.getContentResolver().query(contentUri, proj,
@@ -579,5 +580,6 @@ public class MediaDAO {
       Log.d(TAG, "", e);
     }
   }
+
 
 }

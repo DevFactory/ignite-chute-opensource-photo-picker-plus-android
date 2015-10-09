@@ -23,6 +23,7 @@
 package com.chute.android.photopickerplustutorial.adapter;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -42,6 +43,8 @@ import com.chute.sdk.v2.model.AssetModel;
 import com.getchute.android.photopickerplus.models.enums.MediaType;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 
 
@@ -78,7 +81,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
   public void onBindViewHolder(ViewHolder holder, int position) {
     AssetModel asset = getItem(position);
     int orientation = resolveImageOrientation(asset);
-    Picasso.with(holder.itemView.getContext()).load(asset.getThumbnail()).placeholder(R.drawable.placeholder).fit().centerCrop().into(holder.imageView);
+    Picasso.with(holder.itemView.getContext()).load(asset.getThumbnail()).placeholder(R.drawable.placeholder).into(holder.imageView);
     if (asset.getType().equalsIgnoreCase(MediaType.VIDEO.name().toLowerCase())) {
       holder.videoIcon.setVisibility(View.VISIBLE);
     } else {
@@ -159,4 +162,5 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
       });
     }
   }
+
 }

@@ -68,7 +68,8 @@ public class PhotoPickerPlusTutorialApp extends PhotoPickerPlusApp {
 				.localMediaList(LocalServiceType.ALL_MEDIA,
 						LocalServiceType.CAMERA_MEDIA,
 						LocalServiceType.RECORD_VIDEO,
-						LocalServiceType.LAST_VIDEO_CAPTURED)
+						LocalServiceType.LAST_VIDEO_CAPTURED,
+					  LocalServiceType.TAKE_PHOTO)
 				.configUrl(ConfigEndpointURLs.SERVICES_CONFIG_URL)
 				.supportImages(true).supportVideos(true).build();
 		PhotoPicker.getInstance().init(config);
