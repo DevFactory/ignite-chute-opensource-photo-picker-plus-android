@@ -37,6 +37,6 @@ public class Constants {
 	public static final String KEY_PHOTO_FILTER_TYPE = "keyPhotoFilterType";
 	public static final String KEY_EXPIRED_SESSION = "keyExpiredSession";
 
-	public static final String SELECTED_IMAGES_URL = "http://api.getchute.com/v2/widgets/native";
+	public static final String SELECTED_IMAGES_URL = "https://api.getchute.com/v2/widgets/native";
 
 }
