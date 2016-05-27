@@ -190,8 +190,7 @@ public class ServicesActivity extends BaseActivity implements
 
   @Override
   public void lastVideo() {
-    Uri videoUrl = MediaDAO
-      .getLastVideoFromAllVideos(getApplicationContext());
+    Uri videoUrl = MediaDAO.getLastVideoFromCurosr(getApplicationContext());
 
     if (videoUrl == null || videoUrl.toString().equals("")) {
       NotificationUtil.makeToast(getApplicationContext(), getResources()

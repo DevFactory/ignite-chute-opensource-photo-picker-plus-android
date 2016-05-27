@@ -340,6 +340,18 @@ public class MediaDAO {
     return thumbnail;
   }
 
+  //TODO
+  public static Uri getLastVideoFromCurosr(final Context context) {
+    Uri lastVideo = null;
+    Cursor cursor = getLastVideoCursor(context);
+    if (cursor != null && cursor.moveToLast()) {
+      lastVideo = Uri.fromFile(new File(cursor.getString(cursor
+        .getColumnIndex(MediaStore.Video.Media.DATA))));
+    }
+    safelyCloseCursor(cursor);
+    return lastVideo;
+  }
+
   /**
    * Request a specific record in {@link android.provider.MediaStore.Video.Media} database.
    *
