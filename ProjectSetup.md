@@ -42,9 +42,10 @@ or
 * Add in PhotoPicker+ as a maven dependency.
 ``` xml
 <dependency>
-	<groupId>com.getchute.android.libs.photopickerplus</groupId>
-	<artifactId>library</artifactId>
-	<version>2.0.6</version>
+  <groupId>com.getchute.android.libs.photopickerplus</groupId>
+  <artifactId>library</artifactId>
+  <version>2.2.2</version>
+  <type>pom</type>
 </dependency>
 ```
 
@@ -53,7 +54,7 @@ or
 * Add in PhotoPicker+ as a gradle dependency.   
 
 ``` groovy
-compile 'com.getchute.android.libs.photopickerplus:library:2.0.6'
+compile 'com.getchute.android.libs.photopickerplus:library:2.2.2'
 ```
 
 ``` groovy 
