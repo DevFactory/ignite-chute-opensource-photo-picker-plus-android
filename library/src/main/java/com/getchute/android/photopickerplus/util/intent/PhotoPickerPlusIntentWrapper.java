@@ -28,10 +28,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import com.chute.sdk.v2.model.AccountModel;
-import com.chute.sdk.v2.model.AssetModel;
+import android.os.Bundle;
+import com.chute.sdk.v2_1.model.AccountModel;
+import com.chute.sdk.v2_1.model.AssetModel;
 import com.getchute.android.photopickerplus.ui.activity.ServicesActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,16 +76,19 @@ public class PhotoPickerPlusIntentWrapper extends IntentWrapper {
   }
 
   public void setMediaCollection(List<AssetModel> mediaCollection) {
-    getIntent().putExtra(KEY_PHOTO_COLLECTION,
-      (ArrayList<AssetModel>) mediaCollection);
+    Bundle bundle = new Bundle();
+    bundle.putSerializable(KEY_PHOTO_COLLECTION, (Serializable) mediaCollection);
+    getIntent().putExtras(bundle);
   }
 
   public AccountModel getAccountModel() {
-    return getIntent().getExtras().getParcelable(KEY_ACCOUNT_MODEL);
+    return (AccountModel) getIntent().getExtras().getSerializable(KEY_ACCOUNT_MODEL);
   }
 
   public void setAccountModel(AccountModel accountModel) {
-    getIntent().putExtra(KEY_ACCOUNT_MODEL, accountModel);
+    Bundle bundle = new Bundle();
+    bundle.putSerializable(KEY_ACCOUNT_MODEL, accountModel);
+    getIntent().putExtras(bundle);
   }
 
   public void startActivityForResult(Activity context) {

@@ -15,7 +15,7 @@ package com.getchute.android.photopickerplus.ui.adapter;
  * limitations under the License.
  *
  */
- 
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
@@ -24,8 +24,9 @@ import android.support.v7.widget.RecyclerView;
 /**
  * Created by skyfishjy on 10/31/14.
  */
- 
-public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+
+public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder>
+        extends RecyclerView.Adapter<VH> {
 
     private Context mContext;
 
@@ -128,6 +129,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     }
 
     private class NotifyingDataSetObserver extends DataSetObserver {
+
         @Override
         public void onChanged() {
             super.onChanged();

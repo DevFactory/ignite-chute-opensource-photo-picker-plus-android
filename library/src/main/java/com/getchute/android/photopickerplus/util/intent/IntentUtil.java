@@ -24,11 +24,10 @@ package com.getchute.android.photopickerplus.util.intent;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
-
-import com.chute.sdk.v2.model.AccountModel;
-import com.chute.sdk.v2.model.AssetModel;
+import android.util.Log;
+import com.chute.sdk.v2_1.model.AccountModel;
+import com.chute.sdk.v2_1.model.AssetModel;
 import com.getchute.android.photopickerplus.ui.activity.ServicesActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,9 +52,7 @@ public class IntentUtil {
 		final PhotoPickerPlusIntentWrapper wrapper = new PhotoPickerPlusIntentWrapper(
 				new Intent(context, ServicesActivity.class));
 		wrapper.setMediaCollection(collection);
-		if (accountModel != null) {
-			wrapper.setAccountModel(accountModel);
-		}
+		if (accountModel != null) wrapper.setAccountModel(accountModel);
 		wrapper.getIntent().addFlags(
 				Intent.FLAG_ACTIVITY_CLEAR_TOP
 						| Intent.FLAG_ACTIVITY_SINGLE_TOP);

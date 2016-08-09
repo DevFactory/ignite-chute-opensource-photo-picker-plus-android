@@ -29,79 +29,75 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.chute.sdk.v2.model.enums.AccountType;
+import com.chute.sdk.v2_1.model.enums.AccountType;
 import com.getchute.android.photopickerplus.R;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.models.enums.LocalServiceType;
 import com.getchute.android.photopickerplus.ui.adapter.ServicesRecyclerAdapter;
-
 import java.util.List;
 
 public class FragmentServices extends ActionBarFragment {
 
-  private ServicesRecyclerAdapter adapter;
-  private RecyclerView recyclerView;
-  private ServiceClickedListener serviceClickedListener;
+    private ServicesRecyclerAdapter adapter;
+    private RecyclerView recyclerView;
+    private ServiceClickedListener serviceClickedListener;
 
-  public interface ServiceClickedListener {
+    public interface ServiceClickedListener {
 
-    void accountLogin(AccountType accountType);
+        void accountLogin(AccountType accountType);
 
-    void photoStream();
+        void photoStream();
 
-    void cameraRoll();
+        void cameraRoll();
 
-    void lastPhoto();
+        void lastPhoto();
 
-    void takePhoto();
+        void takePhoto();
 
-    void recordVideo();
+        void recordVideo();
 
-    void lastVideo();
+        void lastVideo();
+    }
 
-  }
+    public static FragmentServices newInstance(String[] services) {
+        FragmentServices frag = new FragmentServices();
+        Bundle args = new Bundle();
+        frag.setArguments(args);
+        return frag;
+    }
 
-  public static FragmentServices newInstance(String[] services) {
-    FragmentServices frag = new FragmentServices();
-    Bundle args = new Bundle();
-    frag.setArguments(args);
-    return frag;
-  }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        serviceClickedListener = (ServiceClickedListener) activity;
+    }
 
-  @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    serviceClickedListener = (ServiceClickedListener) activity;
-  }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        return inflater
+                .inflate(R.layout.gc_fragment_services, container, false);
+    }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-    return inflater
-      .inflate(R.layout.gc_fragment_services, container, false);
-  }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-  @Override
-  public void onViewCreated(View view, Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
+        recyclerView = (RecyclerView) view
+                .findViewById(R.id.gcRecyclerViewServices);
+        int columns = getResources().getInteger(R.integer.grid_columns_services);
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), columns);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
-    recyclerView = (RecyclerView) view
-      .findViewById(R.id.gcRecyclerViewServices);
-    int columns = getResources().getInteger(R.integer.grid_columns_services);
-    final GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), columns);
-    recyclerView.setLayoutManager(gridLayoutManager);
+        PhotoPicker singleton = PhotoPicker.getInstance();
+        configureServices(singleton.getRemoteServices(),
+                singleton.getLocalServices());
+    }
 
-    PhotoPicker singleton = PhotoPicker.getInstance();
-    configureServices(singleton.getRemoteServices(),
-      singleton.getLocalServices());
-  }
-
-  private void configureServices(List<AccountType> remoteServices,
-                                 List<LocalServiceType> localServices) {
-    adapter = new ServicesRecyclerAdapter(getActivity(), remoteServices,
-      localServices, serviceClickedListener);
-    recyclerView.setAdapter(adapter);
-  }
-
+    private void configureServices(List<AccountType> remoteServices,
+            List<LocalServiceType> localServices) {
+        adapter = new ServicesRecyclerAdapter(getActivity(), remoteServices,
+                localServices, serviceClickedListener);
+        recyclerView.setAdapter(adapter);
+    }
 }

@@ -22,11 +22,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.listener;
 
-import java.util.ArrayList;
-
-import com.chute.sdk.v2.model.AccountModel;
-import com.chute.sdk.v2.model.AssetModel;
-import com.chute.sdk.v2.model.enums.AccountType;
+import com.chute.sdk.v2_1.model.AccountModel;
+import com.chute.sdk.v2_1.model.AssetModel;
+import com.chute.sdk.v2_1.model.enums.AccountType;
+import java.util.List;
 
 /**
  * 
@@ -54,7 +53,7 @@ public interface ListenerFilesAccount {
 	 *            {@link AssetModel} list delivered to the main activity i.e.
 	 *            the activity that started the PhotoPicker.
 	 */
-	public void onDeliverAccountFiles(ArrayList<AssetModel> assetModelList, AccountModel accountModel);
+	public void onDeliverAccountFiles(List<AssetModel> assetModelList, AccountModel accountModel);
 
 	/**
 	 * Triggered when a remote service folder or album is selected.

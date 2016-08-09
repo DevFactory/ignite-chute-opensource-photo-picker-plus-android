@@ -23,15 +23,12 @@
 package com.chute.android.photopickerplustutorial;
 
 import com.chute.android.photopickerplustutorial.config.ConfigEndpointURLs;
-import com.chute.sdk.v2.api.Chute;
-import com.chute.sdk.v2.api.authentication.AuthConstants;
-import com.chute.sdk.v2.model.enums.AccountType;
+import com.chute.sdk.v2_1.model.enums.AccountType;
 import com.getchute.android.photopickerplus.PhotoPickerPlusApp;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.config.PhotoPickerConfiguration;
 import com.getchute.android.photopickerplus.models.enums.DisplayType;
 import com.getchute.android.photopickerplus.models.enums.LocalServiceType;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,15 +48,13 @@ public class PhotoPickerPlusTutorialApp extends PhotoPickerPlusApp {
      * See <a href="https://apps.getchute.com">https://apps.getchute.com</a>
      */
 
-    Chute.init(this, new AuthConstants(APP_ID, APP_SECRET));
-
     Map<AccountType, DisplayType> map = new HashMap<AccountType, DisplayType>();
     map.put(AccountType.INSTAGRAM, DisplayType.LIST);
 
     PhotoPickerConfiguration config = new PhotoPickerConfiguration.Builder(
       getApplicationContext())
       .isMultiPicker(false)
-      .defaultAccountDisplayType(DisplayType.LIST)
+      .defaultAccountDisplayType(DisplayType.GRID)
 //				.accountDisplayType(map)
       .enableLogout(true)
       .accountList(AccountType.FLICKR, AccountType.DROPBOX,

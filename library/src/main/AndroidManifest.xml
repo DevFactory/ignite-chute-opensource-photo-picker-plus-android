@@ -14,7 +14,6 @@
 
   <application
     android:theme="@style/PhotoPickerTheme">
-    <service android:name="com.araneaapps.android.libs.asyncrunners.services.ExecutorService"/>
     <activity
       android:name="com.getchute.android.photopickerplus.ui.activity.ServicesActivity"
       android:theme="@style/PhotoPickerTheme">
@@ -24,7 +23,7 @@
       android:theme="@style/PhotoPickerTheme">
     </activity>
     <activity
-      android:name="com.chute.sdk.v2.api.authentication.AuthenticationActivity"
+      android:name="com.chute.sdk.v2_1.api.authentication.AuthenticationActivity"
       android:configChanges="orientation|screenSize"
       android:theme="@style/PhotoPickerTheme">
     </activity>

@@ -27,14 +27,12 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Parcelable;
-
-import com.chute.sdk.v2.model.AccountModel;
-import com.chute.sdk.v2.model.AssetModel;
-import com.chute.sdk.v2.model.enums.AccountType;
+import android.os.Bundle;
+import com.chute.sdk.v2_1.model.AccountModel;
+import com.chute.sdk.v2_1.model.AssetModel;
+import com.chute.sdk.v2_1.model.enums.AccountType;
 import com.getchute.android.photopickerplus.models.enums.PhotoFilterType;
 import com.getchute.android.photopickerplus.ui.activity.AssetActivity;
-
 import java.util.ArrayList;
 
 /**
@@ -44,7 +42,7 @@ import java.util.ArrayList;
  * <li> {@link AccountModel}
  * <li>Album ID
  * <li>List of {@link AssetModel}s
- * <li>{@link com.getchute.android.photopickerplus.models.enums.PhotoFilterType}
+ * <li>{@link PhotoFilterType}
  * </ul>
  */
 public class PhotosIntentWrapper extends IntentWrapper {
@@ -66,11 +64,13 @@ public class PhotosIntentWrapper extends IntentWrapper {
   }
 
   public AccountModel getAccount() {
-    return getIntent().getExtras().getParcelable(KEY_ACCOUNT);
+    return (AccountModel) getIntent().getExtras().getSerializable(KEY_ACCOUNT);
   }
 
   public void setAccount(AccountModel account) {
-    getIntent().putExtra(KEY_ACCOUNT, account);
+    Bundle bundle = new Bundle();
+    bundle.putSerializable(KEY_ACCOUNT, account);
+    getIntent().putExtras(bundle);
   }
 
   public String getAlbumId() {
@@ -83,13 +83,14 @@ public class PhotosIntentWrapper extends IntentWrapper {
 
   @SuppressWarnings("unchecked")
   public ArrayList<AssetModel> getMediaCollection() {
-    return (ArrayList<AssetModel>) getIntent().getExtras().getParcelable(
+    return (ArrayList<AssetModel>) getIntent().getExtras().getSerializable(
       KEY_PHOTO_COLLECTION);
   }
 
   public void setMediaCollection(ArrayList<AssetModel> mediaCollection) {
-    getIntent()
-      .putExtra(KEY_PHOTO_COLLECTION, (Parcelable) mediaCollection);
+    Bundle bundle = new Bundle();
+    bundle.putSerializable(KEY_PHOTO_COLLECTION, mediaCollection);
+    getIntent().putExtras(bundle);
   }
 
   public PhotoFilterType getFilterType() {

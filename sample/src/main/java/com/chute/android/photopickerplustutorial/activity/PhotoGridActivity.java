@@ -26,11 +26,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.android.photopickerplustutorial.adapter.GridAdapter;
-import com.chute.sdk.v2.model.AssetModel;
-
+import com.chute.sdk.v2_1.model.AssetModel;
 import java.util.ArrayList;
 
 public class PhotoGridActivity extends FragmentActivity {
@@ -47,8 +45,7 @@ public class PhotoGridActivity extends FragmentActivity {
 
     recyclerView = (RecyclerView) findViewById(R.id.gcRecyclerViewGrid);
     recyclerView.setHasFixedSize(true);
-    accountMediaList = getIntent().getExtras().getParcelableArrayList(
-      PhotoPickerPlusTutorialActivity.KEY_MEDIA_LSIT);
+    accountMediaList = (ArrayList<AssetModel>) getIntent().getExtras().get(PhotoPickerPlusTutorialActivity.KEY_MEDIA_LSIT);
     adapter = new GridAdapter(PhotoGridActivity.this, accountMediaList);
     final GridLayoutManager gridLayoutManager = new GridLayoutManager(PhotoGridActivity.this, getResources().getInteger(com.getchute.android.photopickerplus.R.integer.grid_columns_assets));
     recyclerView.setLayoutManager(gridLayoutManager);

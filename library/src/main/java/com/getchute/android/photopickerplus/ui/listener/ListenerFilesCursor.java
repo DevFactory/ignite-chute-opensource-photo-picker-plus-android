@@ -22,10 +22,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.getchute.android.photopickerplus.ui.listener;
 
-import java.util.List;
-
+import com.chute.sdk.v2_1.model.AssetModel;
 import com.getchute.android.photopickerplus.models.DeliverMediaModel;
-import com.chute.sdk.v2.model.AssetModel;
+import java.util.List;
 
 /**
  * This interface is implemented by {@link com.getchute.android.photopickerplus.ui.activity.AssetActivity} and
@@ -45,11 +44,11 @@ public interface ListenerFilesCursor {
   public void onCursorAssetsSelect(AssetModel assetModel);
 
   /**
-   * Delivers a list of {@link com.getchute.android.photopickerplus.models.DeliverMediaModel}s to the main activity when media items
+   * Delivers a list of {@link DeliverMediaModel}s to the main activity when media items
    * from a local service are selected.
    * 
    * @param deliverList
-   *          List of selected items wrapped in {@link com.getchute.android.photopickerplus.models.DeliverMediaModel} delivered to the main activity i.e.
+   *          List of selected items wrapped in {@link DeliverMediaModel} delivered to the main activity i.e.
    *          the activity that started the PhotoPicker.
    */
   public void onDeliverCursorAssets(List<DeliverMediaModel> deliverList);
