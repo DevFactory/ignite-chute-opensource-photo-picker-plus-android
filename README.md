@@ -8,6 +8,9 @@ https://github.com/chute/photo-picker-plus
 If you are using the old legacy code you can find it in the pp-v1-legacy branch in the [old repository](https://github.com/chute/photo-picker-plus).
 Read the documentation and migrate to the new version of the Photo Picker. It contains Library and a Sample Project which you can use as a reference.
 
+Please note that due to the WebView changes on Android 4.4.0 and onwards, PhotoPicker+ component will not work on releases lower than API 19 (Android 4.4.0 KitKat).
+If you have any ideas regarding this issue, please feel free to submit a pull request.
+
 Native iOS Component
 ==========
 

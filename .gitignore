@@ -1,23 +1,46 @@
-# built application files
-*.apk
-*.ap_
-
-# files for the dex VM
-*.dex
-# Java class files
-*.class
-# generated files
-bin/
-gen/
-# Local configuration file (sdk path, etc)
-local.properties
-# Eclipse project files
-.classpath
-.project
-/*.md~
 
 build/
 .idea/
 
 library/library.iml
 sample/sample.iml
+
+
+# IDE project files
+*.iml
+*.ipr
+*.iws
+.idea/*
+!.idea/codeStyleSettings.xml
+.gradle
+/local.properties
+/.idea/workspace.xml
+.DS_Store
+Thumbs.db
+build
+.classpath
+.project
+
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+captures
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Directory in which all app related files
+# that don't belong under version control
+# can be added to
+local
+
