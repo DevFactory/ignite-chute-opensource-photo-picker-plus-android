@@ -10,14 +10,20 @@
 bin/
 gen/
 # Local configuration file (sdk path, etc)
-local.properties
 # Eclipse project files
 .classpath
 .project
 /*.md~
 
-build/
-.idea/
-
-library/library.iml
-sample/sample.iml
+# IDE project files
+*.iml
+*.ipr
+*.iws
+.idea/*
+!.idea/codeStyleSettings.xml
+.gradle
+/local.properties
+/.idea/workspace.xml
+.DS_Store
+Thumbs.db
+build
