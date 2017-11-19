@@ -28,7 +28,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.android.photopickerplustutorial.adapter.GridAdapter;
-import com.chute.sdk.v2_1.model.AssetModel;
+import com.getchute.android.photopickerplus.api.model.AssetModel;
 import java.util.ArrayList;
 
 public class PhotoGridActivity extends FragmentActivity {

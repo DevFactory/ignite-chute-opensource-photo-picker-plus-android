@@ -37,7 +37,7 @@ import android.widget.ImageView;
 import com.chute.android.photopickerplustutorial.R;
 import com.chute.android.photopickerplustutorial.activity.PhotoGridActivity;
 import com.chute.android.photopickerplustutorial.activity.VideoPlayerActivity;
-import com.chute.sdk.v2_1.model.AssetModel;
+import com.getchute.android.photopickerplus.api.model.AssetModel;
 import com.getchute.android.photopickerplus.models.enums.MediaType;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;

@@ -23,8 +23,8 @@
 package com.chute.android.photopickerplustutorial;
 
 import com.chute.android.photopickerplustutorial.config.ConfigEndpointURLs;
-import com.chute.sdk.v2_1.model.enums.AccountType;
 import com.getchute.android.photopickerplus.PhotoPickerPlusApp;
+import com.getchute.android.photopickerplus.api.model.enums.AccountType;
 import com.getchute.android.photopickerplus.config.PhotoPicker;
 import com.getchute.android.photopickerplus.config.PhotoPickerConfiguration;
 import com.getchute.android.photopickerplus.models.enums.DisplayType;
