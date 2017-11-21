@@ -68,7 +68,6 @@ public class PhotoPickerPlusTutorialApp extends PhotoPickerPlusApp {
             LocalServiceType.TAKE_PHOTO,
             LocalServiceType.LAST_PHOTO_TAKEN)
         .configUrl(ConfigEndpointURLs.SERVICES_CONFIG_URL)
-        .setLimit(10)
         .supportImages(true).supportVideos(true).build();
     PhotoPicker.getInstance().init(config);
   }
