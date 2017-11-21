@@ -52,24 +52,24 @@ public class PhotoPickerPlusTutorialApp extends PhotoPickerPlusApp {
     map.put(AccountType.INSTAGRAM, DisplayType.LIST);
 
     PhotoPickerConfiguration config = new PhotoPickerConfiguration.Builder(
-      getApplicationContext())
-      .isMultiPicker(false)
-      .defaultAccountDisplayType(DisplayType.GRID)
-//				.accountDisplayType(map)
-      .enableLogout(true)
-      .accountList(AccountType.FLICKR, AccountType.DROPBOX,
-        AccountType.INSTAGRAM, AccountType.GOOGLE,
-        AccountType.YOUTUBE, AccountType.FACEBOOK, AccountType.CHUTE, AccountType.FOURSQUARE, AccountType.GOOGLEDRIVE, AccountType.PICASA, AccountType.SKYDRIVE, AccountType.TWITTER)
-      .localMediaList(LocalServiceType.ALL_MEDIA,
-        LocalServiceType.CAMERA_MEDIA,
-        LocalServiceType.RECORD_VIDEO,
-        LocalServiceType.LAST_VIDEO_CAPTURED,
-        LocalServiceType.TAKE_PHOTO,
-        LocalServiceType.LAST_PHOTO_TAKEN)
-      .configUrl(ConfigEndpointURLs.SERVICES_CONFIG_URL)
-      .supportImages(true).supportVideos(true).build();
+        getApplicationContext())
+        .isMultiPicker(true)
+        .defaultAccountDisplayType(DisplayType.GRID)
+        //				.accountDisplayType(map)
+        .enableLogout(true)
+        .accountList(AccountType.FLICKR, AccountType.DROPBOX,
+            AccountType.INSTAGRAM, AccountType.GOOGLE,
+            AccountType.YOUTUBE, AccountType.FACEBOOK, AccountType.CHUTE, AccountType.FOURSQUARE,
+            AccountType.GOOGLEDRIVE, AccountType.PICASA, AccountType.SKYDRIVE, AccountType.TWITTER)
+        .localMediaList(LocalServiceType.ALL_MEDIA,
+            LocalServiceType.CAMERA_MEDIA,
+            LocalServiceType.RECORD_VIDEO,
+            LocalServiceType.LAST_VIDEO_CAPTURED,
+            LocalServiceType.TAKE_PHOTO,
+            LocalServiceType.LAST_PHOTO_TAKEN)
+        .configUrl(ConfigEndpointURLs.SERVICES_CONFIG_URL)
+        .setLimit(10)
+        .supportImages(true).supportVideos(true).build();
     PhotoPicker.getInstance().init(config);
-
   }
-
 }

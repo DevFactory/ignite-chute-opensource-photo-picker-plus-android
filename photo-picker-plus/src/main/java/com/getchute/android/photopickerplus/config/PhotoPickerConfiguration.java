@@ -52,190 +52,191 @@ import java.util.Map;
  */
 public final class PhotoPickerConfiguration {
 
-    final Context context;
-    final List<AccountType> accountList;
-    final List<LocalServiceType> localMediaList;
-    final String configUrl;
-    final boolean isMultiPicker;
-    final boolean supportVideos;
-    final boolean supportImages;
-    final boolean enableLogout;
-    final DisplayType displayType;
-    final Map<AccountType, DisplayType> accountDisplayTypeMap;
+  final Context context;
+  final List<AccountType> accountList;
+  final List<LocalServiceType> localMediaList;
+  final String configUrl;
+  final boolean isMultiPicker;
+  final boolean supportVideos;
+  final boolean supportImages;
+  final boolean enableLogout;
+  final DisplayType displayType;
+  final Map<AccountType, DisplayType> accountDisplayTypeMap;
+  final int limit;
 
-    private PhotoPickerConfiguration(final Builder builder) {
-        context = builder.context;
-        isMultiPicker = builder.isMultiPicker;
-        accountList = builder.accountList;
-        localMediaList = builder.localMediaList;
-        configUrl = builder.configUrl;
-        supportImages = builder.supportImages;
-        supportVideos = builder.supportVideos;
-        enableLogout = builder.enableLogout;
-        displayType = builder.displayType;
-        accountDisplayTypeMap = builder.accountDisplayTypeMap;
+  private PhotoPickerConfiguration(final Builder builder) {
+    context = builder.context;
+    isMultiPicker = builder.isMultiPicker;
+    accountList = builder.accountList;
+    localMediaList = builder.localMediaList;
+    configUrl = builder.configUrl;
+    supportImages = builder.supportImages;
+    supportVideos = builder.supportVideos;
+    enableLogout = builder.enableLogout;
+    displayType = builder.displayType;
+    accountDisplayTypeMap = builder.accountDisplayTypeMap;
+    limit = builder.limit;
+  }
+
+  /**
+   * Creates default configuration for {@link PhotoPicker} <br />
+   * <b>Default values:</b>
+   * <ul>
+   * <li>isMultiPicker = false</li>
+   * <li>accountList = {@link AccountType#FACEBOOK},
+   * {@link AccountType#INSTAGRAM}</li>
+   * <li>localMediaList = {@link LocalServiceType#ALL_MEDIA},
+   * {@link LocalServiceType#CAMERA_MEDIA}</li>
+   * <li>supportImages = true</li>
+   * <li>supportVideos = true</li>
+   * <li>enablesLogout = true</li>
+   * <li>displayType = {@link DisplayType#GRID}</li>
+   * </ul>
+   */
+  public static PhotoPickerConfiguration createDefault(Context context) {
+    return new Builder(context).build();
+  }
+
+  /**
+   * Builder for {@link PhotoPickerConfiguration}
+   */
+  public static class Builder {
+
+    private Context context;
+    private boolean isMultiPicker = false;
+    private List<AccountType> accountList = null;
+    private List<LocalServiceType> localMediaList = null;
+    private String configUrl = null;
+    private boolean supportImages = true;
+    private boolean supportVideos = true;
+    private boolean enableLogout = true;
+    private DisplayType displayType = DisplayType.GRID;
+    private Map<AccountType, DisplayType> accountDisplayTypeMap = null;
+    private int limit = 0;
+
+    public Builder(Context context) {
+      this.context = context.getApplicationContext();
     }
 
     /**
-     * Creates default configuration for {@link PhotoPicker} <br />
-     * <b>Default values:</b>
-     * <ul>
-     * <li>isMultiPicker = false</li>
-     * <li>accountList = {@link AccountType#FACEBOOK},
-     * {@link AccountType#INSTAGRAM}</li>
-     * <li>localMediaList = {@link LocalServiceType#ALL_MEDIA},
-     * {@link LocalServiceType#CAMERA_MEDIA}</li>
-     * <li>supportImages = true</li>
-     * <li>supportVideos = true</li>
-     * <li>enablesLogout = true</li>
-     * <li>displayType = {@link DisplayType#GRID}</li>
-     * </ul>
+     * Builds configured {@link PhotoPickerConfiguration} object
      */
-    public static PhotoPickerConfiguration createDefault(Context context) {
-        return new Builder(context).build();
+    public PhotoPickerConfiguration build() {
+      initEmptyFieldsWithDefaultValues();
+      return new PhotoPickerConfiguration(this);
     }
 
     /**
-     * Builder for {@link PhotoPickerConfiguration}
+     * Sets list of remote services.
+     *
+     * @param accountList List of {@link AccountType} services.
      */
-    public static class Builder {
-
-        private Context context;
-        private boolean isMultiPicker = false;
-        private List<AccountType> accountList = null;
-        private List<LocalServiceType> localMediaList = null;
-        private String configUrl = null;
-        private boolean supportImages = true;
-        private boolean supportVideos = true;
-        private boolean enableLogout = true;
-        private DisplayType displayType = DisplayType.GRID;
-        private Map<AccountType, DisplayType> accountDisplayTypeMap = null;
-
-        public Builder(Context context) {
-            this.context = context.getApplicationContext();
-        }
-
-        /**
-         * Builds configured {@link PhotoPickerConfiguration} object
-         */
-        public PhotoPickerConfiguration build() {
-            initEmptyFieldsWithDefaultValues();
-            return new PhotoPickerConfiguration(this);
-        }
-
-        /**
-         * Sets list of remote services.
-         *
-         * @param accountList List of {@link AccountType} services.
-         */
-        public Builder accountList(AccountType... accountList) {
-            this.accountList = Arrays.asList(accountList);
-            return this;
-        }
-
-        /**
-         * Sets list of local services.
-         *
-         * @param localMediaList List of {@link LocalServiceType} services.
-         */
-        public Builder localMediaList(LocalServiceType... localMediaList) {
-            this.localMediaList = Arrays.asList(localMediaList);
-            return this;
-        }
-
-        /**
-         * Sets the URL giving the base location of the config file containing
-         * the services.
-         *
-         * @param configUrl
-         */
-        public Builder configUrl(String configUrl) {
-            this.configUrl = configUrl;
-            return this;
-        }
-
-        /**
-         * Sets the default {@link DisplayType} for the media items.
-         *
-         * @param displayType It can be either list of gird. If not set, the default
-         *                    value is {@link DisplayType#GRID}
-         * @return
-         */
-        public Builder defaultAccountDisplayType(DisplayType displayType) {
-            this.displayType = displayType;
-            return this;
-        }
-
-        /**
-         * Sets the {@link DisplayType} for each account individually and stores
-         * the values in a map.
-         *
-         * @param accountDisplayTypeMap Map that stores {@link AccountType}s as keys and
-         *                              {@link DisplayType}s as values.
-         * @return
-         */
-        public Builder accountDisplayType(
-                Map<AccountType, DisplayType> accountDisplayTypeMap) {
-            this.accountDisplayTypeMap = accountDisplayTypeMap;
-            return this;
-        }
-
-        /**
-         * Enables video support.
-         *
-         * @param supportVideos <b>true</b> if PhotoPicker should support videos and
-         *                      <b>false</b> otherwise.
-         * @return
-         */
-        public Builder supportVideos(boolean supportVideos) {
-            this.supportVideos = supportVideos;
-            return this;
-        }
-
-        /**
-         * Enables image support.
-         *
-         * @param supportImages <b>true</b> if PhotoPicker should support images and
-         *                      <b>false</b> otherwise.
-         * @return
-         */
-        public Builder supportImages(boolean supportImages) {
-            this.supportImages = supportImages;
-            return this;
-        }
-
-        /**
-         * Allows selection of one or multiple media items in the PhotoPicker.
-         *
-         * @param isMultiPicker <b>true</b> for enabling multi-picking and <b>false</b>
-         *                      for enabling single-picking feature.
-         * @return
-         */
-        public Builder isMultiPicker(boolean isMultiPicker) {
-            this.isMultiPicker = isMultiPicker;
-            return this;
-        }
-
-        /**
-         * Enables logout from social services.
-         *
-         * @param enableLogout <b>true</b> if PhotoPicker should have a logout option and <b>false</b> otherwise.
-         * @return
-         */
-        public Builder enableLogout(boolean enableLogout) {
-            this.enableLogout = enableLogout;
-            return this;
-        }
-
-        private void initEmptyFieldsWithDefaultValues() {
-            if (localMediaList == null) {
-                localMediaList = DefaultConfigurationFactory
-                        .createLocalMediaList();
-            }
-            if (accountList == null) {
-                accountList = DefaultConfigurationFactory
-                        .createAccountTypeList();
-            }
-        }
+    public Builder accountList(AccountType... accountList) {
+      this.accountList = Arrays.asList(accountList);
+      return this;
     }
+
+    /**
+     * Sets list of local services.
+     *
+     * @param localMediaList List of {@link LocalServiceType} services.
+     */
+    public Builder localMediaList(LocalServiceType... localMediaList) {
+      this.localMediaList = Arrays.asList(localMediaList);
+      return this;
+    }
+
+    /**
+     * Sets the URL giving the base location of the config file containing
+     * the services.
+     */
+    public Builder configUrl(String configUrl) {
+      this.configUrl = configUrl;
+      return this;
+    }
+
+    /**
+     * Sets the default {@link DisplayType} for the media items.
+     *
+     * @param displayType It can be either list of gird. If not set, the default
+     * value is {@link DisplayType#GRID}
+     */
+    public Builder defaultAccountDisplayType(DisplayType displayType) {
+      this.displayType = displayType;
+      return this;
+    }
+
+    /**
+     * Sets the {@link DisplayType} for each account individually and stores
+     * the values in a map.
+     *
+     * @param accountDisplayTypeMap Map that stores {@link AccountType}s as keys and
+     * {@link DisplayType}s as values.
+     */
+    public Builder accountDisplayType(
+        Map<AccountType, DisplayType> accountDisplayTypeMap) {
+      this.accountDisplayTypeMap = accountDisplayTypeMap;
+      return this;
+    }
+
+    /**
+     * Enables video support.
+     *
+     * @param supportVideos <b>true</b> if PhotoPicker should support videos and
+     * <b>false</b> otherwise.
+     */
+    public Builder supportVideos(boolean supportVideos) {
+      this.supportVideos = supportVideos;
+      return this;
+    }
+
+    /**
+     * Enables image support.
+     *
+     * @param supportImages <b>true</b> if PhotoPicker should support images and
+     * <b>false</b> otherwise.
+     */
+    public Builder supportImages(boolean supportImages) {
+      this.supportImages = supportImages;
+      return this;
+    }
+
+    /**
+     * Allows selection of one or multiple media items in the PhotoPicker.
+     *
+     * @param isMultiPicker <b>true</b> for enabling multi-picking and <b>false</b>
+     * for enabling single-picking feature.
+     */
+    public Builder isMultiPicker(boolean isMultiPicker) {
+      this.isMultiPicker = isMultiPicker;
+      return this;
+    }
+
+    /**
+     * Enables logout from social services.
+     *
+     * @param enableLogout <b>true</b> if PhotoPicker should have a logout option and <b>false</b>
+     * otherwise.
+     */
+    public Builder enableLogout(boolean enableLogout) {
+      this.enableLogout = enableLogout;
+      return this;
+    }
+
+    public Builder setLimit(int limit) {
+      this.limit = limit;
+      return this;
+    }
+
+    private void initEmptyFieldsWithDefaultValues() {
+      if (localMediaList == null) {
+        localMediaList = DefaultConfigurationFactory
+            .createLocalMediaList();
+      }
+      if (accountList == null) {
+        accountList = DefaultConfigurationFactory
+            .createAccountTypeList();
+      }
+    }
+  }
 }

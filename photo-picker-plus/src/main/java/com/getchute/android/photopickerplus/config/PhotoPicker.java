@@ -408,6 +408,14 @@ public class PhotoPicker {
         }
     }
 
+    public int getLimit() {
+        return configuration.limit;
+    }
+
+    public boolean hasLimit() {
+        return getLimit() > 0;
+    }
+
     /**
      * Checks if the specified string is a part of the specified enumeration.
      *

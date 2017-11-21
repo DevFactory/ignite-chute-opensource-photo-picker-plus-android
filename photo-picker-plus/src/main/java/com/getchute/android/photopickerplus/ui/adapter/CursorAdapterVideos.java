@@ -68,6 +68,7 @@ public class CursorAdapterVideos extends BaseRecyclerCursorAdapter implements
         } else {
             ((AssetActivity) context).setVideosSelectListener(this);
         }
+        AdapterData.get().setCount(0);
     }
 
     @Override
@@ -157,12 +158,17 @@ public class CursorAdapterVideos extends BaseRecyclerCursorAdapter implements
     }
 
     public void toggleTick(int positionSelected) {
+        boolean isLimitReached = AdapterData.get().checkIfLimitIsReached();
         if (tick.containsKey(positionSelected)) {
             tick.remove(positionSelected);
             count--;
+            AdapterData.get().decreaseCounter();
         } else {
-            tick.put(positionSelected, getItem(positionSelected));
-            count++;
+            if (!isLimitReached) {
+                tick.put(positionSelected, getItem(positionSelected));
+                count++;
+                AdapterData.get().increaseCounter();
+            }
         }
         itemCountListener.onSelectedVideosCount(count);
         notifyDataSetChanged();
