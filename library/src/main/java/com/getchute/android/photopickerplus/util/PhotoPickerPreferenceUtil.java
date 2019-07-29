@@ -51,7 +51,7 @@ public class PhotoPickerPreferenceUtil {
 		this.context = context;
 	}
 
-	static PhotoPickerPreferenceUtil instance;
+	static volatile PhotoPickerPreferenceUtil instance;
 
 	public static PhotoPickerPreferenceUtil get() {
 		return instance;
@@ -62,10 +62,13 @@ public class PhotoPickerPreferenceUtil {
 	}
 
 	public static void init(Context context) {
-		if (instance == null) {
-			instance = new PhotoPickerPreferenceUtil(
-					context.getApplicationContext());
-		}
+		        if (instance == null) {
+                        synchronized (PhotoPickerPreferenceUtil.class) {
+                                if (instance == null) {
+                                        instance = new PhotoPickerPreferenceUtil(context.getApplicationContext());
+                                }
+                        }
+                }
 	}
 
 	public SharedPreferences getPreferences() {
