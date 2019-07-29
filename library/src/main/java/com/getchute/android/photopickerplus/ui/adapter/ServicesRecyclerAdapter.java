@@ -284,7 +284,7 @@ public class ServicesRecyclerAdapter extends RecyclerView.Adapter<ServicesRecycl
 		}
 	}
 
-  public final static class ListItemViewHolder extends RecyclerView.ViewHolder {
+  public static final class ListItemViewHolder extends RecyclerView.ViewHolder {
     ImageView imageViewService;
     TextView textViewServiceTitle;
 

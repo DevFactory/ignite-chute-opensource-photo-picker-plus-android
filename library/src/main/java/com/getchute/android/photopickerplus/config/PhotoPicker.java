@@ -81,7 +81,7 @@ public class PhotoPicker {
 	 * 
 	 * Note the usage of the volatile keyword for thread-safe programming.
 	 */
-	private volatile static PhotoPicker instance;
+	private static volatile PhotoPicker instance;
 
 	/**
 	 * Static initialization method. This method will always return the
