@@ -169,6 +169,8 @@ public class ServicesRecyclerAdapter extends RecyclerView.Adapter<ServicesRecycl
 		case RECORD_VIDEO:
 			holder.imageViewService.setBackgroundResource(R.drawable.take_photo);
 			holder.textViewServiceTitle.setText(R.string.record_video);
+            break;
+        default:
 			break;
 		}
 
@@ -227,6 +229,8 @@ public class ServicesRecyclerAdapter extends RecyclerView.Adapter<ServicesRecycl
 					serviceClickedListener.recordVideo();
 				}
 			});
+            break;
+        default:
 			break;
 		}
 

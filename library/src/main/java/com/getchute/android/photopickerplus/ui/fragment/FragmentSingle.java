@@ -173,7 +173,7 @@ public class FragmentSingle extends ActionBarFragment implements
           R.string.toast_signed_out);
         TokenAuthenticationProvider.getInstance().clearAuth();
         PhotoPickerPreferenceUtil.get().clearAll();
-        break;
+            break;
       case AssetActivity.USE_ITEM:
         if (!accountAssetAdapter.getPhotoCollection().isEmpty()) {
           ImageDataResponseLoader.postImageData(getActivity()
@@ -187,6 +187,8 @@ public class FragmentSingle extends ActionBarFragment implements
         } else {
           fragmentSingleListener.onFragmentSingleNavigationBack();
         }
+        break;
+        default:
         break;
     }
     return super.onOptionsItemSelected(item);
